@@ -1,25 +1,16 @@
 <template>
   <div class="showitem">
     <center>
-    <h4>Meetingroom</h4><br><br>
-    <div class="" v-for="(item, key1) in items.meetingroom">
-      <h4>{{key1}}</h4>
+    <div class="" v-for="(item, typeItem) in items">
+      <h4>{{typeItem}}</h4>
       <br><br>
       <div class="" v-for="(type, key2) in item">
         {{key2}}
-        <v-btn @click="setpathremove('meetingroom', key1, key2)">delete</v-btn>
+        <div class="" v-for="(status, nameItem) in type">
+          {{nameItem}}
+          <v-btn @click="setpathremove('meetingroom', key1, key2)">delete</v-btn>
+        </div>
       </div>
-    </div>
-    <h4>Device</h4> <br><br>
-    <div class="" v-for="(item, key1) in items.device">
-      <h4>{{key1}}</h4>
-      <br><br>
-      <div class="" v-for="(type, key2) in item">
-        {{key2}}
-        <v-btn @click="setpathremove('meetingroom', key1, key2)">delete</v-btn>
-        <br><br>
-      </div>
-      <br><br>
     </div>
   </center>
   </div>
@@ -40,6 +31,11 @@ export default {
     setpathremove (type, child1, child2) {
       let path = type + '/' + child1 + '/' + child2
       this.removeItem(path)
+    }
+  },
+  watch: {
+    items: function () {
+      delete this.items['.key']
     }
   },
   created () {
