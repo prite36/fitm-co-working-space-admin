@@ -1,6 +1,5 @@
 <template>
   <div class="showitem">
-    <center>
     <div class="" v-for="(item, typeItem) in items">
       <h4>{{typeItem}}</h4>
       <br><br>
@@ -12,15 +11,11 @@
         </div>
       </div>
     </div>
-  </center>
   </div>
 </template>
 
 <script>
-import {
-  mapGetters,
-  mapActions
-} from 'vuex'
+import {mapGetters, mapActions} from 'vuex'
 export default {
   name: 'ShowItem',
   computed: {
@@ -49,5 +44,8 @@ export default {
 <style scoped>
 .showitem {
   font-size: 16px;
+  font-size: 16px;
+  padding-left: 5%;
+  padding-right: 2%;
 }
 </style>

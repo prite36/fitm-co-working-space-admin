@@ -10,7 +10,18 @@
     fixed
     v-model="drawer"
     app >
-      <v-list dense>
+      <v-list dense class="menu">
+        <router-link to="MonitorBooking" class="btnlink">
+          <v-list-tile @click="">
+            <v-list-tile-action>
+              <v-icon large color="blue darken-2">desktop_windows</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <h3>ตรวจสอบการจอง</h3>
+            </v-list-tile-content>
+          </v-list-tile>
+        </router-link>
+        <hr>
         <router-link to="ShowItem" class="btnlink">
           <v-list-tile @click="">
             <v-list-tile-action>
@@ -21,13 +32,14 @@
             </v-list-tile-content>
           </v-list-tile>
         </router-link>
+        <hr>
         <router-link to="AddItem" class="btnlink">
           <v-list-tile @click="">
             <v-list-tile-action>
               <v-icon large color="pink darken-1">library_add</v-icon>
             </v-list-tile-action>
             <v-list-tile-content>
-              <h3>AddItem</h3>
+              <h3>เพิ่มห้องและอุปกรณ์</h3>
             </v-list-tile-content>
           </v-list-tile>
         </router-link>
@@ -83,5 +95,8 @@ export default {
 }
 .padtop {
   padding-top: 5%;
+}
+.menu {
+  padding-top: 8%;
 }
 </style>

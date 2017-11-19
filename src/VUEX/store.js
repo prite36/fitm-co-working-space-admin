@@ -19,22 +19,32 @@ let db = firebase.database()
 
 // ผูกค่าตัวแปรกับค่าใน database
 let Items = db.ref('items')
+let Booking = db.ref('booking')
 
 // store
 const store = new Vuex.Store({
   strict: true,
   state: {
     statusLogin: false,
-    items: ''
+    items: '',
+    booking: '',
+    queryBooking: []
   },
   getters: {
     statusLogin: state => state.statusLogin,
-    items: state => state.items
+    items: state => state.items,
+    queryBooking: state => state.queryBooking
   },
   mutations: {
     ...firebaseMutations,
     updateStatus (state, status) {
       state.statusLogin = status
+    },
+    updateQueryBooking (state, date) {
+      var key1 = Object.values(state.booking)
+      key1.forEach(value => {
+        console.log(value)
+      })
     }
   },
   actions: {
@@ -42,11 +52,14 @@ const store = new Vuex.Store({
     setItemsRef: firebaseAction(({ bindFirebaseRef, unbindFirebaseRef }) => {
       bindFirebaseRef('items', Items)
     }),
+    setBookingRef: firebaseAction(({ bindFirebaseRef, unbindFirebaseRef }) => {
+      bindFirebaseRef('booking', Booking)
+    }),
     // authen แล้วให้เปลี่ยน path
     signin ({commit}, user) {
       firebase.auth().signInWithEmailAndPassword(user.email, user.password).then(
         (user) => {
-          router.replace('AddItem')
+          router.replace('MonitorBooking')
           commit('updateStatus', true)
         },
         (err) => {
@@ -69,6 +82,9 @@ const store = new Vuex.Store({
     // ลบห้องอุปกรณ์
     removeItem (payload, child) {
       Items.child(child).remove()
+    },
+    Bookingquery ({commit}, date) {
+      commit('updateQueryBooking', date)
     }
   }
 })

@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Login from '@/components/Login'
 import AddItem from '@/components/AddItem'
 import ShowItem from '@/components/ShowItem'
+import MonitorBooking from '@/components/MonitorBooking'
 import firebase from 'firebase'
 
 Vue.use(Router)
@@ -24,6 +25,14 @@ let router = new Router({
       }
     },
     {
+      path: '/MonitorBooking',
+      name: 'MonitorBooking',
+      component: MonitorBooking,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
       path: '/ShowItem',
       name: 'ShowItem',
       component: ShowItem,
@@ -38,7 +47,7 @@ router.beforeEach((to, from, next) => {
   let requiresAuth = to.matched.some(record => record.meta.requiresAuth)
 
   if (requiresAuth && !currentUser) next('/')
-  else if (!requiresAuth && currentUser) next('AddItem')
+  else if (!requiresAuth && currentUser) next('MonitorBooking')
   else next()
 })
 export default router
