@@ -25,7 +25,7 @@
           <div class="" v-for="(status, nameItem) in type">
             {{nameItem}}
             <div class="" v-for="(dataBooking, keybooking) in status">
-              <div class="" v-if="dataBooking.dateStart === dateQuery">
+              <div class="" v-if="dataBooking.dateStart === dateQuery && modal === false">
                 <v-btn @click="">{{dataBooking.timeStart}} - {{dataBooking.timeStop}}</v-btn>
               </div>
             </div>
@@ -58,12 +58,12 @@ export default {
   watch: {
     booking: function () {
       delete this.booking['.key']
-    },
-    modal: function () {
-      if (this.dateQuery !== null && this.modal === false) {
-        this.Bookingquery(this.dateQuery)
-      }
     }
+    // modal: function () {
+    //   if (this.dateQuery !== null && this.modal === false) {
+    //     this.Bookingquery(this.dateQuery)
+    //   }
+    // }
   },
   created () {
     this.setBookingRef()

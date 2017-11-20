@@ -38,13 +38,14 @@ const store = new Vuex.Store({
     ...firebaseMutations,
     updateStatus (state, status) {
       state.statusLogin = status
-    },
-    updateQueryBooking (state, date) {
-      var key1 = Object.values(state.booking)
-      key1.forEach(value => {
-        console.log(value)
-      })
     }
+    // updateQueryBooking (state, date) {
+      // var key1 = Object.values(state.booking)
+
+      // key1.forEach(value => {
+      //   console.log(value)
+      // })
+    // }
   },
   actions: {
     // bind ค่า ใน db ให้ผูกกับ ตัวแปร ใน state
@@ -81,10 +82,10 @@ const store = new Vuex.Store({
     // ลบห้องอุปกรณ์
     removeItem (payload, child) {
       Items.child(child).remove()
-    },
-    Bookingquery ({commit}, date) {
-      commit('updateQueryBooking', date)
     }
+    // Bookingquery ({commit}, date) {
+    //   commit('updateQueryBooking', date)
+    // }
   }
 })
 
