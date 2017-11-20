@@ -25,7 +25,9 @@
           <div class="" v-for="(status, nameItem) in type">
             {{nameItem}}
             <div class="" v-for="(dataBooking, keybooking) in status">
-              {{dataBooking.timeStart}} - {{dataBooking.timeStop}} <v-btn @click="">showDetail</v-btn><br><br>
+              <div class="" v-if="dataBooking.dateStart === dateQuery">
+                <v-btn @click="">{{dataBooking.timeStart}} - {{dataBooking.timeStop}}</v-btn>
+              </div>
             </div>
           </div>
         </div>
