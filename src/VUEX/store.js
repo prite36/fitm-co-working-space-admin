@@ -27,13 +27,12 @@ const store = new Vuex.Store({
   state: {
     statusLogin: false,
     items: '',
-    booking: '',
-    queryBooking: []
+    booking: ''
   },
   getters: {
     statusLogin: state => state.statusLogin,
     items: state => state.items,
-    queryBooking: state => state.queryBooking
+    booking: state => state.booking
   },
   mutations: {
     ...firebaseMutations,

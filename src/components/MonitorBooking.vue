@@ -15,7 +15,7 @@
       </v-date-picker>
     </v-dialog>
 
-    <!-- <div class="leftshow">
+    <div class="leftshow">
       มีผู้จอง
       <h4>meetingroom</h4> <br>
       <div class="" v-for="(item, typeIyem) in booking">
@@ -30,7 +30,7 @@
           </div>
         </div>
       </div>
-    </div> -->
+    </div>
     <div class="rightshow">
       เวลาว่าง
     </div>
@@ -48,7 +48,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['queryBooking'])
+    ...mapGetters(['booking'])
   },
   methods: {
     ...mapActions(['setBookingRef', 'Bookingquery'])
