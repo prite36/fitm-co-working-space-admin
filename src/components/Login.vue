@@ -1,7 +1,6 @@
 <template>
   <div class="login">
     <center>
-
       <v-text-field
         label="E-mail"
         required

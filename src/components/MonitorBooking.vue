@@ -17,7 +17,6 @@
     <div class="leftshow">
       เวลาจอง<br>
       <div class="" v-for="time in queryBooking">
-        <!-- {{time.bookingTime.typeitem}} -->
         {{time.bookingTime.nameitem}}
         <v-btn>{{time.bookingTime.timestart}}-{{time.bookingTime.timestop}}</v-btn>
       </div>

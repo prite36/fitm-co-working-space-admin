@@ -1,10 +1,18 @@
 <template>
 <div id="app">
-  <v-layout width: 20% justify-center align-center v-if="statusLogin == false">
-    <div class="">
-      <router-view/>
-    </div>
-  </v-layout>
+  <v-app id="bglogin" v-if="statusLogin == false">
+    <template>
+      <v-parallax src="/static/doc-images/vbanner.jpg">
+        <v-layout column align-center justify-center background-color="white">
+          <v-layout width: 20% justify-center align-center v-if="statusLogin == false"  class="login">
+            <div class="">
+              <router-view/>
+            </div>
+          </v-layout>
+        </v-layout>
+      </v-parallax>
+    </template>
+  </v-app>
   <v-app id="inspire" v-if="statusLogin == true">
     <v-navigation-drawer
     fixed
@@ -98,5 +106,11 @@ export default {
 }
 .menu {
   padding-top: 8%;
+}
+#bglogin {
+  padding-top: 20%;
+}
+.login {
+  /*background-color: white;*/
 }
 </style>

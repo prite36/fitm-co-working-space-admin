@@ -2,39 +2,62 @@
   <div class="additem">
     <v-switch label="Add Meetingroom"
                         v-model="selectType"
-                        color="red"
+                        color="primary"
                         value="meetingroom"
                         hide-details>
     </v-switch>
     <v-switch label="Add Device"
                         v-model="selectType"
-                        color="success"
+                        color="red"
                         value="device"
                         hide-details>
     </v-switch>
     <div class="" v-if="selectType === 'meetingroom'">
-      <label>Add Meetingroom</label>
+      <br>
+      <!-- <h4>Add Meetingroom</h4> -->
       <br><br>
-      <input type="radio" name="typeroom" value="mediumRoom" v-model="detailRoom.sizeRoom">
-      <label>Medium Room</label>
-      <input type="radio" name="typeroom" value="largeRoom" v-model="detailRoom.sizeRoom">
-      <label>Large Room</label>
-      <input type="radio" name="typeroom" value="smallRoom" v-model="detailRoom.sizeRoom">
-      <label>Small Room</label>
+      <h4>change size of room</h4>
+      <v-radio-group v-model="detailRoom.sizeRoom">
+        <v-radio label="smallRoom"
+        name="typeroom"
+        color="red"
+        value="smallRoom"
+        ></v-radio>
+        <v-radio label="mediumRoom"
+        name="typeroom"
+        color="orange"
+        value="mediumRoom"
+        ></v-radio>
+        <v-radio label="largeRoom"
+        name="typeroom"
+        color="primary"
+        value="largeRoom"
+        ></v-radio>
+      </v-radio-group>
+      <br>
+      <v-text-field
+        label="name of room"
+        required
+        v-model="detailRoom.nameRoom"
+      ></v-text-field>
       <br><br>
-      <label>Name Room</label>
-      <input type="text" name="" value="" v-model="detailRoom.nameRoom" placeholder="name of room">
-      <br><br>
-      <input type="button" value="Add Item" name="" @click="addRoom(detailRoom)">
+      <v-btn @click="addRoom(detailRoom)">Add Item</v-btn>
     </div>
     <div class="" v-if="selectType === 'device'">
       <label>Add Device</label>
       <br><br>
-      <input type="text" name="" value="" v-model="detailDevice.typeDevice" placeholder="name of type device">
-      <label>Name Room</label>
-      <input type="text" name="" value="" v-model="detailDevice.nameDevice" placeholder="name of device">
+      <v-text-field
+        label="name of type device"
+        required
+        v-model="detailDevice.typeDevice"
+      ></v-text-field>
+      <v-text-field
+        label="name of device"
+        required
+        v-model="detailDevice.nameDevice"
+      ></v-text-field>
       <br><br>
-      <input type="button" value="Add Item" name="" @click="addDevice(detailDevice)">
+      <v-btn @click="addDevice(detailDevice)">Add Item</v-btn>
     </div>
   </div>
 </template>
