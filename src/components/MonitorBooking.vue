@@ -16,7 +16,11 @@
     </v-dialog>
     <div class="leftshow">
       เวลาจอง<br>
-      <v-btn  v-for="n in queryBooking">{{n.bookingTime.timestart}}-{{n.bookingTime.timestop}}</v-btn>
+      <div class="" v-for="time in queryBooking">
+        <!-- {{time.bookingTime.typeitem}} -->
+        {{time.bookingTime.nameitem}}
+        <v-btn>{{time.bookingTime.timestart}}-{{time.bookingTime.timestop}}</v-btn>
+      </div>
     </div>
     <div class="rightshow">
       เวลาว่าง

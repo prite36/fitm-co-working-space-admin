@@ -7,7 +7,7 @@
         {{key2}}
         <div class="" v-for="(status, nameItem) in type">
           {{nameItem}}
-          <v-btn @click="setpathremove('meetingroom', key1, key2)">delete</v-btn>
+          <v-btn @click="setpath(typeItem, key2, nameItem)">delete</v-btn>
         </div>
       </div>
     </div>
@@ -22,8 +22,8 @@ export default {
     ...mapGetters(['items'])
   },
   methods: {
-    ...mapActions(['removeItem', 'setItemsRef']),
-    setpathremove (type, child1, child2) {
+    ...mapActions(['setItemsRef', 'removeItem']),
+    setpath (type, child1, child2) {
       let path = type + '/' + child1 + '/' + child2
       this.removeItem(path)
     }

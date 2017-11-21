@@ -42,6 +42,7 @@ const store = new Vuex.Store({
     updateStatus (state, status) {
       state.statusLogin = status
     },
+    // query โดยการเอาค่าวันที่มาวนเปรียบเทียบกับ booking ทุกตัวหากเงื่อไขตรงจะโยนไปเก็บใน queryBooking
     updateQueryBooking (state, date) {
       delete state.booking['.key']
       state.queryBooking = []
@@ -57,7 +58,9 @@ const store = new Vuex.Store({
               if (date === data.dateStart && date === data.dateStop) {
                 let bookingTime = {
                   timestart: data.timeStart,
-                  timestop: data.timeStop
+                  timestop: data.timeStop,
+                  typeitem: key2,
+                  nameitem: key3
                 }
                 state.queryBooking.push({
                   data: data,
@@ -66,7 +69,9 @@ const store = new Vuex.Store({
               } else if (date === data.dateStart) {
                 let bookingTime = {
                   timestart: data.timeStart,
-                  timestop: '24:00'
+                  timestop: '24:00',
+                  typeitem: key2,
+                  nameitem: key3
                 }
                 state.queryBooking.push({
                   data: data,
@@ -75,7 +80,9 @@ const store = new Vuex.Store({
               } else if (moment(date).isBetween(data.dateStart, data.dateStop)) {
                 let bookingTime = {
                   timestart: '00:00',
-                  timestop: '24:00'
+                  timestop: '24:00',
+                  typeitem: key2,
+                  nameitem: key3
                 }
                 state.queryBooking.push({
                   data: data,
@@ -84,7 +91,9 @@ const store = new Vuex.Store({
               } else if (date === data.dateStop) {
                 let bookingTime = {
                   timestart: '00:00',
-                  timestop: data.timeStop
+                  timestop: data.timeStop,
+                  typeitem: key2,
+                  nameitem: key3
                 }
                 state.queryBooking.push({
                   data: data,
