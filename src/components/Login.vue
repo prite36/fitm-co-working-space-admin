@@ -1,20 +1,6 @@
 <template>
   <div class="login">
-    <center>
-      <v-text-field
-        label="E-mail"
-        required
-        v-model="user.email"
-      ></v-text-field>
-      <v-text-field
-        type="password"
-        label="Password"
-        required
-        v-model="user.password"
-      ></v-text-field>
-      <v-btn @click="signin(user)">Signin</v-btn>
 
-    </center>
   </div>
 </template>
 

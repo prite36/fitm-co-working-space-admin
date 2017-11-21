@@ -5,19 +5,25 @@
       <v-parallax src="/static/doc-images/vbanner.jpg">
         <v-layout column align-center justify-center background-color="white">
           <v-layout width: 20% justify-center align-center v-if="statusLogin == false"  class="login">
-            <div class="">
-              <router-view/>
-            </div>
+            <v-text-field
+              label="E-mail"
+              required
+              v-model="user.email"
+            ></v-text-field>
+            <v-text-field
+              type="password"
+              label="Password"
+              required
+              v-model="user.password"
+            ></v-text-field>
+            <v-btn @click="signin(user)">Signin</v-btn>
           </v-layout>
         </v-layout>
       </v-parallax>
     </template>
   </v-app>
   <v-app id="inspire" v-if="statusLogin == true">
-    <v-navigation-drawer
-    fixed
-    v-model="drawer"
-    app >
+    <v-navigation-drawer fixed v-model="drawer" app>
       <v-list dense class="menu">
         <router-link to="MonitorBooking" class="btnlink">
           <v-list-tile @click="">
@@ -51,6 +57,15 @@
             </v-list-tile-content>
           </v-list-tile>
         </router-link>
+        <v-list-tile @click="logout()">
+          <v-list-tile-action>
+            <v-icon large color="black">exit_to_app</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <h3>Logout</h3>
+          </v-list-tile-content>
+        </v-list-tile>
+
       </v-list>
     </v-navigation-drawer>
     <v-toolbar color="cyan" dark fixed app>
@@ -69,22 +84,33 @@
 </template>
 
 <script>
-import Login from './components/Login.vue'
 import AddItem from './components/AddItem.vue'
 import ShowItem from './components/ShowItem.vue'
+// import firebase from 'firebase'
 import {
-  mapGetters
+  mapGetters,
+  mapActions
 } from 'vuex'
 export default {
   name: 'app',
   components: {
-    Login: Login,
     AddItem: AddItem,
     ShowItem: ShowItem
   },
   data: () => ({
-    drawer: true
+    drawer: true,
+    user: {
+      email: '',
+      password: ''
+    }
   }),
+  methods: {
+    ...mapActions(['logout', 'signin']),
+    ...mapActions(['setStatus'])
+  },
+  created () {
+    this.setStatus()
+  },
   computed: {
     ...mapGetters(['statusLogin'])
   }

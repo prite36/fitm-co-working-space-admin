@@ -114,17 +114,36 @@ const store = new Vuex.Store({
     setBookingRef: firebaseAction(({ bindFirebaseRef, unbindFirebaseRef }) => {
       bindFirebaseRef('booking', Booking)
     }),
+    setStatus ({commit}) {
+      firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+          commit('updateStatus', true)
+          router.replace('MonitorBooking')
+        } else {
+          commit('updateStatus', false)
+          router.replace('/')
+        }
+      })
+    },
     // authen แล้วให้เปลี่ยน path
     signin ({commit}, user) {
       firebase.auth().signInWithEmailAndPassword(user.email, user.password).then(
         (user) => {
-          router.replace('MonitorBooking')
           commit('updateStatus', true)
         },
         (err) => {
           alert('Oops. ' + err.message)
         }
       )
+    },
+    // Logout
+    logout ({commit}) {
+      firebase.auth().signOut().then(function () {
+        commit('updateStatus', false)
+        router.replace('/')
+      }).catch(function (error) {
+        console.log(error)
+      })
     },
     // เพิ่มห้อง
     addRoom (payload, detailRoom) {
