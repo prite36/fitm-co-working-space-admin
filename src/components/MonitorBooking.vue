@@ -14,24 +14,9 @@
         </template>
       </v-date-picker>
     </v-dialog>
-
     <div class="leftshow">
-      มีผู้จอง
-      <h4>meetingroom</h4> <br>
-      <div class="" v-for="(item, typeIyem) in booking">
-        {{typeIyem}}&nbsp;
-        <div class="" v-for="(type, key) in item">
-          {{key}}
-          <div class="" v-for="(status, nameItem) in type">
-            {{nameItem}}
-            <div class="" v-for="(dataBooking, keybooking) in status">
-              <div class="" v-if="dataBooking.dateStart === dateQuery && modal === false">
-                <v-btn @click="">{{dataBooking.timeStart}} - {{dataBooking.timeStop}}</v-btn>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      เวลาจอง<br>
+      <v-btn  v-for="n in queryBooking">{{n.bookingTime.timestart}}-{{n.bookingTime.timestop}}</v-btn>
     </div>
     <div class="rightshow">
       เวลาว่าง
@@ -50,7 +35,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['booking'])
+    ...mapGetters(['queryBooking'])
   },
   methods: {
     ...mapActions(['setBookingRef', 'Bookingquery'])
@@ -58,12 +43,12 @@ export default {
   watch: {
     booking: function () {
       delete this.booking['.key']
+    },
+    modal: function () {
+      if (this.dateQuery !== null && this.modal === false) {
+        this.Bookingquery(this.dateQuery)
+      }
     }
-    // modal: function () {
-    //   if (this.dateQuery !== null && this.modal === false) {
-    //     this.Bookingquery(this.dateQuery)
-    //   }
-    // }
   },
   created () {
     this.setBookingRef()

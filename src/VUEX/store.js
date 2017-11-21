@@ -2,9 +2,11 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import firebase from 'firebase'
 import router from '../router'
+import Moment from 'moment'
+import { extendMoment } from 'moment-range'
 import {firebaseMutations, firebaseAction} from 'vuexfire'
 Vue.use(Vuex)
-
+const moment = extendMoment(Moment)
 // link database
 let config = {
   apiKey: 'AIzaSyAE2rQQye4hlRpDqAWirvyaaCExiaWA8DY',
@@ -27,25 +29,73 @@ const store = new Vuex.Store({
   state: {
     statusLogin: false,
     items: '',
-    booking: ''
+    booking: {},
+    queryBooking: []
   },
   getters: {
     statusLogin: state => state.statusLogin,
     items: state => state.items,
-    booking: state => state.booking
+    queryBooking: state => state.queryBooking
   },
   mutations: {
     ...firebaseMutations,
     updateStatus (state, status) {
       state.statusLogin = status
+    },
+    updateQueryBooking (state, date) {
+      delete state.booking['.key']
+      state.queryBooking = []
+      for (var key1 in state.booking) {
+        // console.log(state.booking[key1])
+        for (var key2 in state.booking[key1]) {
+          // console.log(state.booking[key1][key2])
+          for (var key3 in state.booking[key1][key2]) {
+            // console.log(state.booking[key1][key2][key3])
+            for (var key4 in state.booking[key1][key2][key3]) {
+              let data = state.booking[key1][key2][key3][key4]
+              // console.log(data)
+              if (date === data.dateStart && date === data.dateStop) {
+                let bookingTime = {
+                  timestart: data.timeStart,
+                  timestop: data.timeStop
+                }
+                state.queryBooking.push({
+                  data: data,
+                  bookingTime: bookingTime
+                })
+              } else if (date === data.dateStart) {
+                let bookingTime = {
+                  timestart: data.timeStart,
+                  timestop: '24:00'
+                }
+                state.queryBooking.push({
+                  data: data,
+                  bookingTime: bookingTime
+                })
+              } else if (moment(date).isBetween(data.dateStart, data.dateStop)) {
+                let bookingTime = {
+                  timestart: '00:00',
+                  timestop: '24:00'
+                }
+                state.queryBooking.push({
+                  data: data,
+                  bookingTime: bookingTime
+                })
+              } else if (date === data.dateStop) {
+                let bookingTime = {
+                  timestart: '00:00',
+                  timestop: data.timeStop
+                }
+                state.queryBooking.push({
+                  data: data,
+                  bookingTime: bookingTime
+                })
+              }
+            }
+          }
+        }
+      }
     }
-    // updateQueryBooking (state, date) {
-      // var key1 = Object.values(state.booking)
-
-      // key1.forEach(value => {
-      //   console.log(value)
-      // })
-    // }
   },
   actions: {
     // bind ค่า ใน db ให้ผูกกับ ตัวแปร ใน state
@@ -82,10 +132,10 @@ const store = new Vuex.Store({
     // ลบห้องอุปกรณ์
     removeItem (payload, child) {
       Items.child(child).remove()
+    },
+    Bookingquery ({commit}, date) {
+      commit('updateQueryBooking', date)
     }
-    // Bookingquery ({commit}, date) {
-    //   commit('updateQueryBooking', date)
-    // }
   }
 })
 

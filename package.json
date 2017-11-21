@@ -13,6 +13,7 @@
   "dependencies": {
     "firebase": "^4.6.2",
     "moment": "^2.19.2",
+    "moment-range": "^3.0.3",
     "vue": "^2.5.3",
     "vue-router": "^3.0.1",
     "vue-template-compiler": "^2.5.4",
