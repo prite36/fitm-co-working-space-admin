@@ -1,5 +1,6 @@
 <template>
   <div class="monitorbooking">
+    <h3>ตรวจสอบการจอง</h3>
     <v-dialog persistent v-model="modal" lazy full-width width="290px">
       <v-text-field
         slot="activator" label="Picker in dialog" v-model="dateQuery" prepend-icon="event" readonly>

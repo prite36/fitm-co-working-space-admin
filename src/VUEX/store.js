@@ -27,7 +27,7 @@ let Booking = db.ref('booking')
 const store = new Vuex.Store({
   strict: true,
   state: {
-    statusLogin: false,
+    statusLogin: true,
     items: '',
     booking: {},
     queryBooking: []
@@ -118,10 +118,9 @@ const store = new Vuex.Store({
       firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
           commit('updateStatus', true)
-          router.replace('MonitorBooking')
         } else {
           commit('updateStatus', false)
-          router.replace('/')
+          router.push('/')
         }
       })
     },
@@ -130,6 +129,7 @@ const store = new Vuex.Store({
       firebase.auth().signInWithEmailAndPassword(user.email, user.password).then(
         (user) => {
           commit('updateStatus', true)
+          router.push('MonitorBooking')
         },
         (err) => {
           alert('Oops. ' + err.message)
@@ -140,7 +140,7 @@ const store = new Vuex.Store({
     logout ({commit}) {
       firebase.auth().signOut().then(function () {
         commit('updateStatus', false)
-        router.replace('/')
+        router.push('/')
       }).catch(function (error) {
         console.log(error)
       })

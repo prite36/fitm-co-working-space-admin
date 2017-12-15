@@ -1,8 +1,9 @@
 <template>
   <div class="showitem">
-    <div class="" v-for="(item, typeItem) in items">
+  <h3>ลบ แก้ไข ห้องและอุปกรณ์</h3><br><br>
+    <div class="typeitem" v-for="(item, typeItem) in items">
       <h4>{{typeItem}}</h4>
-      <br><br>
+      <br>
       <div class="" v-for="(type, key2) in item">
         {{key2}}
         <div class="" v-for="(status, nameItem) in type">
@@ -15,6 +16,7 @@
 </template>
 
 <script>
+// import firebase from 'firebase'
 import {mapGetters, mapActions} from 'vuex'
 export default {
   name: 'ShowItem',
@@ -22,7 +24,7 @@ export default {
     ...mapGetters(['items'])
   },
   methods: {
-    ...mapActions(['setItemsRef', 'removeItem']),
+    ...mapActions(['setItemsRef', 'removeItem', 'setStatus']),
     setpath (type, child1, child2) {
       let path = type + '/' + child1 + '/' + child2
       this.removeItem(path)
@@ -35,7 +37,17 @@ export default {
   },
   created () {
     this.setItemsRef()
+    // this.setStatus('ShowItem')
   }
+  // mounted () {
+  //   let data = firebase.database().ref('/booking')
+  //   let lecture = []
+  //   data.on('value', (snapshot) => {
+  //     console.log('>>>>>', snapshot.child('device/Lacercut').val())
+  //     lecture.push(snapshot.child('device/').val())
+  //   })
+  //   console.log(lecture)
+  // }
 }
 </script>
 <style lang="scss">
@@ -44,8 +56,11 @@ export default {
 <style scoped>
 .showitem {
   font-size: 16px;
-  font-size: 16px;
-  padding-left: 5%;
+  padding-left: 2%;
   padding-right: 2%;
+}
+.typeitem {
+  float:left;
+  width: 50%;
 }
 </style>

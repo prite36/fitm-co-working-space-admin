@@ -1,6 +1,6 @@
 <template>
 <div id="app">
-  <v-app id="bglogin" v-if="statusLogin == false">
+  <v-app id="bglogin" v-if="!statusLogin">
     <template>
       <v-parallax src="/static/doc-images/vbanner.jpg">
         <v-layout column align-center justify-center background-color="white">
@@ -22,7 +22,7 @@
       </v-parallax>
     </template>
   </v-app>
-  <v-app id="inspire" v-if="statusLogin == true">
+  <v-app id="inspire" v-else>
     <v-navigation-drawer fixed v-model="drawer" app>
       <v-list dense class="menu">
         <router-link to="MonitorBooking" class="btnlink">
@@ -42,7 +42,7 @@
               <v-icon large color="green darken-2">description</v-icon>
             </v-list-tile-action>
             <v-list-tile-content>
-              <h3>ลบ&แก้ไข ห้องและอุปกรณ์</h3>
+              <h3>ลบ แก้ไข ห้องและอุปกรณ์</h3>
             </v-list-tile-content>
           </v-list-tile>
         </router-link>
@@ -62,13 +62,12 @@
             <v-icon large color="black">exit_to_app</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <h3>Logout</h3>
+            <h3>ออกจากระบบ</h3>
           </v-list-tile-content>
         </v-list-tile>
-
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar color="cyan" dark fixed app>
+    <v-toolbar color="blue darken-4" dark fixed app>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>FITM Co-Workingspace</v-toolbar-title>
     </v-toolbar>
@@ -76,7 +75,7 @@
       <router-view/>
       </v-container>
     </v-content>
-    <v-footer color="cyan" app>
+    <v-footer color="blue darken-4" app>
       <span class="white--text">&copy; 2017</span>
     </v-footer>
   </v-app>
@@ -86,7 +85,6 @@
 <script>
 import AddItem from './components/AddItem.vue'
 import ShowItem from './components/ShowItem.vue'
-// import firebase from 'firebase'
 import {
   mapGetters,
   mapActions
