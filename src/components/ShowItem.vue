@@ -24,7 +24,7 @@ export default {
     ...mapGetters(['items'])
   },
   methods: {
-    ...mapActions(['setItemsRef', 'removeItem', 'setStatus']),
+    ...mapActions(['setItemsRef', 'removeItem']),
     setpath (type, child1, child2) {
       let path = type + '/' + child1 + '/' + child2
       this.removeItem(path)
@@ -37,7 +37,6 @@ export default {
   },
   created () {
     this.setItemsRef()
-    // this.setStatus('ShowItem')
   }
   // mounted () {
   //   let data = firebase.database().ref('/booking')

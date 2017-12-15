@@ -82,10 +82,9 @@ export default{
   computed: {
   },
   methods: {
-    ...mapActions(['addRoom', 'setStatus', 'addDevice'])
+    ...mapActions(['addRoom', 'addDevice'])
   },
   created () {
-    // this.setStatus('AddItem')
   }
 }
 </script>
