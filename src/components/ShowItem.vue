@@ -20,6 +20,8 @@
 import {mapGetters, mapActions} from 'vuex'
 export default {
   name: 'ShowItem',
+  data: () => ({
+  }),
   computed: {
     ...mapGetters(['items'])
   },

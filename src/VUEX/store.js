@@ -44,8 +44,8 @@ const store = new Vuex.Store({
     },
     // query โดยการเอาค่าวันที่มาวนเปรียบเทียบกับ booking ทุกตัวหากเงื่อไขตรงจะโยนไปเก็บใน queryBooking
     updateQueryBooking (state, date) {
-      delete state.booking['.key']
       state.queryBooking = []
+      delete state.booking['.key']
       for (var key1 in state.booking) {
         // console.log(state.booking[key1])
         for (var key2 in state.booking[key1]) {
@@ -62,10 +62,11 @@ const store = new Vuex.Store({
                   typeitem: key2,
                   nameitem: key3
                 }
-                state.queryBooking.push({
+                let packdata = {
                   data: data,
                   bookingTime: bookingTime
-                })
+                }
+                state.queryBooking.push(packdata)
               } else if (date === data.dateStart) {
                 let bookingTime = {
                   timestart: data.timeStart,
@@ -73,10 +74,11 @@ const store = new Vuex.Store({
                   typeitem: key2,
                   nameitem: key3
                 }
-                state.queryBooking.push({
+                let packdata = {
                   data: data,
                   bookingTime: bookingTime
-                })
+                }
+                state.queryBooking.push(packdata)
               } else if (moment(date).isBetween(data.dateStart, data.dateStop)) {
                 let bookingTime = {
                   timestart: '00:00',
@@ -84,10 +86,11 @@ const store = new Vuex.Store({
                   typeitem: key2,
                   nameitem: key3
                 }
-                state.queryBooking.push({
+                let packdata = {
                   data: data,
                   bookingTime: bookingTime
-                })
+                }
+                state.queryBookingp.push(packdata)
               } else if (date === data.dateStop) {
                 let bookingTime = {
                   timestart: '00:00',
@@ -95,10 +98,11 @@ const store = new Vuex.Store({
                   typeitem: key2,
                   nameitem: key3
                 }
-                state.queryBooking.push({
+                let packdata = {
                   data: data,
                   bookingTime: bookingTime
-                })
+                }
+                state.queryBooking.push(packdata)
               }
             }
           }
@@ -132,7 +136,7 @@ const store = new Vuex.Store({
           router.push('MonitorBooking')
         },
         (err) => {
-          alert('Oops. ' + err.message)
+          alert(err.message)
         }
       )
     },

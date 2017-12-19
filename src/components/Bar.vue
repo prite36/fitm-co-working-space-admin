@@ -62,8 +62,7 @@
 
 <script>
 import {
-  mapActions,
-  mapGetters
+  mapActions
 } from 'vuex'
 export default {
   name: 'bar',
@@ -72,9 +71,6 @@ export default {
   }),
   methods: {
     ...mapActions(['logout'])
-  },
-  computed: {
-    ...mapGetters(['statusLogin'])
   }
 }
 </script>
