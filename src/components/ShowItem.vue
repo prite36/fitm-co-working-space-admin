@@ -7,8 +7,24 @@
       <div class="" v-for="(type, key2) in item">
         {{key2}}
         <div class="" v-for="(status, nameItem) in type">
-          {{nameItem}}
-          <v-btn @click="setpath(typeItem, key2, nameItem)">delete</v-btn>
+          <template>
+            <v-layout row justify-center>
+              {{nameItem}}
+              <v-btn color="primary" dark @click.native.stop="dialog = true">ลบ</v-btn>
+              <v-dialog v-model="dialog" max-width="290">
+                <v-card>
+                  <v-card-title class="headline">คุณต้องการทำการลบ <b>{{nameItem}}</b> ออกจากระบบหรือไม่</v-card-title>
+                  <v-card-text> กดยืนยันเพื่อลบ กดยกเลิกเพื่อกลับสู่หน้าเดิม</v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="green darken-1" flat="flat" @click.native="setpath(typeItem, key2, nameItem), dialog = false">ลบ</v-btn>
+                    <v-btn color="green darken-1" flat="flat" @click.native="dialog = false">ยกเลิก</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </v-layout>
+          </template>
+          <!-- <v-btn @click="setpath(typeItem, key2, nameItem)">delete</v-btn> -->
         </div>
       </div>
     </div>
@@ -21,6 +37,7 @@ import {mapGetters, mapActions} from 'vuex'
 export default {
   name: 'ShowItem',
   data: () => ({
+    dialog: false
   }),
   computed: {
     ...mapGetters(['items'])

@@ -47,8 +47,8 @@
           </v-tabs-content>
           <v-tabs-content id="tab2">
             <v-card flat>
-                <label>Add Device</label>
-                <br><br>
+                <label><h4>Add Device</h4></label>
+                <br>
                 <v-flex xs12>
                 <v-select
                   v-model="detailDevice.typeDevice"
