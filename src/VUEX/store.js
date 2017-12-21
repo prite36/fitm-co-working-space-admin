@@ -35,6 +35,7 @@ const store = new Vuex.Store({
   getters: {
     statusLogin: state => state.statusLogin,
     items: state => state.items,
+    booking: state => state.booking,
     queryBooking: state => state.queryBooking
   },
   mutations: {

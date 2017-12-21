@@ -1,12 +1,12 @@
 <template>
   <div class="showitem">
   <h3>ลบ แก้ไข ห้องและอุปกรณ์</h3><br><br>
-    <div class="typeitem" v-for="(item, typeItem) in items">
+    <div class="" v-for="(item, typeItem) in items">
       <h4>{{typeItem}}</h4>
       <br>
       <div class="" v-for="(type, key2) in item">
-        {{key2}}
-        <div class="" v-for="(status, nameItem) in type">
+        <center>{{key2}}</center>
+        <div class="typeitem" v-for="(status, nameItem) in type">
           <template>
             <v-layout row justify-center>
               {{nameItem}}
@@ -24,7 +24,6 @@
               </v-dialog>
             </v-layout>
           </template>
-          <!-- <v-btn @click="setpath(typeItem, key2, nameItem)">delete</v-btn> -->
         </div>
       </div>
     </div>
@@ -79,6 +78,6 @@ export default {
 }
 .typeitem {
   float:left;
-  width: 50%;
+  width: 48%;
 }
 </style>

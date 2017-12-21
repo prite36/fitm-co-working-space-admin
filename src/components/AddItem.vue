@@ -42,7 +42,7 @@
                   v-model="detailRoom.nameRoom"
                 ></v-text-field>
                 <br><br>
-                <v-btn @click="addRoom(detailRoom)">Add Item</v-btn>
+                <center><v-btn @click="addRoom(detailRoom)">Add Item</v-btn></center>
             </v-card>
           </v-tabs-content>
           <v-tabs-content id="tab2">
@@ -63,32 +63,12 @@
                   v-model="detailDevice.nameDevice"
                 ></v-text-field>
                 <br><br>
-                <v-btn @click="addDevice(detailDevice)">Add Item</v-btn>
+                <center><v-btn @click="addDevice(detailDevice)">Add Item</v-btn></center>
             </v-card>
           </v-tabs-content>
         </v-tabs-items>
       </v-tabs>
     </template>
-    <!-- {{select}}
-    <template>
-  <v-card color="grey lighten-4" flat>
-    <v-card-text>
-      <v-container fluid>
-        <v-layout wrap>
-          <v-flex xs12>
-            <v-select
-              v-model="select"
-              label="Select a favorite activity or create a new one"
-              multiple
-              tags
-              :items="items.device"
-            ></v-select>
-          </v-flex>
-        </v-layout>
-      </v-container>
-    </v-card-text>
-  </v-card>
-  </template> -->
   </div>
 </template>
 

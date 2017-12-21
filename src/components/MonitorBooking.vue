@@ -1,7 +1,7 @@
 <template>
   <div class="monitorbooking">
     <h3>ตรวจสอบการจอง</h3>
-    <v-dialog persistent v-model="modal" lazy full-width width="290px">
+    <v-dialog persistent v-model="modaldate" lazy full-width width="290px">
       <v-text-field
         slot="activator" label="Picker in dialog" v-model="dateQuery" prepend-icon="event" readonly>
       </v-text-field>
@@ -20,7 +20,7 @@
       <div class="" v-for="time in queryBooking">
         <br><br>
         {{time.bookingTime.nameitem}}
-        <v-btn>{{time.bookingTime.timestart}}-{{time.bookingTime.timestop}}</v-btn>
+        <v-btn @click="">{{time.bookingTime.timestart}}-{{time.bookingTime.timestop}}</v-btn>
       </div>
     </div>
     <div class="rightshow">
@@ -35,12 +35,12 @@ export default {
   name: 'MonitorBooking',
   data () {
     return {
-      modal: false,
+      modaldate: false,
       dateQuery: null
     }
   },
   computed: {
-    ...mapGetters(['queryBooking'])
+    ...mapGetters(['queryBooking', 'booking'])
   },
   methods: {
     ...mapActions(['setBookingRef', 'Bookingquery'])
@@ -48,9 +48,12 @@ export default {
   watch: {
     booking: function () {
       delete this.booking['.key']
+      if (this.dateQuery !== null && this.modaldate === false) {
+        this.Bookingquery(this.dateQuery)
+      }
     },
-    modal: function () {
-      if (this.dateQuery !== null && this.modal === false) {
+    modaldate: function () {
+      if (this.dateQuery !== null && this.modaldate === false) {
         this.Bookingquery(this.dateQuery)
       }
     }
