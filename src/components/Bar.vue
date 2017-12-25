@@ -9,18 +9,18 @@
               <v-icon large color="blue darken-2">desktop_windows</v-icon>
             </v-list-tile-action>
             <v-list-tile-content>
-              <h3>ตรวจสอบการจอง</h3>
+              <h3>Monitoring Booking</h3>
             </v-list-tile-content>
           </v-list-tile>
         </router-link>
         <hr>
-        <router-link to="ShowItem" class="btnlink">
+        <router-link to="Editdelete" class="btnlink">
           <v-list-tile @click="">
             <v-list-tile-action>
               <v-icon large color="green darken-2">description</v-icon>
             </v-list-tile-action>
             <v-list-tile-content>
-              <h3>ลบ แก้ไข ห้องและอุปกรณ์</h3>
+              <h3>Delete room & device</h3>
             </v-list-tile-content>
           </v-list-tile>
         </router-link>
@@ -28,10 +28,10 @@
         <router-link to="AddItem" class="btnlink">
           <v-list-tile @click="">
             <v-list-tile-action>
-              <v-icon large color="pink darken-1">library_add</v-icon>
+              <v-icon large color="pink darken-1">indeterminate_check_box</v-icon>
             </v-list-tile-action>
             <v-list-tile-content>
-              <h3>เพิ่มห้องและอุปกรณ์</h3>
+              <h3>Add room & device</h3>
             </v-list-tile-content>
           </v-list-tile>
         </router-link>
@@ -40,7 +40,7 @@
             <v-icon large color="black">exit_to_app</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <h3>ออกจากระบบ</h3>
+            <h3>Logout</h3>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
@@ -51,7 +51,7 @@
     </v-toolbar>
     <v-content class="padtop">
       <router-view/>
-      </v-container>
+      <!-- </v-container> -->
     </v-content>
     <v-footer color="blue darken-4" app>
       <span class="white--text">&copy; 2017</span>

@@ -1,6 +1,6 @@
 <template>
-  <div class="showitem">
-  <h3>ลบ แก้ไข ห้องและอุปกรณ์</h3><br><br>
+  <div class="editdelete">
+  <h3>Delete room and device</h3><br><br>
     <div class="" v-for="(item, typeItem) in items">
       <h4>{{typeItem}}</h4>
       <br>
@@ -10,14 +10,14 @@
           <template>
             <v-layout row justify-center>
               {{nameItem}}
-              <v-btn color="primary" dark @click.native.stop="dialog = true">ลบ</v-btn>
+              <v-btn color="primary" dark @click="commitdelete(typeItem, key2, nameItem)">ลบ</v-btn>
               <v-dialog v-model="dialog" max-width="290">
                 <v-card>
-                  <v-card-title class="headline">คุณต้องการทำการลบ <b>{{nameItem}}</b> ออกจากระบบหรือไม่</v-card-title>
+                  <v-card-title class="headline">คุณต้องการทำการลบ <b>{{nameCommit}}</b> ออกจากระบบหรือไม่</v-card-title>
                   <v-card-text> กดยืนยันเพื่อลบ กดยกเลิกเพื่อกลับสู่หน้าเดิม</v-card-text>
                   <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="green darken-1" flat="flat" @click.native="setpath(typeItem, key2, nameItem), dialog = false">ลบ</v-btn>
+                    <v-btn color="green darken-1" flat="flat" @click.native="removeItem(pathDelete), dialog = false">ลบ</v-btn>
                     <v-btn color="green darken-1" flat="flat" @click.native="dialog = false">ยกเลิก</v-btn>
                   </v-card-actions>
                 </v-card>
@@ -31,21 +31,24 @@
 </template>
 
 <script>
-// import firebase from 'firebase'
 import {mapGetters, mapActions} from 'vuex'
 export default {
-  name: 'ShowItem',
+  name: 'editdelete',
   data: () => ({
-    dialog: false
+    dialog: false,
+    pathDelete: '',
+    nameCommit: ''
   }),
   computed: {
     ...mapGetters(['items'])
   },
   methods: {
     ...mapActions(['setItemsRef', 'removeItem']),
-    setpath (type, child1, child2) {
-      let path = type + '/' + child1 + '/' + child2
-      this.removeItem(path)
+    async commitdelete (type, child1, child2) {
+      let path = await type + '/' + child1 + '/' + child2
+      this.nameCommit = child2
+      this.pathDelete = path
+      this.dialog = true
     }
   },
   watch: {
@@ -71,7 +74,7 @@ export default {
 @import '../styles/font.scss';
 </style>
 <style scoped>
-.showitem {
+.editdelete {
   font-size: 16px;
   padding-left: 2%;
   padding-right: 2%;

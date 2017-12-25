@@ -17,22 +17,27 @@
         <v-tabs-items>
           <v-tabs-content id="tab1">
             <v-card flat>
-                <h4>change size of room</h4>
+                <h4>change type of room</h4>
                 <v-radio-group v-model="detailRoom.sizeRoom">
-                  <v-radio label="smallRoom"
+                  <v-radio label="smallroom"
                   name="typeroom"
                   color="red"
                   value="smallRoom"
                   ></v-radio>
-                  <v-radio label="mediumRoom"
+                  <v-radio label="mediumroom"
                   name="typeroom"
                   color="orange"
                   value="mediumRoom"
                   ></v-radio>
-                  <v-radio label="largeRoom"
+                  <v-radio label="largeroom"
                   name="typeroom"
                   color="primary"
                   value="largeRoom"
+                  ></v-radio>
+                  <v-radio label="classroom"
+                  name="typeroom"
+                  color="green"
+                  value="classroom"
                   ></v-radio>
                 </v-radio-group>
                 <br>
@@ -42,7 +47,8 @@
                   v-model="detailRoom.nameRoom"
                 ></v-text-field>
                 <br><br>
-                <center><v-btn @click="addRoom(detailRoom)">Add Item</v-btn></center>
+                <center><v-btn @click="addRoom(detailRoom)">Add Room</v-btn></center>
+                <br>
             </v-card>
           </v-tabs-content>
           <v-tabs-content id="tab2">
@@ -117,5 +123,8 @@ export default{
   font-size: 16px;
   padding-left: 2%;
   padding-right: 2%;
+}
+.additem {
+  background-color: white;
 }
 </style>

@@ -91,7 +91,7 @@ const store = new Vuex.Store({
                   data: data,
                   bookingTime: bookingTime
                 }
-                state.queryBookingp.push(packdata)
+                state.queryBooking.push(packdata)
               } else if (date === data.dateStop) {
                 let bookingTime = {
                   timestart: '00:00',

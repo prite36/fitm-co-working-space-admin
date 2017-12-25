@@ -12,7 +12,8 @@
                   <v-flex xs12>
                     <v-text-field
                       name="input-10-1"
-                      label="Enter your Email"
+                      prepend-icon="email"
+                      label="Enter your email"
                       v-model="user.email"
                       min="8"
                     ></v-text-field>
@@ -22,7 +23,8 @@
                   <v-flex xs12>
                     <v-text-field
                       name="input-10-1"
-                      label="Enter your Password"
+                      prepend-icon="vpn_key"
+                      label="Enter your password"
                       v-model="user.password"
                       min="8"
                       :append-icon="e1 ? 'visibility' : 'visibility_off'"
@@ -34,7 +36,7 @@
                 </v-layout>
               </v-container>
             </v-card-text>
-            <center><v-btn @click="signin(user)">login</v-btn></center>
+            <center><v-btn color="primary" @click="signin(user)">login</v-btn></center>
             <br>
           </v-card>
         </v-parallax>

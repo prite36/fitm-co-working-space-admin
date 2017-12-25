@@ -11,7 +11,7 @@
 
 <script>
 import AddItem from './components/AddItem.vue'
-import ShowItem from './components/ShowItem.vue'
+import Editdelete from './components/Editdelete.vue'
 import MonitorBooking from './components/MonitorBooking.vue'
 import Bar from './components/Bar.vue'
 import Login from './components/Login.vue'
@@ -23,7 +23,7 @@ export default {
   name: 'app',
   components: {
     AddItem: AddItem,
-    ShowItem: ShowItem,
+    Editdelete: Editdelete,
     MonitorBooking: MonitorBooking,
     Bar: Bar,
     Login: Login
