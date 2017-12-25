@@ -1,32 +1,80 @@
 <template>
   <div class="editdelete">
-  <h3>Delete room and device</h3><br><br>
-    <div class="" v-for="(item, typeItem) in items">
-      <h4>{{typeItem}}</h4>
+    <v-tabs fixed icons centered>
+      <v-tabs-bar light color="">
+        <v-tabs-slider color="red"></v-tabs-slider>
+        <v-tabs-item href="#tab1">
+          <v-icon color="green">account_balance</v-icon>
+          <h5>Delete Room</h5>
+        </v-tabs-item>
+        <v-tabs-item href="#tab2">
+          <v-icon color="blue">devices_other</v-icon>
+          <h5>Delete Device</h5>
+        </v-tabs-item>
+      </v-tabs-bar>
       <br>
-      <div class="" v-for="(type, key2) in item">
-        <center>{{key2}}</center>
-        <div class="typeitem" v-for="(status, nameItem) in type">
-          <template>
-            <v-layout row justify-center>
-              {{nameItem}}
-              <v-btn color="primary" dark @click="commitdelete(typeItem, key2, nameItem)">ลบ</v-btn>
-              <v-dialog v-model="dialog" max-width="290">
-                <v-card>
-                  <v-card-title class="headline">คุณต้องการทำการลบ <b>{{nameCommit}}</b> ออกจากระบบหรือไม่</v-card-title>
-                  <v-card-text> กดยืนยันเพื่อลบ กดยกเลิกเพื่อกลับสู่หน้าเดิม</v-card-text>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="green darken-1" flat="flat" @click.native="removeItem(pathDelete), dialog = false">ลบ</v-btn>
-                    <v-btn color="green darken-1" flat="flat" @click.native="dialog = false">ยกเลิก</v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-            </v-layout>
-          </template>
-        </div>
-      </div>
-    </div>
+      <v-tabs-items>
+        <v-tabs-content id="tab1">
+          <v-layout row>
+            <v-flex xs12 sm6 offset-sm3>
+              <v-card>
+                <v-list two-line subheader v-for="(typeroom, nametype) in items.meetingroom">
+                  <v-subheader inset>
+                    <a>{{nametype}}</a>
+                  </v-subheader>
+                  <v-list-tile avatar v-for="(room, nameroom) in typeroom" @click="">
+                    <v-list-tile-content>
+                      {{nameroom}}
+                    </v-list-tile-content>
+                    <v-list-tile-action>
+                      <v-btn icon ripple  @click="commitdelete('meetingroom', nametype, nameroom)">
+                        <v-icon large color="red">delete_forever</v-icon>
+                      </v-btn>
+                    </v-list-tile-action>
+                  </v-list-tile>
+                  <hr>
+                </v-list>
+              </v-card>
+            </v-flex>
+          </v-layout>
+        </v-tabs-content>
+        <v-tabs-content id="tab2">
+          <v-layout row>
+            <v-flex xs12 sm6 offset-sm3>
+              <v-card>
+                <v-list two-line subheader v-for="(typedevice, nametype) in items.device">
+                  <v-subheader inset>
+                    <h2>{{nametype}}</h2>
+                  </v-subheader>
+                  <v-list-tile avatar v-for="(device, namedevice) in typedevice">
+                    <v-list-tile-content>
+                      {{namedevice}}
+                    </v-list-tile-content>
+                    <v-list-tile-action>
+                      <v-btn icon ripple  @click="commitdelete('device', nametype, namedevice)">
+                        <v-icon large color="red">delete_forever</v-icon>
+                      </v-btn>
+                    </v-list-tile-action>
+                  </v-list-tile>
+                </v-list>
+              </v-card>
+            </v-flex>
+          </v-layout>
+        </v-tabs-content>
+      </v-tabs-items>
+    </v-tabs>
+    <v-dialog v-model="dialog" max-width="290">
+      <v-card>
+        <v-card-title class="headline">You want to delete <b>{{nameCommit}}</b> ?</v-card-title>
+        <v-card-text> Push on delete button for delete or<br>
+        Push on cancle button for back to original page</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="red darken-1" flat="flat" @click.native="removeItem(pathDelete), dialog = false">delete</v-btn>
+          <v-btn color="green darken-1" flat="flat" @click.native="dialog = false">cancle</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -49,6 +97,7 @@ export default {
       this.nameCommit = child2
       this.pathDelete = path
       this.dialog = true
+      console.log(path + '/' + this.nameCommit + '/' + this.pathDelete + '/' + this.dialog)
     }
   },
   watch: {
