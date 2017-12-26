@@ -100,7 +100,6 @@ export default {
       this.nameCommit = child2
       this.pathDelete = path
       this.dialog = true
-      console.log(path + '/' + this.nameCommit + '/' + this.pathDelete + '/' + this.dialog)
     }
   },
   watch: {

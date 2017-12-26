@@ -4,9 +4,11 @@ import router from './router'
 import Vuex from 'vuex'
 import store from './VUEX/store'
 import Vuetify from 'vuetify'
+import VeeValidate from 'vee-validate'
 
 Vue.use(Vuex)
 Vue.use(Vuetify)
+Vue.use(VeeValidate)
 
 Vue.config.productionTip = false
 
