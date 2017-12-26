@@ -22,7 +22,7 @@ let db = firebase.database()
 // ผูกค่าตัวแปรกับค่าใน database
 let Items = db.ref('items')
 let Booking = db.ref('booking')
-
+let Profile = db.ref('profile')
 // store
 const store = new Vuex.Store({
   strict: true,
@@ -30,13 +30,15 @@ const store = new Vuex.Store({
     statusLogin: true,
     items: '',
     booking: {},
+    profiles: null,
     queryBooking: []
   },
   getters: {
     statusLogin: state => state.statusLogin,
     items: state => state.items,
     booking: state => state.booking,
-    queryBooking: state => state.queryBooking
+    queryBooking: state => state.queryBooking,
+    profiles: state => state.profiles
   },
   mutations: {
     ...firebaseMutations,
@@ -47,6 +49,7 @@ const store = new Vuex.Store({
     updateQueryBooking (state, date) {
       state.queryBooking = []
       delete state.booking['.key']
+      delete state.profiles['.key']
       for (var key1 in state.booking) {
         // console.log(state.booking[key1])
         for (var key2 in state.booking[key1]) {
@@ -118,6 +121,9 @@ const store = new Vuex.Store({
     }),
     setBookingRef: firebaseAction(({ bindFirebaseRef, unbindFirebaseRef }) => {
       bindFirebaseRef('booking', Booking)
+    }),
+    setProfileRef: firebaseAction(({ bindFirebaseRef, unbindFirebaseRef }) => {
+      bindFirebaseRef('profiles', Profile)
     }),
     setStatus ({commit}) {
       firebase.auth().onAuthStateChanged(function (user) {

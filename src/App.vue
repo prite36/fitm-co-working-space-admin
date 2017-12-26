@@ -3,7 +3,7 @@
   <v-app v-if="!statusLogin">
     <login></login>
   </v-app>
-  <v-app id="inspire" v-else>
+  <v-app v-else>
     <bar></bar>
   </v-app>
 </div>

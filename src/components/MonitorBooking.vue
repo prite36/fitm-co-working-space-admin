@@ -15,6 +15,7 @@
     </v-date-picker>
   </v-dialog>
 
+  <br>
   <v-layout row v-if="dateQuery !== null">
     <v-flex xs12 sm6 offset-sm3>
       <v-card>
@@ -46,10 +47,11 @@
         <li>Date time stop  {{details.data.dateStop}} {{details.data.timeStop}}</li>
         <li>Time stamp  {{details.data.timeStamp}}</li>
         <li v-if="details.data.countPeople">people of use {{details.data.countPeople}}</li>
+        <li>contact {{userProfile.email}}</li>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="green darken-1" flat="flat" @click.native="dialog = false">กลับหน้าเดิม</v-btn>
+        <v-btn color="green darken-1" flat="flat" @click.native="dialog = false">Back to original page</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -65,16 +67,24 @@ export default {
       dialog: false,
       details: null,
       modaldate: false,
-      dateQuery: null
+      dateQuery: null,
+      userProfile: null
     }
   },
   computed: {
-    ...mapGetters(['queryBooking', 'booking'])
+    ...mapGetters(['queryBooking', 'booking', 'profiles'])
   },
   methods: {
-    ...mapActions(['setBookingRef', 'Bookingquery']),
+    ...mapActions(['setBookingRef', 'setProfileRef', 'Bookingquery']),
     async showDetail (detail) {
       this.details = await detail
+      for (var type in this.profiles) {
+        for (var id in this.profiles[type]) {
+          if (id === this.details.data.senderID) {
+            this.userProfile = this.profiles[type][id]
+          }
+        }
+      }
       this.dialog = true
     }
   },
@@ -89,10 +99,14 @@ export default {
       if (this.dateQuery !== null && this.modaldate === false) {
         this.Bookingquery(this.dateQuery)
       }
+    },
+    profiles: function () {
+      delete this.profiles['.key']
     }
   },
   created () {
     this.setBookingRef()
+    this.setProfileRef()
   }
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <v-app id="inspire">
+    <v-app id="">
       <template>
         <h2 align="center">Admin Co-Workingspace</h2>
         <br>
