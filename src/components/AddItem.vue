@@ -5,11 +5,11 @@
         <v-tabs-bar light color="">
           <v-tabs-slider color="red"></v-tabs-slider>
           <v-tabs-item href="#tab1">
-            <v-icon color="green">account_balance</v-icon>
+            <v-icon color="green" medium>account_balance</v-icon>
             <h5>Add Room</h5>
           </v-tabs-item>
           <v-tabs-item href="#tab2">
-            <v-icon color="blue">devices_other</v-icon>
+            <v-icon color="blue" medium>devices_other</v-icon>
             <h5>Add Device</h5>
           </v-tabs-item>
         </v-tabs-bar>

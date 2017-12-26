@@ -17,7 +17,7 @@
         <router-link to="Editdelete" class="btnlink">
           <v-list-tile @click="">
             <v-list-tile-action>
-              <v-icon large color="green darken-2">description</v-icon>
+              <v-icon large color="pink darken-1">indeterminate_check_box</v-icon>
             </v-list-tile-action>
             <v-list-tile-content>
               <h3>Delete room & device</h3>
@@ -28,13 +28,14 @@
         <router-link to="AddItem" class="btnlink">
           <v-list-tile @click="">
             <v-list-tile-action>
-              <v-icon large color="pink darken-1">indeterminate_check_box</v-icon>
+              <v-icon large color="green darken-2">note_add</v-icon>
             </v-list-tile-action>
             <v-list-tile-content>
               <h3>Add room & device</h3>
             </v-list-tile-content>
           </v-list-tile>
         </router-link>
+        <hr>
         <v-list-tile @click="logout()">
           <v-list-tile-action>
             <v-icon large color="black">exit_to_app</v-icon>

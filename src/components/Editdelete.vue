@@ -4,12 +4,12 @@
       <v-tabs-bar light color="">
         <v-tabs-slider color="red"></v-tabs-slider>
         <v-tabs-item href="#tab1">
-          <v-icon color="green">account_balance</v-icon>
-          <h5>Delete Room</h5>
+          <v-icon color="green" medium>account_balance</v-icon>
+          <h5 align="center">Delete Room</h5>
         </v-tabs-item>
         <v-tabs-item href="#tab2">
-          <v-icon color="blue">devices_other</v-icon>
-          <h5>Delete Device</h5>
+          <v-icon color="blue" medium>devices_other</v-icon>
+          <h5 align="center">Delete Device</h5>
         </v-tabs-item>
       </v-tabs-bar>
       <br>
@@ -18,10 +18,11 @@
           <v-layout row>
             <v-flex xs12 sm6 offset-sm3>
               <v-card>
+                <hr>
                 <v-list two-line subheader v-for="(typeroom, nametype) in items.meetingroom">
-                  <v-subheader inset>
-                    <a>{{nametype}}</a>
-                  </v-subheader>
+                  <!-- <v-subheader inset> -->
+                    <p align="center">{{nametype}}</p>
+                  <!-- </v-subheader> -->
                   <v-list-tile avatar v-for="(room, nameroom) in typeroom" @click="">
                     <v-list-tile-content>
                       {{nameroom}}
@@ -42,11 +43,12 @@
           <v-layout row>
             <v-flex xs12 sm6 offset-sm3>
               <v-card>
+                <hr>
                 <v-list two-line subheader v-for="(typedevice, nametype) in items.device">
-                  <v-subheader inset>
-                    <h2>{{nametype}}</h2>
-                  </v-subheader>
-                  <v-list-tile avatar v-for="(device, namedevice) in typedevice">
+                  <!-- <v-subheader inset> -->
+                    <p align="center">{{nametype}}</p>
+                  <!-- </v-subheader> -->
+                  <v-list-tile avatar v-for="(device, namedevice) in typedevice" @click="">
                     <v-list-tile-content>
                       {{namedevice}}
                     </v-list-tile-content>
@@ -56,6 +58,7 @@
                       </v-btn>
                     </v-list-tile-action>
                   </v-list-tile>
+                  <hr>
                 </v-list>
               </v-card>
             </v-flex>
