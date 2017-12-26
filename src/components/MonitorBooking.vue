@@ -15,28 +15,37 @@
     </v-date-picker>
   </v-dialog>
 
-  <div class="" v-for="detail in queryBooking">
-    <template>
-      <v-layout row justify-center>
-        {{detail.bookingTime.nameitem}}
-        <v-btn @click="showDetail(detail)">{{detail.bookingTime.timestart}}-{{detail.bookingTime.timestop}}</v-btn>
-      </v-layout>
-    </template>
-  </div>
+  <v-layout row v-if="dateQuery !== null">
+    <v-flex xs12 sm6 offset-sm3>
+      <v-card>
+        <v-list two-line subheader v-for="detail in queryBooking">
+            <p align="center">{{detail.bookingTime.nameitem}}</p>
+          <v-list-tile avatar @click="showDetail(detail)">
+            <v-list-tile-content>
+              Booking time {{detail.bookingTime.timestart}}-{{detail.bookingTime.timestop}}
+            </v-list-tile-content>
+            <v-list-tile-action>
+              <v-btn icon ripple  @click="showDetail(detail)">
+                <v-icon large color="green">description</v-icon>
+              </v-btn>
+            </v-list-tile-action>
+          </v-list-tile>
+          <hr>
+        </v-list>
+      </v-card>
+    </v-flex>
+  </v-layout>
+
   <v-dialog v-if="details !== null" v-model="dialog" max-width="290">
     <v-card>
-      <v-card-title class="headline">รายละเอียดการจอง {{details.bookingTime.nameitem}}</v-card-title>
+      <v-card-title class="headline">Details Booking of {{details.bookingTime.nameitem}}</v-card-title>
       <v-card-text>
-        ระยะเวลาการจองของวันที่ {{dateQuery}}
-        {{details.bookingTime.timestart}}-{{details.bookingTime.timestop}}
-        <br>
-        date time start = {{details.data.dateStart}} {{details.data.timeStart}}
-        <br>
-        date time stop = {{details.data.dateStop}} {{details.data.timeStop}}
-        <br>
-        Time stamp = {{details.data.timeStamp}}
-        <br>
-        people = {{details.data.countPeople}}
+        <li>Date of booking {{dateQuery}}</li>
+        <li>Sum time booking {{details.bookingTime.timestart}}-{{details.bookingTime.timestop}}</li>
+        <li>Date time start  {{details.data.dateStart}} {{details.data.timeStart}}</li>
+        <li>Date time stop  {{details.data.dateStop}} {{details.data.timeStop}}</li>
+        <li>Time stamp  {{details.data.timeStamp}}</li>
+        <li v-if="details.data.countPeople">people of use {{details.data.countPeople}}</li>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>

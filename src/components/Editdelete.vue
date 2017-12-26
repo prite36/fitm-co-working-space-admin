@@ -20,9 +20,7 @@
               <v-card>
                 <hr>
                 <v-list two-line subheader v-for="(typeroom, nametype) in items.meetingroom">
-                  <!-- <v-subheader inset> -->
                     <p align="center">{{nametype}}</p>
-                  <!-- </v-subheader> -->
                   <v-list-tile avatar v-for="(room, nameroom) in typeroom" @click="">
                     <v-list-tile-content>
                       {{nameroom}}
