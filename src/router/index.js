@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import AddItem from '@/components/AddItem'
 import Editdelete from '@/components/Editdelete'
 import MonitorBooking from '@/components/MonitorBooking'
+import sendInfo from '@/components/sendInfo'
 
 Vue.use(Router)
 
@@ -23,6 +24,11 @@ let router = new Router({
       path: '/Editdelete',
       name: 'Editdelete',
       component: Editdelete
+    },
+    {
+      path: '/sendInfo',
+      name: 'sendInfo',
+      component: sendInfo
     }
   ]
 })
