@@ -1,14 +1,16 @@
 <template lang="html">
   <div class="sendinfo">
-    <v-flex xs8 fixed centered>
-      <v-text-field
-      name="input-7-1"
-      label="message"
-      multi-line
-      v-model="message"
-      ></v-text-field>
-    </v-flex>
-    <v-btn color="primary" @click="sendMessage(message)">sendMessage</v-btn>
+    <center>
+      <v-flex xs8 fixed centered>
+        <v-text-field
+        name="input-7-1"
+        label="message"
+        multi-line
+        v-model="message"
+        ></v-text-field>
+      </v-flex>
+      <v-btn color="primary" @click="sendMessage(message)">sendMessage</v-btn>
+    </center>
   </div>
 </template>
 
@@ -50,4 +52,7 @@ export default {
 </script>
 
 <style>
+.sendinfo {
+  align-items: center;
+}
 </style>

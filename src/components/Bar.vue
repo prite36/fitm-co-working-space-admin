@@ -47,6 +47,17 @@
           </v-list-tile>
         </router-link>
         <hr>
+        <router-link to="feedback" class="btnlink">
+          <v-list-tile @click="">
+            <v-list-tile-action>
+              <v-icon large color="orange">feedback</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <h3>Feedback</h3>
+            </v-list-tile-content>
+          </v-list-tile>
+        </router-link>
+        <hr>
         <v-list-tile @click="logout()">
           <v-list-tile-action>
             <v-icon large color="black">exit_to_app</v-icon>

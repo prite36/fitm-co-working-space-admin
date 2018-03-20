@@ -15,6 +15,7 @@ import Editdelete from './components/Editdelete.vue'
 import MonitorBooking from './components/MonitorBooking.vue'
 import Bar from './components/Bar.vue'
 import Login from './components/Login.vue'
+import Feedback from './components/Feedback.vue'
 import {
   mapGetters,
   mapActions
@@ -26,7 +27,8 @@ export default {
     Editdelete: Editdelete,
     MonitorBooking: MonitorBooking,
     Bar: Bar,
-    Login: Login
+    Login: Login,
+    Feedback: Feedback
   },
   methods: {
     ...mapActions(['setStatus'])

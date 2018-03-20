@@ -5,6 +5,7 @@ import router from '../router'
 import Moment from 'moment'
 import { extendMoment } from 'moment-range'
 import {firebaseMutations, firebaseAction} from 'vuexfire'
+
 Vue.use(Vuex)
 const moment = extendMoment(Moment)
 // link database
@@ -23,6 +24,7 @@ let db = firebase.database()
 let Items = db.ref('items')
 let Booking = db.ref('booking')
 let Profile = db.ref('profile')
+let Feedbacks = db.ref('feedbacks')
 // store
 const store = new Vuex.Store({
   strict: true,
@@ -31,14 +33,16 @@ const store = new Vuex.Store({
     items: '',
     booking: {},
     profiles: null,
-    queryBooking: []
+    queryBooking: [],
+    feedbacks: []
   },
   getters: {
     statusLogin: state => state.statusLogin,
     items: state => state.items,
     booking: state => state.booking,
     queryBooking: state => state.queryBooking,
-    profiles: state => state.profiles
+    profiles: state => state.profiles,
+    feedbacks: state => state.feedbacks
   },
   mutations: {
     ...firebaseMutations,
@@ -124,6 +128,9 @@ const store = new Vuex.Store({
     }),
     setProfileRef: firebaseAction(({ bindFirebaseRef, unbindFirebaseRef }) => {
       bindFirebaseRef('profiles', Profile)
+    }),
+    setFeedbacksRef: firebaseAction(({ bindFirebaseRef, unbindFirebaseRef }) => {
+      bindFirebaseRef('feedbacks', Feedbacks)
     }),
     setStatus ({commit}) {
       firebase.auth().onAuthStateChanged(function (user) {

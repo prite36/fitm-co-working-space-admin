@@ -4,6 +4,7 @@ import AddItem from '@/components/AddItem'
 import Editdelete from '@/components/Editdelete'
 import MonitorBooking from '@/components/MonitorBooking'
 import sendInfo from '@/components/sendInfo'
+import Feedback from '@/components/Feedback'
 
 Vue.use(Router)
 
@@ -29,6 +30,11 @@ let router = new Router({
       path: '/sendInfo',
       name: 'sendInfo',
       component: sendInfo
+    },
+    {
+      path: '/feedback',
+      name: 'feedback',
+      component: Feedback
     }
   ]
 })
