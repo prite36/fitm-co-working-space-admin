@@ -21,8 +21,8 @@
       <h3>comment</h3>
       <center><table>
         <tr>
-          <td>comment</td>
-          <td>เวลา</td>
+          <td>ความคิดเห็น<hr></td>
+          <td>เวลา<hr></td>
         </tr>
         <tr v-for="n in Rating.comment">
           <td width="80%"><p>{{n.comment}}</p><hr></td>
@@ -39,34 +39,10 @@ export default {
   name: 'feedback',
   data: () => ({
     Rating: {
-      chatbotRating: {
-        1: 0,
-        2: 0,
-        3: 0,
-        4: 0,
-        5: 0
-      },
-      serviceRating: {
-        1: 0,
-        2: 0,
-        3: 0,
-        4: 0,
-        5: 0
-      },
-      deviceRating: {
-        1: 0,
-        2: 0,
-        3: 0,
-        4: 0,
-        5: 0
-      },
-      roomRating: {
-        1: 0,
-        2: 0,
-        3: 0,
-        4: 0,
-        5: 0
-      },
+      chatbotRating: {1: 0, 2: 0, 3: 0, 4: 0, 5: 0},
+      serviceRating: {1: 0, 2: 0, 3: 0, 4: 0, 5: 0},
+      deviceRating: {1: 0, 2: 0, 3: 0, 4: 0, 5: 0},
+      roomRating: {1: 0, 2: 0, 3: 0, 4: 0, 5: 0},
       comment: []
     }
   }),
@@ -76,35 +52,40 @@ export default {
   methods: {
     ...mapActions(['setFeedbacksRef']),
     calRate () {
-      let packdata = {
-        comment: '',
-        timeStamp: ''
-      }
+      this.clearstar()
+      // this.Rating.comment = []
       for (var key1 in this.feedbacks) {
-        for (var key2 in this.feedbacks[key1]) {
-          console.log(key2)
-          if (key2 !== '.key' && key2 !== 'comment' && key2 !== 'timeStamp') {
-            this.Rating[key2][this.feedbacks[key1][key2]]++
-          } else if (key2 === 'comment' && key2 !== '.key') {
-            packdata.comment = this.feedbacks[key1][key2]
-          } else if (key2 === 'timeStamp' && key2 !== '.key') {
-            packdata.timeStamp = this.feedbacks[key1][key2]
-            console.log(packdata)
-            this.Rating.comment.push(packdata)
-          }
+        console.log(this.feedbacks[key1])
+        this.Rating.chatbotRating[this.feedbacks[key1].chatbotRating]++
+        this.Rating.deviceRating[this.feedbacks[key1].deviceRating]++
+        this.Rating.roomRating[this.feedbacks[key1].roomRating]++
+        this.Rating.serviceRating[this.feedbacks[key1].serviceRating]++
+        if (this.feedbacks[key1].comment) {
+          this.Rating.comment.push({
+            comment: this.feedbacks[key1].comment,
+            timeStamp: this.feedbacks[key1].timeStamp
+          })
         }
       }
+    },
+    clearstar () {
+      this.Rating = {
+        chatbotRating: {1: 0, 2: 0, 3: 0, 4: 0, 5: 0},
+        serviceRating: {1: 0, 2: 0, 3: 0, 4: 0, 5: 0},
+        deviceRating: {1: 0, 2: 0, 3: 0, 4: 0, 5: 0},
+        roomRating: {1: 0, 2: 0, 3: 0, 4: 0, 5: 0},
+        comment: []
+      }
     }
-  },
-  watch: {
   },
   created () {
     this.setFeedbacksRef()
   },
-  beforeMount () {
-    this.calRate()
+  watch: {
+    feedbacks: function () {
+      this.calRate()
+    }
   }
-
 }
 </script>
 <style lang="scss">
