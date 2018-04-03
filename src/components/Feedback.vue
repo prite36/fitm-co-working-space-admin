@@ -1,38 +1,60 @@
 <template>
   <div class="feedback">
-    <P class="text-md-center">Rating fitm-coworkingspace {{scopefilter}}</P>
+    <h4 class="text-xs-center">Rating fitm-coworkingspace {{scopefilter}}</h4>
     <v-dialog persistent lazy full-width width="290px">
       <v-text-field slot="activator" label="Change date in dialog" v-model="scopefilter" prepend-icon="event" readonly>
       </v-text-field>
+
       <v-date-picker v-model="scopefilter" type="month" scrollable actions>
         <template slot-scope="{ save, cancel }">
             <v-card-actions>
               <v-spacer></v-spacer>
+              <v-btn flat color="primary" @click="scopefilter = ''">rateall</v-btn>
               <v-btn flat color="primary" @click="cancel">Cancel</v-btn>
               <v-btn flat color="primary" @click="save">OK</v-btn>
             </v-card-actions>
           </template>
       </v-date-picker>
     </v-dialog>
-    <v-btn color="primary" @click="scopefilter = ''">rate all</v-btn>
 
-    <div class="rate">
-      <h3> chatbot </h3>
-      <p v-for="n in 5">  มีผู้ให้คะแนน {{n}} ดาว {{ratings.chatbotRating[n]}} คน </p>
-    </div>
-    <div class="rate">
-      <h3> การบริการ </h3>
-      <p v-for="n in 5">  มีผู้ให้คะแนน {{n}} ดาว {{ratings.serviceRating[n]}} คน </p>
-    </div>
-    <div class="rate">
-      <h3> อุปกรณ์ </h3>
-      <p v-for="n in 5">  มีผู้ให้คะแนน {{n}} ดาว {{ratings.deviceRating[n]}} คน </p>
-    </div>
-    <div class="rate">
-      <h3> ห้อง </h3>
-      <p v-for="n in 5">  มีผู้ให้คะแนน {{n}} ดาว {{ratings.roomRating[n]}} คน </p>
-    </div>
-
+    <v-container grid-list-md text-xs-center>
+      <v-layout row wrap>
+        <v-flex xs6>
+          <v-card>
+            <v-card-text class="px-0">
+              <h4> chatbot </h4>
+              <div class="" v-for="n in 5">
+                <v-progress-linear  :value="star.chatbotRating.perrate[n-1]" height="10" color="blue"></v-progress-linear>
+              </div>
+            </v-card-text>
+          </v-card>
+        </v-flex>
+        <v-flex xs6>
+          <v-card>
+            <v-card-text class="px-0">
+              <h4> serviceRating </h4>
+              <v-progress-linear v-for="n in 5" :value="star.serviceRating.perrate[n-1]" height="10" color="blue"></v-progress-linear>
+            </v-card-text>
+          </v-card>
+        </v-flex>
+        <v-flex xs6>
+          <v-card>
+            <v-card-text class="px-0">
+              <h4> deviceRating </h4>
+              <v-progress-linear v-for="n in 5" :value="star.deviceRating.perrate[n-1]" height="10" color="blue"></v-progress-linear>
+            </v-card-text>
+          </v-card>
+        </v-flex>
+        <v-flex xs6>
+          <v-card>
+            <v-card-text class="px-0">
+              <h4> roomRating </h4>
+              <v-progress-linear v-for="n in 5" :value="star.roomRating.perrate[n-1]" height="10" color="blue"></v-progress-linear>
+            </v-card-text>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
     <div>
       <v-data-table
         :headers="headers"
@@ -78,6 +100,28 @@ export default {
     comments: [],
     search: '',
     pagination: {},
+    star: {
+      chatbotRating: {
+        allstar: 0,
+        perrate: [0, 0, 0, 0, 0],
+        averageStar: 0
+      },
+      serviceRating: {
+        allstar: 0,
+        perrate: [0, 0, 0, 0, 0],
+        averageStar: 0
+      },
+      deviceRating: {
+        allstar: 0,
+        perrate: [0, 0, 0, 0, 0],
+        averageStar: 0
+      },
+      roomRating: {
+        allstar: 0,
+        perrate: [0, 0, 0, 0, 0],
+        averageStar: 0
+      }
+    },
     headers: [
       {
         text: 'Comments',
@@ -100,6 +144,16 @@ export default {
   },
   methods: {
     ...mapActions(['setFeedbacksRef']),
+    calallstar () {
+      for (var key1 in this.ratings) {
+        for (var key2 in this.ratings[key1]) {
+          if (key2 !== '0') {
+            this.star[key1].allstar += this.ratings[key1][key2]
+          }
+        }
+      }
+      this.perstar()
+    },
     calRate () {
       for (var key1 in this.feedbacks) {
         if (this.scopefilter === '') {
@@ -129,7 +183,7 @@ export default {
         }
       }
     },
-    clearstar () {
+    clearrate () {
       this.ratings = {
         chatbotRating: {1: 0, 2: 0, 3: 0, 4: 0, 5: 0},
         serviceRating: {1: 0, 2: 0, 3: 0, 4: 0, 5: 0},
@@ -137,6 +191,39 @@ export default {
         roomRating: {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
       }
       this.comments = []
+    },
+    clearstar () {
+      console.log('cls')
+      this.star = {
+        chatbotRating: {
+          allstar: 0,
+          perrate: [0, 0, 0, 0, 0],
+          averageStar: 0
+        },
+        serviceRating: {
+          allstar: 0,
+          perrate: [0, 0, 0, 0, 0],
+          averageStar: 0
+        },
+        deviceRating: {
+          allstar: 0,
+          perrate: [0, 0, 0, 0, 0],
+          averageStar: 0
+        },
+        roomRating: {
+          allstar: 0,
+          perrate: [0, 0, 0, 0, 0],
+          averageStar: 0
+        }
+      }
+    },
+    perstar () {
+      for (var n in this.ratings) {
+        for (var i = 0; i < 5; i++) {
+          let fakekey = i + 1 // ใช้เพราะ rating.typeofreate เริ่มที่ 1 แต่ perrateเริ่มที่ 0
+          this.star[n].perrate[i] = (this.ratings[n][fakekey] * 100) / this.star[n].allstar
+        }
+      }
     }
   },
   created () {
@@ -144,12 +231,18 @@ export default {
   },
   watch: {
     feedbacks: function () {
-      this.clearstar()
+      this.clearrate()
       this.calRate()
     },
     scopefilter: function () {
-      this.clearstar()
+      this.clearrate()
       this.calRate()
+      this.calallstar()
+    },
+    ratings: function () {
+      console.log('wrate')
+      this.clearstar()
+      this.calallstar()
     }
   }
 }
