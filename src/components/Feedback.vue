@@ -23,6 +23,7 @@
           <v-card>
             <v-card-text class="px-0">
               <h4> chatbot </h4>
+              {{star.chatbotRating.averageStar}}
               <div class="" v-for="n in 5">
                 <v-progress-linear  :value="star.chatbotRating.perrate[n-1]" height="10" color="blue"></v-progress-linear>
               </div>
@@ -33,6 +34,7 @@
           <v-card>
             <v-card-text class="px-0">
               <h4> serviceRating </h4>
+              {{star.serviceRating.averageStar}}
               <v-progress-linear v-for="n in 5" :value="star.serviceRating.perrate[n-1]" height="10" color="blue"></v-progress-linear>
             </v-card-text>
           </v-card>
@@ -41,6 +43,7 @@
           <v-card>
             <v-card-text class="px-0">
               <h4> deviceRating </h4>
+              {{star.deviceRating.averageStar}}
               <v-progress-linear v-for="n in 5" :value="star.deviceRating.perrate[n-1]" height="10" color="blue"></v-progress-linear>
             </v-card-text>
           </v-card>
@@ -49,6 +52,7 @@
           <v-card>
             <v-card-text class="px-0">
               <h4> roomRating </h4>
+              {{star.roomRating.averageStar}}
               <v-progress-linear v-for="n in 5" :value="star.roomRating.perrate[n-1]" height="10" color="blue"></v-progress-linear>
             </v-card-text>
           </v-card>
@@ -144,6 +148,15 @@ export default {
   },
   methods: {
     ...mapActions(['setFeedbacksRef']),
+    calaverageStar () {
+      for (var key1 in this.ratings) {
+        var tempCalculate = 0
+        for (var key = 1; key <= 5; key++) {
+          tempCalculate += this.ratings[key1][key] * key
+        }
+        this.star[key1].averageStar = tempCalculate / this.star[key1].allstar
+      }
+    },
     calallstar () {
       for (var key1 in this.ratings) {
         for (var key2 in this.ratings[key1]) {
@@ -193,7 +206,6 @@ export default {
       this.comments = []
     },
     clearstar () {
-      console.log('cls')
       this.star = {
         chatbotRating: {
           allstar: 0,
@@ -240,9 +252,9 @@ export default {
       this.calallstar()
     },
     ratings: function () {
-      console.log('wrate')
       this.clearstar()
       this.calallstar()
+      this.calaverageStar()
     }
   }
 }
