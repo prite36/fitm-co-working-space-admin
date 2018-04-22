@@ -16,17 +16,17 @@
       <v-tabs-items>
         <v-tabs-content id="tab1">
           <v-layout row>
-            <v-flex xs12 sm6 offset-sm3>
+            <v-flex xs12>
               <v-card>
                 <hr>
-                <v-list two-line subheader v-for="(typeroom, nametype) in items.meetingroom">
+                <v-list two-line subheader v-for="(typeroom, nametype) in items.meetingRoom" :key="nametype">
                     <p align="center">{{nametype}}</p>
-                  <v-list-tile avatar v-for="(room, nameroom) in typeroom" @click="">
+                  <v-list-tile avatar v-for="(room, nameroom) in typeroom" :key="nameroom" @click="">
                     <v-list-tile-content>
                       {{nameroom}}
                     </v-list-tile-content>
                     <v-list-tile-action>
-                      <v-btn icon ripple  @click="commitdelete('meetingroom', nametype, nameroom)">
+                      <v-btn icon ripple  @click="commitdelete('meetingRoom', nametype, nameroom)">
                         <v-icon large color="red">delete_forever</v-icon>
                       </v-btn>
                     </v-list-tile-action>
@@ -39,14 +39,14 @@
         </v-tabs-content>
         <v-tabs-content id="tab2">
           <v-layout row>
-            <v-flex xs12 sm6 offset-sm3>
+            <v-flex xs12>
               <v-card>
                 <hr>
-                <v-list two-line subheader v-for="(typedevice, nametype) in items.device">
+                <v-list two-line subheader v-for="(typedevice, nametype) in items.device" :key="nametype">
                   <!-- <v-subheader inset> -->
                     <p align="center">{{nametype}}</p>
                   <!-- </v-subheader> -->
-                  <v-list-tile avatar v-for="(device, namedevice) in typedevice" @click="">
+                  <v-list-tile avatar v-for="(device, namedevice) in typedevice" :key="namedevice" @click="">
                     <v-list-tile-content>
                       {{namedevice}}
                     </v-list-tile-content>
@@ -130,6 +130,6 @@ export default {
 }
 .typeitem {
   float:left;
-  width: 48%;
+  width: 100%;
 }
 </style>

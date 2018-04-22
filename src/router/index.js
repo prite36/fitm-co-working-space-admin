@@ -5,6 +5,9 @@ import Editdelete from '@/components/Editdelete'
 import MonitorBooking from '@/components/MonitorBooking'
 import sendInfo from '@/components/sendInfo'
 import Feedback from '@/components/Feedback'
+import Statistic from '@/components/Statistic'
+import BlockUser from '@/components/BlockUser'
+import Unblock from '@/components/Unblock'
 
 Vue.use(Router)
 
@@ -12,22 +15,22 @@ let router = new Router({
   mode: 'history',
   routes: [
     {
-      path: '/AddItem',
-      name: 'AddItem',
+      path: '/additem',
+      name: 'additem',
       component: AddItem
     },
     {
-      path: '/MonitorBooking',
-      name: 'MonitorBooking',
+      path: '/monitorbooking',
+      name: 'monitorbooking',
       component: MonitorBooking
     },
     {
-      path: '/Editdelete',
-      name: 'Editdelete',
+      path: '/editdelete',
+      name: 'editdelete',
       component: Editdelete
     },
     {
-      path: '/sendInfo',
+      path: '/sendinfo',
       name: 'sendInfo',
       component: sendInfo
     },
@@ -35,6 +38,21 @@ let router = new Router({
       path: '/feedback',
       name: 'feedback',
       component: Feedback
+    },
+    {
+      path: '/statistic',
+      name: 'statistic',
+      component: Statistic
+    },
+    {
+      path: '/blockuser',
+      name: 'blockuser',
+      component: BlockUser
+    },
+    {
+      path: '/unblock',
+      name: 'unblock',
+      component: Unblock
     }
   ]
 })

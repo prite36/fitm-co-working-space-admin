@@ -26,7 +26,7 @@
               <v-radio label="smallroom" name="typeroom" color="red" value="smallRoom"></v-radio>
               <v-radio label="mediumroom" name="typeroom" color="orange" value="mediumRoom"></v-radio>
               <v-radio label="largeroom" name="typeroom" color="primary" value="largeRoom"></v-radio>
-              <v-radio label="classroom" name="typeroom" color="green" value="classroom"></v-radio>
+              <v-radio label="classroom" name="typeroom" color="green" value="classRoom"></v-radio>
             </v-radio-group>
             <br>
             <v-text-field
@@ -157,8 +157,8 @@ export default{
           this.checkNameDevice.push(nameDevice)
         }
       }
-      for (var dataRoom in this.items.meetingroom) {
-        for (var nameRoom in this.items.meetingroom[dataRoom]) {
+      for (var dataRoom in this.items.meetingRoom) {
+        for (var nameRoom in this.items.meetingRoom[dataRoom]) {
           this.checkNameRoom.push(nameRoom)
         }
       }
@@ -172,10 +172,8 @@ export default{
           })
           if (typeitem === 'addroom') {
             this.addRoom(this.detailRoom)
-            console.log('addroom')
           } else if (typeitem === 'adddevice') {
             this.addDevice(this.detailDevice)
-            console.log('adddevice')
           }
         }
       })

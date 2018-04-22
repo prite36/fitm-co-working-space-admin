@@ -25,6 +25,8 @@ let Items = db.ref('items')
 let Booking = db.ref('booking')
 let Profile = db.ref('profile')
 let Feedbacks = db.ref('feedbacks')
+let Historys = db.ref('history')
+
 // store
 const store = new Vuex.Store({
   strict: true,
@@ -32,9 +34,10 @@ const store = new Vuex.Store({
     statusLogin: true,
     items: '',
     booking: {},
-    profiles: null,
+    profiles: {},
     queryBooking: [],
-    feedbacks: []
+    feedbacks: [],
+    historys: []
   },
   getters: {
     statusLogin: state => state.statusLogin,
@@ -48,6 +51,31 @@ const store = new Vuex.Store({
     ...firebaseMutations,
     updateStatus (state, status) {
       state.statusLogin = status
+    },
+    moveBookingToHistory (state, id) {
+      delete state.booking['.key']
+      // console.log(state.booking)
+      for (var key1 in state.booking) {
+        // console.log(state.booking[key1])
+        for (var key2 in state.booking[key1]) {
+          // console.log(state.booking[key1][key2])
+          for (var key3 in state.booking[key1][key2]) {
+            // console.log(state.booking[key1][key2][key3])
+            for (var key4 in state.booking[key1][key2][key3]) {
+              let data = state.booking[key1][key2][key3][key4]
+              if (data.senderID === id) {
+                let tmp = {}
+                Booking.child(key1).child(key2).child(key3).child(key4).update({status: 'adminCancleBooking'})
+                Booking.child(key1).child(key2).child(key3).child(key4).once('value', snapshot => {
+                  tmp = snapshot.val()
+                })
+                Historys.child(tmp.id).update(tmp)
+                Booking.child(key1).child(key2).child(key3).child(key4).remove()
+              }
+            }
+          }
+        }
+      }
     },
     // query โดยการเอาค่าวันที่มาวนเปรียบเทียบกับ booking ทุกตัวหากเงื่อไขตรงจะโยนไปเก็บใน queryBooking
     updateQueryBooking (state, date) {
@@ -132,6 +160,10 @@ const store = new Vuex.Store({
     setFeedbacksRef: firebaseAction(({ bindFirebaseRef, unbindFirebaseRef }) => {
       bindFirebaseRef('feedbacks', Feedbacks)
     }),
+    setHistorysRef: firebaseAction(({ bindFirebaseRef, unbindFirebaseRef }) => {
+      bindFirebaseRef('historys', Historys)
+    }),
+
     setStatus ({commit}) {
       firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
@@ -165,7 +197,7 @@ const store = new Vuex.Store({
     },
     // เพิ่มห้อง
     addRoom (payload, detailRoom) {
-      Items.child('meetingroom/').child(detailRoom.sizeRoom).child(detailRoom.nameRoom).set({
+      Items.child('meetingRoom/').child(detailRoom.sizeRoom).child(detailRoom.nameRoom).set({
         status: 'open'
       })
     },
@@ -181,6 +213,23 @@ const store = new Vuex.Store({
     },
     Bookingquery ({commit}, date) {
       commit('updateQueryBooking', date)
+    },
+    block ({commit}, data) {
+      console.log(data)
+      Profile.child(data.type).child(data.id).update(
+        {
+          statusBlock: true
+        }
+      )
+      commit('moveBookingToHistory', data.id)
+    },
+    unblock (payload, path) {
+      Profile.child(path).update(
+        {
+          statusBlock: false,
+          countOfNotCheckIn: 0
+        }
+      )
     }
   }
 })

@@ -24,7 +24,7 @@
             <v-card-text class="px-0">
               <h4> chatbot </h4>
               {{star.chatbotRating.averageStar}}
-              <div class="" v-for="n in 5">
+              <div class="" v-for="(n, index) in 5" :key="index">
                 <v-progress-linear  :value="star.chatbotRating.perrate[n-1]" height="10" color="blue"></v-progress-linear>
               </div>
             </v-card-text>
@@ -35,7 +35,7 @@
             <v-card-text class="px-0">
               <h4> serviceRating </h4>
               {{star.serviceRating.averageStar}}
-              <v-progress-linear v-for="n in 5" :value="star.serviceRating.perrate[n-1]" height="10" color="blue"></v-progress-linear>
+              <v-progress-linear v-for="(n, index) in 5" :key="index" :value="star.serviceRating.perrate[n-1]" height="10" color="blue"></v-progress-linear>
             </v-card-text>
           </v-card>
         </v-flex>
@@ -44,7 +44,7 @@
             <v-card-text class="px-0">
               <h4> deviceRating </h4>
               {{star.deviceRating.averageStar}}
-              <v-progress-linear v-for="n in 5" :value="star.deviceRating.perrate[n-1]" height="10" color="blue"></v-progress-linear>
+              <v-progress-linear v-for="(n, index) in 5" :key="index" :value="star.deviceRating.perrate[n-1]" height="10" color="blue"></v-progress-linear>
             </v-card-text>
           </v-card>
         </v-flex>
@@ -53,7 +53,7 @@
             <v-card-text class="px-0">
               <h4> roomRating </h4>
               {{star.roomRating.averageStar}}
-              <v-progress-linear v-for="n in 5" :value="star.roomRating.perrate[n-1]" height="10" color="blue"></v-progress-linear>
+              <v-progress-linear v-for="(n, index) in 5" :key="index" :value="star.roomRating.perrate[n-1]" height="10" color="blue"></v-progress-linear>
             </v-card-text>
           </v-card>
         </v-flex>

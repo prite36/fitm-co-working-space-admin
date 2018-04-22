@@ -6,12 +6,12 @@
     </v-text-field>
     <v-date-picker v-model="dateQuery" scrollable actions>
       <template slot-scope="{ save, cancel }">
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn flat color="primary" @click="cancel">Cancel</v-btn>
-            <v-btn flat color="primary" @click="save">OK</v-btn>
-          </v-card-actions>
-        </template>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn flat color="primary" @click="cancel">Cancel</v-btn>
+          <v-btn flat color="primary" @click="save">OK</v-btn>
+        </v-card-actions>
+      </template>
     </v-date-picker>
   </v-dialog>
 
@@ -19,7 +19,7 @@
   <v-layout row v-if="dateQuery !== null">
     <v-flex xs12 sm6 offset-sm3>
       <v-card>
-        <v-list two-line subheader v-for="detail in queryBooking">
+        <v-list two-line subheader v-for="(detail, index) in queryBooking" :key="index">
             <p align="center">{{detail.bookingTime.nameitem}}</p>
           <v-list-tile avatar @click="showDetail(detail)">
             <v-list-tile-content>
