@@ -39,6 +39,7 @@ const store = new Vuex.Store({
     feedbacks: [],
     historys: [],
     historyFilter: []
+    // สร้างตัวแปร
   },
   getters: {
     statusLogin: state => state.statusLogin,
@@ -48,6 +49,7 @@ const store = new Vuex.Store({
     profiles: state => state.profiles,
     feedbacks: state => state.feedbacks,
     historyFilter: state => state.historyFilter
+    // ส่งตัวแปรไปหน้า component
   },
   mutations: {
     ...firebaseMutations,
@@ -146,6 +148,9 @@ const store = new Vuex.Store({
           }
         }
       }
+    },
+    testlog () {
+      console.log('test1')
     },
     queryForGraph (state, duration) {
       state.historyFilter = state.historys.filter(
