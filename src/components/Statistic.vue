@@ -1,11 +1,26 @@
 <template lang="html">
   <div class="statistic">
+    <v-dialog persistent lazy full-width width="290px">
+      <v-text-field slot="activator" label="Change date in dialog" v-model="scopefilter" prepend-icon="event" readonly>
+      </v-text-field>
+      <v-date-picker v-model="scopefilter" type="month" scrollable actions>
+        <template slot-scope="{ save, cancel }">
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn flat color="primary" @click="scopefilter = ''">rateall</v-btn>
+              <v-btn flat color="primary" @click="cancel">Cancel</v-btn>
+              <v-btn flat color="primary" @click="save">OK</v-btn>
+            </v-card-actions>
+          </template>
+      </v-date-picker>
+    </v-dialog>
     <bar-chart></bar-chart>
   </div>
 </template>
 
 <script>
 import BarChart from './barchart.js'
+import {mapGetters, mapActions} from 'vuex'
 
 export default {
   components: {
@@ -14,6 +29,21 @@ export default {
   name: 'statistic',
   data () {
     return {
+      scopefilter: ''
+    }
+  },
+  methods: {
+    ...mapActions(['setHistorysRef', 'graphQuery'])
+  },
+  computed: {
+    ...mapGetters(['historyFilter'])
+  },
+  created () {
+    this.setHistorysRef()
+  },
+  watch: {
+    scopefilter: function () {
+      this.graphQuery(this.scopefilter)
     }
   }
 }

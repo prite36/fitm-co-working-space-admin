@@ -14,8 +14,18 @@ export default {
         datasets: [
           {
             label: 'Data One',
-            backgroundColor: 'dark',
-            data: [10, 39, 1, 3, 50, 55, 22]
+            backgroundColor: '#BBDEFB',
+            data: [10, 39, 1, 3, 50, 40, 22]
+          },
+          {
+            label: 'Data two',
+            backgroundColor: 'pink',
+            data: [20, 49, 5, 4, 60, 45, 20]
+          },
+          {
+            label: 'Data two',
+            backgroundColor: '#B2DFDB',
+            data: [30, 29, 8, 6, 80, 58, 15]
           }
         ]
       }, {responsive: true, maintainAspectRatio: false}

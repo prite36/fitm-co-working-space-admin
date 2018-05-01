@@ -37,7 +37,8 @@ const store = new Vuex.Store({
     profiles: {},
     queryBooking: [],
     feedbacks: [],
-    historys: []
+    historys: [],
+    historyFilter: []
   },
   getters: {
     statusLogin: state => state.statusLogin,
@@ -45,7 +46,8 @@ const store = new Vuex.Store({
     booking: state => state.booking,
     queryBooking: state => state.queryBooking,
     profiles: state => state.profiles,
-    feedbacks: state => state.feedbacks
+    feedbacks: state => state.feedbacks,
+    historyFilter: state => state.historyFilter
   },
   mutations: {
     ...firebaseMutations,
@@ -144,6 +146,11 @@ const store = new Vuex.Store({
           }
         }
       }
+    },
+    queryForGraph (state, duration) {
+      state.historyFilter = state.historys.filter(
+        history => moment(history.timeStamp).isSame(duration, 'month')
+      )
     }
   },
   actions: {
@@ -230,6 +237,9 @@ const store = new Vuex.Store({
           countOfNotCheckIn: 0
         }
       )
+    },
+    graphQuery ({commit}, duration) {
+      commit('queryForGraph', duration)
     }
   }
 })

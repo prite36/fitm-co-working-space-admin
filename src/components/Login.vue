@@ -1,46 +1,30 @@
 <template>
   <div class="login">
-    <v-app id="">
-      <template>
-        <h2 align="center">Admin Co-Workingspace</h2>
-        <br>
-        <v-parallax src="/static/doc-images/vbanner.jpg">
-          <v-card color="grey lighten-4" flat>
-            <v-card-text>
-              <v-container fluid>
-                <v-layout row>
-                  <v-flex xs12>
-                    <v-text-field
-                      name="input-10-1"
-                      prepend-icon="email"
-                      label="Enter your email"
-                      v-model="user.email"
-                      min="8"
-                    ></v-text-field>
-                  </v-flex>
-                </v-layout>
-                <v-layout row>
-                  <v-flex xs12>
-                    <v-text-field
-                      name="input-10-1"
-                      prepend-icon="vpn_key"
-                      label="Enter your password"
-                      v-model="user.password"
-                      min="8"
-                      :append-icon="e1 ? 'visibility' : 'visibility_off'"
-                      :append-icon-cb="() => (e1 = !e1)"
-                      :type="e1 ? 'password' : 'text'"
-                      counter
-                    ></v-text-field>
-                  </v-flex>
-                </v-layout>
-              </v-container>
-            </v-card-text>
-            <center><v-btn color="primary" @click="signin(user)">login</v-btn></center>
-            <br>
-          </v-card>
-        </v-parallax>
-      </template>
+    <v-app id="inspire">
+      <v-content>
+        <v-container fluid fill-height>
+          <v-layout align-center justify-center>
+            <v-flex xs12 sm8 md4>
+              <v-card class="elevation-12">
+                <v-toolbar dark color="primary">
+                  <v-toolbar-title>admin co-working space</v-toolbar-title>
+                  <v-spacer></v-spacer>
+                </v-toolbar>
+                <v-card-text>
+                  <v-form>
+                    <v-text-field prepend-icon="person" name="login" label="Enter your email" v-model="user.email" type="text"></v-text-field>
+                    <v-text-field prepend-icon="lock" name="password" label="Enter your password" v-model="user.password" id="password" type="password"></v-text-field>
+                  </v-form>
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="primary" @click="signin(user)">Login</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-content>
     </v-app>
   </div>
 </template>
@@ -69,7 +53,4 @@ export default {
 </style>
 
 <style media="screen">
-  #inspire{
-    padding-top: 13%;
-  }
 </style>

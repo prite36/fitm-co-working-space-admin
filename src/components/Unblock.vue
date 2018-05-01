@@ -1,5 +1,6 @@
 <template>
   <div class="unblock">
+    <h2 align="center">Unblock user</h2>
     <v-tabs fixed icons centered>
       <v-tabs-bar light color="">
         <v-tabs-slider color="red"></v-tabs-slider>

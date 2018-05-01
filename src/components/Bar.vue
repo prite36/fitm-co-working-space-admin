@@ -1,19 +1,19 @@
 <template>
   <div class="bar">
     <v-app>
-    <v-navigation-drawer fixed v-model="drawer" app>
+    <v-navigation-drawer fixed v-model="drawer" light app>
       <v-list dense class="menu">
         <router-link to="monitorbooking" class="btnlink">
           <v-list-tile @click="">
             <v-list-tile-action>
-              <v-icon large color="blue darken-2">desktop_windows</v-icon>
+              <v-icon large color="blue darken-4">desktop_windows</v-icon>
             </v-list-tile-action>
             <v-list-tile-content>
               <h3>monitoring booking</h3>
             </v-list-tile-content>
           </v-list-tile>
         </router-link>
-        <hr>
+
         <router-link to="editdelete" class="btnlink">
           <v-list-tile @click="">
             <v-list-tile-action>
@@ -24,7 +24,7 @@
             </v-list-tile-content>
           </v-list-tile>
         </router-link>
-        <hr>
+
         <router-link to="additem" class="btnlink">
           <v-list-tile @click="">
             <v-list-tile-action>
@@ -35,7 +35,7 @@
             </v-list-tile-content>
           </v-list-tile>
         </router-link>
-        <hr>
+
         <router-link to="sendinfo" class="btnlink">
           <v-list-tile @click="">
             <v-list-tile-action>
@@ -46,7 +46,7 @@
             </v-list-tile-content>
           </v-list-tile>
         </router-link>
-        <hr>
+
         <router-link to="feedback" class="btnlink">
           <v-list-tile @click="">
             <v-list-tile-action>
@@ -57,7 +57,7 @@
             </v-list-tile-content>
           </v-list-tile>
         </router-link>
-        <hr>
+
         <router-link to="statistic" class="btnlink">
           <v-list-tile @click="">
             <v-list-tile-action>
@@ -68,7 +68,7 @@
             </v-list-tile-content>
           </v-list-tile>
         </router-link>
-        <hr>
+
         <router-link to="blockuser" class="btnlink">
           <v-list-tile @click="">
             <v-list-tile-action>
@@ -79,7 +79,7 @@
             </v-list-tile-content>
           </v-list-tile>
         </router-link>
-        <hr>
+
         <router-link to="unblock" class="btnlink">
           <v-list-tile @click="">
             <v-list-tile-action>
@@ -90,7 +90,7 @@
             </v-list-tile-content>
           </v-list-tile>
         </router-link>
-        <hr>
+
         <v-list-tile @click="logout()">
           <v-list-tile-action>
             <v-icon large color="black">exit_to_app</v-icon>
@@ -101,7 +101,7 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar color="blue darken-4" dark fixed app>
+    <v-toolbar color="blue darken-2" dark fixed app>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>FITM Co-Workingspace</v-toolbar-title>
     </v-toolbar>
@@ -109,8 +109,8 @@
       <router-view/>
       <!-- </v-container> -->
     </v-content>
-    <v-footer color="blue darken-4" app>
-      <span class="white--text">&copy; 2017</span>
+    <v-footer color="blue darken-2" app>
+      <span class="white--text">&copy; 2018</span>
     </v-footer>
   </v-app>
   </div>

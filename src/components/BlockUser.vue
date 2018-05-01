@@ -1,5 +1,6 @@
 <template>
   <div class="blockuser">
+    <h2 align="center">Block user</h2>
     <v-tabs fixed icons centered>
       <v-tabs-bar light color="">
         <v-tabs-slider color="red"></v-tabs-slider>
