@@ -1,10 +1,16 @@
-import { Bar, mixins } from 'vue-chartjs'
-const { reactiveProp } = mixins
+import {Bar} from 'vue-chartjs'
+import {mapGetters} from 'vuex'
 
 export default {
   extends: Bar,
-  mixins: [reactiveProp],
-  props: ['options'],
+  computed: {
+    ...mapGetters(['historyFilter'])
+  },
+  watch: {
+    historyFilter: function () {
+      console.log(this.historyFilter)
+    }
+  },
   mounted () {
     // this.chartData is created in the mixin.
     // If you want to pass options please create a local options object
