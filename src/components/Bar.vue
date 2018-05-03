@@ -3,7 +3,7 @@
     <v-app>
     <v-navigation-drawer fixed v-model="drawer" light app>
       <v-list dense class="menu">
-        <router-link to="monitorbooking" class="btnlink">
+        <router-link to="/" class="btnlink">
           <v-list-tile @click="">
             <v-list-tile-action>
               <v-icon large color="blue darken-4">desktop_windows</v-icon>

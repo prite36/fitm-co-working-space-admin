@@ -38,7 +38,7 @@ const store = new Vuex.Store({
     queryBooking: [],
     feedbacks: [],
     historys: [],
-    historyFilter: []
+    registerFilter: []
     // สร้างตัวแปร
   },
   getters: {
@@ -48,7 +48,7 @@ const store = new Vuex.Store({
     queryBooking: state => state.queryBooking,
     profiles: state => state.profiles,
     feedbacks: state => state.feedbacks,
-    historyFilter: state => state.historyFilter
+    registerFilter: state => state.registerFilter
     // ส่งตัวแปรไปหน้า component
   },
   mutations: {
@@ -149,13 +149,29 @@ const store = new Vuex.Store({
         }
       }
     },
-    testlog () {
-      console.log('test1')
-    },
-    queryForGraph (state, duration) {
-      state.historyFilter = state.historys.filter(
-        history => moment(history.timeStamp).isSame(duration, 'month')
-      )
+    queryForregisterGraph (state, duration) {
+      state.registerFilter = []
+      if (state.profiles.guest) {
+        let mapguest = Object.values(state.profiles.guest)
+        let guest = mapguest.filter(
+          guest => moment(guest.timestamp).isSame(duration, 'month')
+        )
+        state.registerFilter.push(guest)
+      }
+      if (state.profiles.student) {
+        let mapstudent = Object.values(state.profiles.student)
+        let student = mapstudent.filter(
+          student => moment(student.timestamp).isSame(duration, 'month')
+        )
+        state.registerFilter.push(student)
+      }
+      if (state.profiles.staff) {
+        let mapstaff = Object.values(state.profiles.staff)
+        let staff = mapstaff.filter(
+          staff => moment(staff.timestamp).isSame(duration, 'month')
+        )
+        state.registerFilter.push(staff)
+      }
     }
   },
   actions: {
@@ -180,6 +196,7 @@ const store = new Vuex.Store({
       firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
           commit('updateStatus', true)
+          router.push('/')
         } else {
           commit('updateStatus', false)
           router.push('/')
@@ -243,8 +260,8 @@ const store = new Vuex.Store({
         }
       )
     },
-    graphQuery ({commit}, duration) {
-      commit('queryForGraph', duration)
+    regiterGraphQuery ({commit}, duration) {
+      commit('queryForregisterGraph', duration)
     }
   }
 })

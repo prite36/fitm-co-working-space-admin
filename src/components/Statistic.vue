@@ -32,17 +32,17 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setHistorysRef', 'graphQuery'])
+    ...mapActions(['setProfileRef', 'regiterGraphQuery'])
   },
   computed: {
-    ...mapGetters(['historyFilter'])
+    ...mapGetters(['registerFilter'])
   },
   created () {
-    this.setHistorysRef()
+    this.setProfileRef()
   },
   watch: {
     scopefilter: function () {
-      this.graphQuery(this.scopefilter)
+      this.regiterGraphQuery(this.scopefilter)
     }
   }
 }

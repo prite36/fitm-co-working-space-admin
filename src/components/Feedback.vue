@@ -21,40 +21,78 @@
       <v-layout row wrap>
         <v-flex xs6>
           <v-card>
-            <v-card-text class="px-0">
-              <h4> chatbot </h4>
-              {{star.chatbotRating.averageStar}}
-              <div class="" v-for="(n, index) in 5" :key="index">
-                <v-progress-linear  :value="star.chatbotRating.perrate[n-1]" height="10" color="blue"></v-progress-linear>
-              </div>
-            </v-card-text>
+          <h4> roomRating </h4>
+          averageStar = {{star.roomRating.averageStar}} ดาว
+            <v-container grid-list-md text-xs-center>
+              <v-layout row wrap v-for="(n, index) in 5" :key="index">
+                <v-flex xs3>
+                    {{n}}ดาว
+                </v-flex>
+                <v-flex xs6>
+                  <v-progress-linear :value="star.roomRating.perrate[n-1]" height="5" color="blue"></v-progress-linear>
+                </v-flex>
+                <v-flex xs3>
+                    {{ratings.roomRating[n]}}คน
+                </v-flex>
+              </v-layout>
+            </v-container>
           </v-card>
         </v-flex>
         <v-flex xs6>
           <v-card>
-            <v-card-text class="px-0">
-              <h4> serviceRating </h4>
-              {{star.serviceRating.averageStar}}
-              <v-progress-linear v-for="(n, index) in 5" :key="index" :value="star.serviceRating.perrate[n-1]" height="10" color="blue"></v-progress-linear>
-            </v-card-text>
+          <h4> device rating </h4>
+          average stars = {{star.deviceRating.averageStar}} ดาว
+            <v-container grid-list-md text-xs-center>
+              <v-layout row wrap v-for="(n, index) in 5" :key="index">
+                <v-flex xs3>
+                    {{n}}ดาว
+                </v-flex>
+                <v-flex xs6>
+                  <v-progress-linear :value="star.deviceRating.perrate[n-1]" height="5" color="blue"></v-progress-linear>
+                </v-flex>
+                <v-flex xs3>
+                    {{ratings.deviceRating[n]}}คน
+                </v-flex>
+              </v-layout>
+            </v-container>
           </v-card>
         </v-flex>
         <v-flex xs6>
           <v-card>
-            <v-card-text class="px-0">
-              <h4> deviceRating </h4>
-              {{star.deviceRating.averageStar}}
-              <v-progress-linear v-for="(n, index) in 5" :key="index" :value="star.deviceRating.perrate[n-1]" height="10" color="blue"></v-progress-linear>
-            </v-card-text>
+          <h4> chatbot rating </h4>
+          average stars = {{star.chatbotRating.averageStar}} ดาว
+            <v-container grid-list-md text-xs-center>
+              <v-layout row wrap v-for="(n, index) in 5" :key="index">
+                <v-flex xs3>
+                    {{n}}ดาว
+                </v-flex>
+                <v-flex xs6>
+                  <v-progress-linear :value="star.chatbotRating.perrate[n-1]" height="5" color="blue"></v-progress-linear>
+                </v-flex>
+                <v-flex xs3>
+                    {{ratings.chatbotRating[n]}}คน
+                </v-flex>
+              </v-layout>
+            </v-container>
           </v-card>
         </v-flex>
         <v-flex xs6>
           <v-card>
-            <v-card-text class="px-0">
-              <h4> roomRating </h4>
-              {{star.roomRating.averageStar}}
-              <v-progress-linear v-for="(n, index) in 5" :key="index" :value="star.roomRating.perrate[n-1]" height="10" color="blue"></v-progress-linear>
-            </v-card-text>
+          <h4> service rating </h4>
+          average stars = {{star.serviceRating.averageStar}} ดาว
+            <v-container grid-list-md text-xs-center>
+              <v-layout row wrap v-for="(n, index) in 5" :key="index">
+                <v-flex xs3>
+                    {{n}}ดาว
+                </v-flex>
+                <v-flex xs6>
+                  <v-progress-linear :value="star.serviceRating.perrate[n-1]" height="5" color="blue"></v-progress-linear>
+                </v-flex>
+                <v-flex xs3>
+                    {{ratings.serviceRating[n]}}คน
+                </v-flex>
+              </v-layout>
+            </v-container>
           </v-card>
         </v-flex>
       </v-layout>
@@ -89,8 +127,12 @@
 <script>
 import {mapGetters, mapActions} from 'vuex'
 import moment from 'moment'
+import horizontalBar from './chartstar.js'
 
 export default {
+  components: {
+    horizontalBar
+  },
   name: 'feedback',
   data: () => ({
     scopefilter: '',
@@ -154,7 +196,7 @@ export default {
         for (var key = 1; key <= 5; key++) {
           tempCalculate += this.ratings[key1][key] * key
         }
-        this.star[key1].averageStar = tempCalculate / this.star[key1].allstar
+        this.star[key1].averageStar = (tempCalculate / this.star[key1].allstar).toFixed(2)
       }
     },
     calallstar () {

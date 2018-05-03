@@ -4,11 +4,11 @@ import {mapGetters} from 'vuex'
 export default {
   extends: Bar,
   computed: {
-    ...mapGetters(['historyFilter'])
+    ...mapGetters(['registerFilter'])
   },
   watch: {
     historyFilter: function () {
-      console.log(this.historyFilter)
+      console.log(this.registerFilter)
     }
   },
   mounted () {

@@ -20,7 +20,7 @@ let router = new Router({
       component: AddItem
     },
     {
-      path: '/monitorbooking',
+      path: '/',
       name: 'monitorbooking',
       component: MonitorBooking
     },
