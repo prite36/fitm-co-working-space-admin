@@ -14,14 +14,16 @@
         </template>
       </v-date-picker>
     </v-dialog>
-    <!-- <div class="timeline">
-      <p>History device booking timeline of {{dateNow}}</p>
+     <div class="timeline">
+      <p>History device booking timeline of {{dateQuery}}</p>
       <timeline :min="0.00" :max="24.00" :data="filteredDevices" :colors="colorsDevices" :height="devicesTLHeight"></timeline>
-      <p>History room booking timeline  of {{dateNow}}</p>
+      <p>History room booking timeline  of {{dateQuery}}</p>
       <timeline :min="0.00" :max="24.00" :data="filteredRooms" :colors="colorsRooms" :height="roomsTLHeight" ></timeline>
-      <p>History old item timeline  of {{dateNow}}</p>
-      <timeline :min="0.00" :max="24.00" :data="oldItem" :colors="colorsOld" :height="oldTLHeight" ></timeline>
-    </div> -->
+      <div v-if="filteredOld.length > 2">
+        <p>History old item timeline  of {{dateQuery}}</p>
+        <timeline   :min="0.00" :max="24.00" :data="oldItem" :colors="colorsOld" :height="oldTLHeight" ></timeline>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -38,7 +40,7 @@ export default {
   name: 'historybooking',
   data () {
     return {
-      dateQuery: null,
+      dateQuery: momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD'),
       modaldate: false,
       bookingDevices: null,
       bookingRooms: null,
@@ -46,7 +48,7 @@ export default {
       dateNow: momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD'),
       filteredDevices: [],
       filteredRooms: [],
-      oldItem: [],
+      filteredOld: [],
       colorsDevices: [],
       colorsRooms: [],
       colorsOld: []
@@ -54,83 +56,114 @@ export default {
   },
   methods: {
     queryTimeline () {
-      let tempHistories = this.histories
-
-    //   let defaultColors = ['#3366CC', '#DC3912', '#FF9900', '#109618', '#990099', '#3B3EAC', '#0099C6', '#DD4477', '#66AA00', '#B82E2E', '#316395']
-    //   filtered.push(
-    //     [
-    //       'เวลาการจอง 24 ชม.',
-    //       momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD 00:00 Z'),
-    //       momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD 00:01 Z')
-    //     ],
-    //     [
-    //       'เวลาการจอง 24 ชม.',
-    //       momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD 23:59 Z'),
-    //       momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD 24:00 Z')
-    //     ]
-    //   )
-    //   // ใส่สีขาว
-    //   colors.push('#ffffff')
-    //   for (var typeItem in list) {
-    //     for (var nametypeItem in list[typeItem]) {
-    //       if (bookingData[typeItem] && bookingData[typeItem][nametypeItem]) {
-    //         // console.log(`pass ${nametypeItem}`)
-    //         // ถ้า bookong ของ nametypeItem มีค่า
-    //         Object.values(bookingData[typeItem][nametypeItem]).forEach(values => {
-    //           let range1 = null
-    //           if (!this.dateQuery) {
-    //             range1 = moment.range(
-    //               momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD 00:00 Z'),
-    //               momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD 24:00 Z')
-    //             )
-    //           } else {
-    //             range1 = moment.range(
-    //               Moment(this.dateQuery).format('YYYY-MM-DD 00:00 Z'),
-    //               Moment(this.dateQuery).format('YYYY-MM-DD 24:00 Z')
-    //             )
-    //           }
-    //           const range2 = moment.range(
-    //             `${values.dateStart} ${values.timeStart}`,
-    //             `${values.dateStop} ${values.timeStop}`
-    //           )
-    //           if (range1.overlaps(range2, { adjacent: false })) {
-    //             // ถ้าชาวงเวลาจอง อยู่ภายในวันนี้ เข้าเงื่อนไข
-    //             let rangeIntersect = range1.intersect(range2)
-    //             // ใช้ในการหาว่า ช่วงเวลา booking นี้ อยู่ภายในวันนั้นหรือไม่ ใช้ intersect ใช้ในการหาช่วงที่ตัดกัน
-    //             filtered.push([
-    //               nametypeItem,
-    //               rangeIntersect.start.format('YYYY-MM-DD HH:mm Z'),
-    //               rangeIntersect.end.format('YYYY-MM-DD HH:mm Z')
-    //             ])
-    //             colors.push(defaultColors[Math.floor(Math.random() * defaultColors.length)])
-    //           }
-    //         })
-    //       } else {
-    //         // console.log(`fail ${nametypeItem}`)
-    //         // ถ้า ไม่มี booking ของ  nametypeItem นี้ ให้กำหนดเวลาอัติโนมัติ
-    //         filtered.push(
-    //           [
-    //             nametypeItem,
-    //             momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD 00:00 Z'),
-    //             momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD 00:01 Z')
-    //           ],
-    //           [
-    //             nametypeItem,
-    //             momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD 23:59 Z'),
-    //             momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD 24:00 Z')
-    //           ]
-    //         )
-    //         // ใส่สีขาว
-    //         colors.push('#ffffff')
-    //       }
-    //     }
-    //   }
+      let defaultColors = ['#3366CC', '#DC3912', '#FF9900', '#109618', '#990099',
+        '#3B3EAC', '#0099C6', '#DD4477', '#66AA00', '#B82E2E', '#316395'
+      ]
+      let tempHistories = Object.values(this.histories)
+      let dataSet = [
+        {listItem: this.listItems.device, filtered: this.filteredDevices, colors: this.colorsDevices},
+        {listItem: this.listItems.meetingRoom, filtered: this.filteredRooms, colors: this.colorsRooms},
+        {listItem: 'oldItem', filtered: this.filteredOld, colors: this.colorsOld}
+      ]
+      dataSet.forEach(values => {
+        values.filtered.push(
+          [
+            'เวลาการจอง 24 ชม.',
+            Moment(this.dateQuery).format('YYYY-MM-DD 00:00 Z'),
+            Moment(this.dateQuery).format('YYYY-MM-DD 00:01 Z')
+          ],
+          [
+            'เวลาการจอง 24 ชม.',
+            Moment(this.dateQuery).format('YYYY-MM-DD 23:59 Z'),
+            Moment(this.dateQuery).format('YYYY-MM-DD 24:00 Z')
+          ]
+        )
+        // ใส่สีขาว
+        values.colors.push('#ffffff')
+        if (values.listItem !== 'oldItem') {
+          for (var typeItem in values.listItem) {
+            for (var nametypeItem in values.listItem[typeItem]) {
+              let countBeforeCheck = tempHistories.length
+              tempHistories.forEach((element, index) => {
+                // console.log(element.nameTypeItem)
+                if (element.nameTypeItem === nametypeItem) {
+                  const range1 = moment.range(
+                    Moment(this.dateQuery).format('YYYY-MM-DD 00:00 Z'),
+                    Moment(this.dateQuery).format('YYYY-MM-DD 24:00 Z')
+                  )
+                  const range2 = moment.range(
+                    `${element.dateStart} ${element.timeStart}`,
+                    `${element.dateStop} ${element.timeStop}`
+                  )
+                  if (range1.overlaps(range2, { adjacent: false })) {
+                    // ถ้าชาวงเวลาจอง อยู่ภายในวันนี้ เข้าเงื่อนไข
+                    let rangeIntersect = range1.intersect(range2)
+                    // ใช้ในการหาว่า ช่วงเวลา booking นี้ อยู่ภายในวันนั้นหรือไม่ ใช้ intersect ใช้ในการหาช่วงที่ตัดกัน
+                    values.filtered.push([
+                      nametypeItem,
+                      rangeIntersect.start.format('YYYY-MM-DD HH:mm Z'),
+                      rangeIntersect.end.format('YYYY-MM-DD HH:mm Z')
+                    ])
+                    values.colors.push(defaultColors[Math.floor(Math.random() * defaultColors.length)])
+                    tempHistories.splice(index, 1)
+                  }
+                }
+              })
+              if (countBeforeCheck === tempHistories.length) {
+                // ถ้า ไม่มี booking ของ  nametypeItem นี้ ให้กำหนดเวลาอัติโนมัติ
+                values.filtered.push(
+                  [
+                    nametypeItem,
+                    Moment(this.dateQuery).format('YYYY-MM-DD 00:00 Z'),
+                    Moment(this.dateQuery).format('YYYY-MM-DD 00:01 Z')
+                  ],
+                  [
+                    nametypeItem,
+                    Moment(this.dateQuery).format('YYYY-MM-DD 23:59 Z'),
+                    Moment(this.dateQuery).format('YYYY-MM-DD 24:00 Z')
+                  ]
+                )
+                // ใส่สีขาว
+                values.colors.push('#ffffff')
+              }
+            }
+          }
+        } else {
+          console.log(tempHistories)
+          tempHistories.forEach((element, index) => {
+            // console.log(element.nameTypeItem)
+            if (element.nameTypeItem === nametypeItem) {
+              const range1 = moment.range(
+                Moment(this.dateQuery).format('YYYY-MM-DD 00:00 Z'),
+                Moment(this.dateQuery).format('YYYY-MM-DD 24:00 Z')
+              )
+              const range2 = moment.range(
+                `${element.dateStart} ${element.timeStart}`,
+                `${element.dateStop} ${element.timeStop}`
+              )
+              if (range1.overlaps(range2, { adjacent: false })) {
+                // ถ้าชาวงเวลาจอง อยู่ภายในวันนี้ เข้าเงื่อนไข
+                let rangeIntersect = range1.intersect(range2)
+                // ใช้ในการหาว่า ช่วงเวลา booking นี้ อยู่ภายในวันนั้นหรือไม่ ใช้ intersect ใช้ในการหาช่วงที่ตัดกัน
+                values.filtered.push([
+                  nametypeItem,
+                  rangeIntersect.start.format('YYYY-MM-DD HH:mm Z'),
+                  rangeIntersect.end.format('YYYY-MM-DD HH:mm Z')
+                ])
+                values.colors.push(defaultColors[Math.floor(Math.random() * defaultColors.length)])
+                tempHistories.splice(index, 1)
+              }
+            }
+          })
+        }
+      })
     }
   },
   watch: {
     histories () {
       this.filteredDevices = []
       this.filteredRooms = []
+      this.filteredOld = []
       this.oldItem = []
       this.colorsDevices = []
       this.colorsRooms = []
@@ -140,6 +173,7 @@ export default {
     dateQuery () {
       this.filteredDevices = []
       this.filteredRooms = []
+      this.filteredOld = []
       this.oldItem = []
       this.colorsDevices = []
       this.colorsRooms = []
@@ -150,7 +184,7 @@ export default {
   mounted () {
     this.$bindAsObject('listItems', firebase.database().ref('items'), null, () => {
       delete this.listItems['.key']
-      this.$bindAsArray('histories', firebase.database().ref('history'))
+      this.$bindAsObject('histories', firebase.database().ref('history'))
     })
   },
   computed: {
