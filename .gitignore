@@ -1,5 +1,8 @@
 .DS_Store
-node_modules/
+# ignore modules ทั้งหมด
+node_modules/*
+# ยกเว้น module pdfmake
+!node_modules/pdfmake
 dist/
 npm-debug.log*
 yarn-debug.log*

@@ -18,6 +18,7 @@
     "moment": "^2.19.2",
     "moment-range": "^3.0.3",
     "moment-timezone": "^0.5.16",
+    "pdfmake": "^0.1.36",
     "vee-validate": "^2.0.0-rc.27",
     "vue": "^2.5.3",
     "vue-chartjs": "^3.3.1",
