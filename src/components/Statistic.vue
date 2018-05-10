@@ -13,7 +13,8 @@
           </template>
       </v-date-picker>
     </v-dialog>
-    <bar-chart></bar-chart>
+    <bar-chart ref="barChart"></bar-chart>
+    <v-btn flat color="primary" @click="saveImg('barChart')">ok</v-btn>
   </div>
 </template>
 
@@ -32,7 +33,14 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setProfileRef', 'regiterGraphQuery'])
+    ...mapActions(['setProfileRef', 'regiterGraphQuery']),
+    saveImg (ref) {
+      let canvas = document.getElementById('bar-chart').toDataURL('image/png')
+      let link = document.createElement('a')
+      link.download = 'image'
+      link.href = canvas
+      link.click()
+    }
   },
   computed: {
     ...mapGetters(['registerFilter'])

@@ -5,7 +5,9 @@ import Vuex from 'vuex'
 import store from './VUEX/store'
 import Vuetify from 'vuetify'
 import VeeValidate from 'vee-validate'
+import VueFire from 'vuefire'
 
+Vue.use(VueFire)
 Vue.use(Vuex)
 Vue.use(Vuetify)
 Vue.use(VeeValidate)

@@ -8,8 +8,12 @@ import Feedback from '@/components/Feedback'
 import Statistic from '@/components/Statistic'
 import BlockUser from '@/components/BlockUser'
 import Unblock from '@/components/Unblock'
+import historybooking from '@/components/historyBooking'
+import Chartkick from 'chartkick'
+import VueChartkick from 'vue-chartkick'
 
 Vue.use(Router)
+Vue.use(VueChartkick, { Chartkick })
 
 let router = new Router({
   mode: 'history',
@@ -18,6 +22,11 @@ let router = new Router({
       path: '/additem',
       name: 'additem',
       component: AddItem
+    },
+    {
+      path: '/historybooking',
+      name: 'historybooking',
+      component: historybooking
     },
     {
       path: '/',

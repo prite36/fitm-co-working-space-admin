@@ -135,7 +135,7 @@ export default {
   },
   name: 'feedback',
   data: () => ({
-    scopefilter: '',
+    scopefilter: null,
     landscape: false,
     ratings: {
       chatbotRating: {1: 0, 2: 0, 3: 0, 4: 0, 5: 0},
@@ -211,7 +211,7 @@ export default {
     },
     calRate () {
       for (var key1 in this.feedbacks) {
-        if (this.scopefilter === '') {
+        if (this.scopefilter === null) {
           this.ratings.chatbotRating[this.feedbacks[key1].chatbotRating]++
           this.ratings.deviceRating[this.feedbacks[key1].deviceRating]++
           this.ratings.roomRating[this.feedbacks[key1].roomRating]++
@@ -222,7 +222,7 @@ export default {
               timeStamp: this.feedbacks[key1].timeStamp
             })
           }
-        } else if (this.scopefilter !== '') {
+        } else if (this.scopefilter !== null) {
           if (moment(this.feedbacks[key1].timeStamp).isSame(this.scopefilter, 'month')) {
             this.ratings.chatbotRating[this.feedbacks[key1].chatbotRating]++
             this.ratings.deviceRating[this.feedbacks[key1].deviceRating]++

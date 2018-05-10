@@ -1162,6 +1162,10 @@ chartjs-color@^2.1.0:
     chartjs-color-string "^0.5.0"
     color-convert "^0.5.3"
 
+chartkick@2.2.4:
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/chartkick/-/chartkick-2.2.4.tgz#6391444e9fd64d8834e0ffee4ba091310d697d88"
+
 chokidar@^1.7.0:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-1.7.0.tgz#798e689778151c8076b4b360e5edd28cda2bb468"
@@ -3441,7 +3445,13 @@ moment-range@^3.0.3:
   dependencies:
     es6-symbol "^3.1.0"
 
-moment@^2.10.2:
+moment-timezone@^0.5.16:
+  version "0.5.16"
+  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.16.tgz#661717d5f55b4d2c2e002262d726c83785192a5a"
+  dependencies:
+    moment ">= 2.9.0"
+
+"moment@>= 2.9.0", moment@^2.10.2:
   version "2.22.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.22.1.tgz#529a2e9bf973f259c9643d237fda84de3a26e8ad"
 
@@ -5292,6 +5302,10 @@ vue-chartjs@^3.3.1:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/vue-chartjs/-/vue-chartjs-3.3.1.tgz#fb08dc244da316e385910401daf16874f52ac1fc"
 
+vue-chartkick@0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/vue-chartkick/-/vue-chartkick-0.2.2.tgz#deaa6dbbe07822968d9a04c375d55901c54bcea1"
+
 vue-hot-reload-api@^2.2.0:
   version "2.2.3"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.2.3.tgz#43c8e5506d65a271d2571936d77253019fd3eb17"
@@ -5339,6 +5353,10 @@ vue-template-es2015-compiler@^1.6.0:
 vue@^2.5.3:
   version "2.5.4"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.5.4.tgz#4405e30b856875553e8fadb0ebf50f51ffc443f5"
+
+vuefire@^1.4.5:
+  version "1.4.5"
+  resolved "https://registry.yarnpkg.com/vuefire/-/vuefire-1.4.5.tgz#2f31028b18f25e0f581bb68fb94b88302d62ebf8"
 
 vuetify@^0.17.0:
   version "0.17.0"

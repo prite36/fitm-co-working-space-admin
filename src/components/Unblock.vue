@@ -86,7 +86,7 @@
         </v-tabs-content>
       </v-tabs-items>
     </v-tabs>
-    <v-dialog v-model="dialog" max-width="290">
+    <v-dialog v-model="dialog">
       <v-card>
         <v-card-title class="headline">You want to unblock  <b>" {{user}} "</b> ?</v-card-title>
         <v-card-text> Push on block button for unblock or<br>

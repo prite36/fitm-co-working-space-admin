@@ -20,21 +20,21 @@ export default {
         datasets: [
           {
             label: 'Data One',
-            backgroundColor: '#BBDEFB',
+            backgroundColor: '#2196F3',
             data: [10, 39, 1, 3, 50, 40, 22]
           },
           {
             label: 'Data two',
-            backgroundColor: 'pink',
+            backgroundColor: '#E91E63',
             data: [20, 49, 5, 4, 60, 45, 20]
           },
           {
             label: 'Data two',
-            backgroundColor: '#B2DFDB',
+            backgroundColor: '#00BCD4',
             data: [30, 29, 8, 6, 80, 58, 15]
           }
         ]
-      }, {responsive: true, maintainAspectRatio: false}
+      }, {responsive: true, maintainAspectRatio: false, displayColors: false}
     )
   }
 }

@@ -13,7 +13,16 @@
             </v-list-tile-content>
           </v-list-tile>
         </router-link>
-
+        <router-link to="/historybooking" class="btnlink">
+          <v-list-tile @click="">
+            <v-list-tile-action>
+              <v-icon large color="cyan darken-1">history</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <h3>history booking</h3>
+            </v-list-tile-content>
+          </v-list-tile>
+        </router-link>
         <router-link to="editdelete" class="btnlink">
           <v-list-tile @click="">
             <v-list-tile-action>
