@@ -37,7 +37,8 @@ const store = new Vuex.Store({
     profiles: {},
     feedbacks: [],
     historys: [],
-    registerFilter: []
+    registerFilter: [],
+    queryBooking: []
     // สร้างตัวแปร
   },
   getters: {
@@ -46,13 +47,81 @@ const store = new Vuex.Store({
     booking: state => state.booking,
     profiles: state => state.profiles,
     feedbacks: state => state.feedbacks,
-    registerFilter: state => state.registerFilter
+    registerFilter: state => state.registerFilter,
+    queryBooking: state => state.queryBooking
     // ส่งตัวแปรไปหน้า component
   },
   mutations: {
     ...firebaseMutations,
     updateStatus (state, status) {
       state.statusLogin = status
+    },
+    // query โดยการเอาค่าวันที่มาวนเปรียบเทียบกับ booking ทุกตัวหากเงื่อไขตรงจะโยนไปเก็บใน queryBooking
+    updateQueryBooking (state, date) {
+      state.queryBooking = []
+      delete state.booking['.key']
+      for (var key1 in state.booking) {
+        // console.log(state.booking[key1])
+        for (var key2 in state.booking[key1]) {
+          // console.log(state.booking[key1][key2])
+          for (var key3 in state.booking[key1][key2]) {
+            // console.log(state.booking[key1][key2][key3])
+            for (var key4 in state.booking[key1][key2][key3]) {
+              let data = state.booking[key1][key2][key3][key4]
+              // console.log(data)
+              if (date === data.dateStart && date === data.dateStop) {
+                let bookingTime = {
+                  timestart: data.timeStart,
+                  timestop: data.timeStop,
+                  typeitem: key2,
+                  nameitem: key3
+                }
+                let packdata = {
+                  data: data,
+                  bookingTime: bookingTime
+                }
+                state.queryBooking.push(packdata)
+              } else if (date === data.dateStart) {
+                let bookingTime = {
+                  timestart: data.timeStart,
+                  timestop: '24:00',
+                  typeitem: key2,
+                  nameitem: key3
+                }
+                let packdata = {
+                  data: data,
+                  bookingTime: bookingTime
+                }
+                state.queryBooking.push(packdata)
+              } else if (moment(date).isBetween(data.dateStart, data.dateStop)) {
+                let bookingTime = {
+                  timestart: '00:00',
+                  timestop: '24:00',
+                  typeitem: key2,
+                  nameitem: key3
+                }
+                let packdata = {
+                  data: data,
+                  bookingTime: bookingTime
+                }
+                state.queryBooking.push(packdata)
+              } else if (date === data.dateStop) {
+                let bookingTime = {
+                  timestart: '00:00',
+                  timestop: data.timeStop,
+                  typeitem: key2,
+                  nameitem: key3
+                }
+                let packdata = {
+                  data: data,
+                  bookingTime: bookingTime
+                }
+                state.queryBooking.push(packdata)
+              }
+            }
+          }
+        }
+      }
     },
     moveBookingToHistory (state, id) {
       delete state.booking['.key']
@@ -189,6 +258,20 @@ const store = new Vuex.Store({
     },
     regiterGraphQuery ({commit}, duration) {
       commit('queryForregisterGraph', duration)
+    },
+    Bookingquery ({commit}, date) {
+      commit('updateQueryBooking', date)
+    },
+    removeBooking (payload, child) {
+      Booking.child(child).remove()
+    },
+    updateBooking (payload, data) {
+      Booking.child(data.child).update({
+        'timeStart': data.timeStart,
+        'timeStop': data.timeStop,
+        'dateStart': data.dateStart,
+        'dateStop': data.dateStop
+      })
     }
   }
 })

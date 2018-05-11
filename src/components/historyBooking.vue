@@ -203,7 +203,7 @@ export default {
 </script>
 
 <style scoped>
-  .monitorbooking {
+  .historybooking {
     padding-left: 5%;
     padding-right: 5%;
   }
