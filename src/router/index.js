@@ -10,6 +10,7 @@ import BlockUser from '@/components/BlockUser'
 import Unblock from '@/components/Unblock'
 import historybooking from '@/components/historyBooking'
 import editbooking from '@/components/editBooking'
+import addAdmin from '@/components/addAdmin'
 import Chartkick from 'chartkick'
 import VueChartkick from 'vue-chartkick'
 
@@ -23,6 +24,11 @@ let router = new Router({
       path: '/additem',
       name: 'additem',
       component: AddItem
+    },
+    {
+      path: '/addAdmin',
+      name: 'addAdmin',
+      component: addAdmin
     },
     {
       path: '/editbooking',

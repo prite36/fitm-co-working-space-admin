@@ -10,12 +10,12 @@ Vue.use(Vuex)
 const moment = extendMoment(Moment)
 // link database
 let config = {
-  apiKey: 'AIzaSyAE2rQQye4hlRpDqAWirvyaaCExiaWA8DY',
-  authDomain: 'fitm-coworkingspace.firebaseapp.com',
-  databaseURL: 'https://fitm-coworkingspace.firebaseio.com',
-  projectId: 'fitm-coworkingspace',
-  storageBucket: 'fitm-coworkingspace.appspot.com',
-  messagingSenderId: '181239315787'
+  apiKey: 'AIzaSyCe9ziSu83NGVd08_FnljSQj7dNCdtYS7w',
+  authDomain: 'fitm-coworking-space.firebaseapp.com',
+  databaseURL: 'https://fitm-coworking-space.firebaseio.com',
+  projectId: 'fitm-coworking-space',
+  storageBucket: '',
+  messagingSenderId: '817891071163'
 }
 firebase.initializeApp(config)
 let db = firebase.database()
@@ -272,6 +272,11 @@ const store = new Vuex.Store({
         'dateStart': data.dateStart,
         'dateStop': data.dateStop
       })
+    },
+    addAdmin (payload, user) {
+      if (user.repassword === user.password) {
+        firebase.auth().createUserWithEmailAndPassword(user.email, user.password).catch()
+      }
     }
   }
 })

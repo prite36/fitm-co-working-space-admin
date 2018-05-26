@@ -110,6 +110,17 @@
           </v-list-tile>
         </router-link>
 
+        <router-link to="addAdmin" class="btnlink">
+          <v-list-tile @click="">
+            <v-list-tile-action>
+              <v-icon large color="blue">person_add</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <h3>add admin</h3>
+            </v-list-tile-content>
+          </v-list-tile>
+        </router-link>
+
         <v-list-tile @click="logout()">
           <v-list-tile-action>
             <v-icon large color="black">exit_to_app</v-icon>
