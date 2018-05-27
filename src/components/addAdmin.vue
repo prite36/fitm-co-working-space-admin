@@ -1,10 +1,10 @@
 <template>
-  <div class="login">
+  <div class="addadmin">
     <v-app id="inspire">
       <v-content>
-        <v-container fluid fill-height>
+        <v-container>
           <v-layout align-center justify-center>
-            <v-flex xs12 sm8>
+            <v-flex xs12 sm12>
               <v-card class="elevation-12">
                 <v-toolbar dark color="primary">
                   <v-toolbar-title>admin co-working space</v-toolbar-title>
@@ -14,7 +14,7 @@
                   <v-form>
                     <v-text-field prepend-icon="person" name="login" label="Enter your email" v-model="user.email" type="text"></v-text-field>
                     <v-text-field prepend-icon="lock" name="password" label="Enter your password" v-model="user.password" id="password" type="password"></v-text-field>
-                    <v-text-field prepend-icon="lock" name="password" label="Enter your password again" v-model="user.repassword" id="password" type="password"></v-text-field>
+                    <v-text-field prepend-icon="lock" name="repassword" label="Enter your password again" v-model="user.repassword" id="repassword" type="password"></v-text-field>
                   </v-form>
                 </v-card-text>
                 <v-card-actions>
@@ -35,7 +35,7 @@ import {
   mapActions
 } from 'vuex'
 export default {
-  name: 'login',
+  name: 'addAdmin',
   data: () => ({
     e1: true,
     user: {

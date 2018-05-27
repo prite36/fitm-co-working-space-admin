@@ -29,7 +29,7 @@
                 <v-btn icon ripple  @click="removeBooking(detail.data.childPart)">
                   <v-icon medium color="red">delete_forever</v-icon>
                 </v-btn>
-                <v-btn icon ripple  @click="setUpdateBooking(detail.data.childPart)">
+                <v-btn icon ripple  @click="setUpdateBooking(detail.data)">
                   <v-icon medium color="blue">border_color</v-icon>
                 </v-btn>
                 <v-btn icon ripple  @click="showDetail(detail)">
@@ -147,9 +147,13 @@ export default {
       this.details = await detail
       this.dialog = true
     },
-    setUpdateBooking (child) {
+    setUpdateBooking (details) {
       this.newBooking = !this.newBooking
-      this.data.child = child
+      this.data.child = details.childPart
+      this.data.dateStart = details.dateStart
+      this.data.dateStop = details.dateStop
+      this.data.timeStart = details.timeStart
+      this.data.timeStop = details.timeStop
     },
     updateBook () {
       this.updateBooking(this.data)

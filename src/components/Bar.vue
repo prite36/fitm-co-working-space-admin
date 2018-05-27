@@ -121,6 +121,17 @@
           </v-list-tile>
         </router-link>
 
+        <router-link to="configure" class="btnlink">
+          <v-list-tile @click="">
+            <v-list-tile-action>
+              <v-icon large color="black">settings</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <h3>configure system</h3>
+            </v-list-tile-content>
+          </v-list-tile>
+        </router-link>
+
         <v-list-tile @click="logout()">
           <v-list-tile-action>
             <v-icon large color="black">exit_to_app</v-icon>

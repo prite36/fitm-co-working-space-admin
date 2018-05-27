@@ -12,6 +12,7 @@ import historybooking from '@/components/historyBooking'
 import editbooking from '@/components/editBooking'
 import addAdmin from '@/components/addAdmin'
 import Chartkick from 'chartkick'
+import configure from '@/components/configure'
 import VueChartkick from 'vue-chartkick'
 
 Vue.use(Router)
@@ -24,6 +25,11 @@ let router = new Router({
       path: '/additem',
       name: 'additem',
       component: AddItem
+    },
+    {
+      path: '/configure',
+      name: 'configure',
+      component: configure
     },
     {
       path: '/addAdmin',

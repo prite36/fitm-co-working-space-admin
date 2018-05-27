@@ -26,7 +26,7 @@ let Booking = db.ref('booking')
 let Profile = db.ref('profile')
 let Feedbacks = db.ref('feedbacks')
 let Historys = db.ref('history')
-
+let Configs = db.ref('configSystem')
 // store
 const store = new Vuex.Store({
   strict: true,
@@ -38,7 +38,8 @@ const store = new Vuex.Store({
     feedbacks: [],
     historys: [],
     registerFilter: [],
-    queryBooking: []
+    queryBooking: [],
+    configs: {}
     // สร้างตัวแปร
   },
   getters: {
@@ -48,7 +49,8 @@ const store = new Vuex.Store({
     profiles: state => state.profiles,
     feedbacks: state => state.feedbacks,
     registerFilter: state => state.registerFilter,
-    queryBooking: state => state.queryBooking
+    queryBooking: state => state.queryBooking,
+    configs: state => state.configs
     // ส่งตัวแปรไปหน้า component
   },
   mutations: {
@@ -190,6 +192,9 @@ const store = new Vuex.Store({
     setHistorysRef: firebaseAction(({ bindFirebaseRef, unbindFirebaseRef }) => {
       bindFirebaseRef('historys', Historys)
     }),
+    setConfigsRef: firebaseAction(({ bindFirebaseRef, unbindFirebaseRef }) => {
+      bindFirebaseRef('configs', Configs)
+    }),
 
     setStatus ({commit}) {
       firebase.auth().onAuthStateChanged(function (user) {
@@ -275,7 +280,22 @@ const store = new Vuex.Store({
     },
     addAdmin (payload, user) {
       if (user.repassword === user.password) {
+        console.log('pass')
         firebase.auth().createUserWithEmailAndPassword(user.email, user.password).catch()
+      } else {
+        alert('please try again')
+      }
+    },
+    saveConfig (payload, config) {
+      if (config.deviceMax >= config.deviceMin && config.roomMax >= config.roomMin) {
+        Configs.update({
+          'countOfBlock': {'value': config.countOfBlock},
+          'countOfMaxBooking': config.maxBooking,
+          'device': {'max': config.deviceMax, 'min': config.deviceMin},
+          'meetingRoom': {'max': config.roomMax, 'min': config.roomMin}
+        })
+      } else {
+        alert('please check again')
       }
     }
   }
