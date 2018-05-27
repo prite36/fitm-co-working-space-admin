@@ -271,12 +271,16 @@ const store = new Vuex.Store({
       Booking.child(child).remove()
     },
     updateBooking (payload, data) {
-      Booking.child(data.child).update({
-        'timeStart': data.timeStart,
-        'timeStop': data.timeStop,
-        'dateStart': data.dateStart,
-        'dateStop': data.dateStop
-      })
+      if (moment(data.dateStart, data.timeStart).isSameOrBefore(data.dateStop, data.timeStop)) {
+        Booking.child(data.child).update({
+          'timeStart': data.timeStart,
+          'timeStop': data.timeStop,
+          'dateStart': data.dateStart,
+          'dateStop': data.dateStop
+        })
+      } else {
+        alert('plese recheck and try again')
+      }
     },
     addAdmin (payload, user) {
       if (user.repassword === user.password) {
