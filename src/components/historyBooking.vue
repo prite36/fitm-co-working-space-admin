@@ -19,10 +19,6 @@
       <timeline :min="0.00" :max="24.00" :data="filteredDevices" :colors="colorsDevices" :height="devicesTLHeight"></timeline>
       <p>History room booking timeline  of {{dateQuery}}</p>
       <timeline :min="0.00" :max="24.00" :data="filteredRooms" :colors="colorsRooms" :height="roomsTLHeight" ></timeline>
-      <div v-if="filteredOld.length > 2">
-        <p>History old item timeline  of {{dateQuery}}</p>
-        <timeline   :min="0.00" :max="24.00" :data="oldItem" :colors="colorsOld" :height="oldTLHeight" ></timeline>
-      </div>
     </div>
   </div>
 </template>
@@ -48,13 +44,10 @@ export default {
       dateNow: momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD'),
       filteredDevices: [],
       filteredRooms: [],
-      filteredOld: [],
       colorsDevices: [],
       colorsRooms: [],
-      colorsOld: [],
       countDevices: {total: 0},
-      countRooms: {total: 0},
-      countOld: {total: 0}
+      countRooms: {total: 0}
     }
   },
   methods: {
@@ -65,8 +58,7 @@ export default {
       let tempHistories = Object.values(this.histories)
       let dataSet = [
         {listItem: this.listItems.device, filtered: this.filteredDevices, colors: this.colorsDevices, count: this.countDevices},
-        {listItem: this.listItems.meetingRoom, filtered: this.filteredRooms, colors: this.colorsRooms, count: this.countRooms},
-        {listItem: 'oldItem', filtered: this.filteredOld, colors: this.colorsOld, count: this.countOld}
+        {listItem: this.listItems.meetingRoom, filtered: this.filteredRooms, colors: this.colorsRooms, count: this.countRooms}
       ]
       dataSet.forEach(values => {
         values.filtered.push(
@@ -79,76 +71,49 @@ export default {
         // ใส่สีขาว
         values.colors.push('#ffffff')
         values.count.total++
-        if (values.listItem !== 'oldItem') {
-          for (var typeItem in values.listItem) {
-            for (var nametypeItem in values.listItem[typeItem]) {
-              values.count.total++
-              let countBeforeCheck = tempHistories.length
-              tempHistories.forEach((element, index) => {
-                // console.log(element.nameTypeItem)
-                if (element.nameTypeItem === nametypeItem) {
-                  const range1 = moment.range(
-                    Moment(this.dateQuery).format('YYYY-MM-DD 00:00 Z'),
-                    Moment(this.dateQuery).format('YYYY-MM-DD 24:00 Z')
-                  )
-                  const range2 = moment.range(
-                    `${element.dateStart} ${element.timeStart}`,
-                    `${element.dateStop} ${element.timeStop}`
-                  )
-                  if (range1.overlaps(range2, { adjacent: false })) {
-                    // ถ้าชาวงเวลาจอง อยู่ภายในวันนี้ เข้าเงื่อนไข
-                    let rangeIntersect = range1.intersect(range2)
-                    // ใช้ในการหาว่า ช่วงเวลา booking นี้ อยู่ภายในวันนั้นหรือไม่ ใช้ intersect ใช้ในการหาช่วงที่ตัดกัน
-                    values.filtered.push([
-                      nametypeItem,
-                      rangeIntersect.start.format('YYYY-MM-DD HH:mm Z'),
-                      rangeIntersect.end.format('YYYY-MM-DD HH:mm Z')
-                    ])
-                    values.colors.push(defaultColors[Math.floor(Math.random() * defaultColors.length)])
-                    tempHistories.splice(index, 1)
-                  }
-                }
-              })
-              if (countBeforeCheck === tempHistories.length) {
-                // ถ้า ไม่มี booking ของ  nametypeItem นี้ ให้กำหนดเวลาอัติโนมัติ
-                values.filtered.push(
-                  [
-                    nametypeItem,
-                    Moment(this.dateQuery).format('YYYY-MM-DD 00:00 Z'),
-                    Moment(this.dateQuery).format('YYYY-MM-DD 24:00 Z')
-                  ]
+
+        for (var typeItem in values.listItem) {
+          for (var nametypeItem in values.listItem[typeItem]) {
+            values.count.total++
+            let countBeforeCheck = tempHistories.length
+            tempHistories.forEach((element, index) => {
+              // console.log(element.nameTypeItem)
+              if (element.nameTypeItem === nametypeItem) {
+                const range1 = moment.range(
+                  Moment(this.dateQuery).format('YYYY-MM-DD 00:00 Z'),
+                  Moment(this.dateQuery).format('YYYY-MM-DD 24:00 Z')
                 )
-                // ใส่สีขาว
-                values.colors.push('#ffffff')
+                const range2 = moment.range(
+                  `${element.dateStart} ${element.timeStart}`,
+                  `${element.dateStop} ${element.timeStop}`
+                )
+                if (range1.overlaps(range2, { adjacent: false })) {
+                  // ถ้าชาวงเวลาจอง อยู่ภายในวันนี้ เข้าเงื่อนไข
+                  let rangeIntersect = range1.intersect(range2)
+                  // ใช้ในการหาว่า ช่วงเวลา booking นี้ อยู่ภายในวันนั้นหรือไม่ ใช้ intersect ใช้ในการหาช่วงที่ตัดกัน
+                  values.filtered.push([
+                    nametypeItem,
+                    rangeIntersect.start.format('YYYY-MM-DD HH:mm Z'),
+                    rangeIntersect.end.format('YYYY-MM-DD HH:mm Z')
+                  ])
+                  values.colors.push(defaultColors[Math.floor(Math.random() * defaultColors.length)])
+                  tempHistories.splice(index, 1)
+                }
               }
+            })
+            if (countBeforeCheck === tempHistories.length) {
+              // ถ้า ไม่มี booking ของ  nametypeItem นี้ ให้กำหนดเวลาอัติโนมัติ
+              values.filtered.push(
+                [
+                  nametypeItem,
+                  Moment(this.dateQuery).format('YYYY-MM-DD 00:00 Z'),
+                  Moment(this.dateQuery).format('YYYY-MM-DD 24:00 Z')
+                ]
+              )
+              // ใส่สีขาว
+              values.colors.push('#ffffff')
             }
           }
-        } else {
-          tempHistories.forEach((element, index) => {
-            // console.log(element.nameTypeItem)
-            if (element.nameTypeItem === nametypeItem) {
-              const range1 = moment.range(
-                Moment(this.dateQuery).format('YYYY-MM-DD 00:00 Z'),
-                Moment(this.dateQuery).format('YYYY-MM-DD 24:00 Z')
-              )
-              const range2 = moment.range(
-                `${element.dateStart} ${element.timeStart}`,
-                `${element.dateStop} ${element.timeStop}`
-              )
-              if (range1.overlaps(range2, { adjacent: false })) {
-                // ถ้าชาวงเวลาจอง อยู่ภายในวันนี้ เข้าเงื่อนไข
-                let rangeIntersect = range1.intersect(range2)
-                // ใช้ในการหาว่า ช่วงเวลา booking นี้ อยู่ภายในวันนั้นหรือไม่ ใช้ intersect ใช้ในการหาช่วงที่ตัดกัน
-                values.filtered.push([
-                  nametypeItem,
-                  rangeIntersect.start.format('YYYY-MM-DD HH:mm Z'),
-                  rangeIntersect.end.format('YYYY-MM-DD HH:mm Z')
-                ])
-                values.colors.push(defaultColors[Math.floor(Math.random() * defaultColors.length)])
-                tempHistories.splice(index, 1)
-              }
-            }
-          })
         }
       })
     }
@@ -157,27 +122,20 @@ export default {
     histories () {
       this.filteredDevices = []
       this.filteredRooms = []
-      this.filteredOld = []
       this.oldItem = []
       this.colorsDevices = []
       this.colorsRooms = []
-      this.colorsOld = []
       this.countDevices = {total: 0}
       this.countRooms = {total: 0}
-      this.countOld = {total: 0}
       this.queryTimeline()
     },
     dateQuery () {
       this.filteredDevices = []
       this.filteredRooms = []
-      this.filteredOld = []
-      this.oldItem = []
       this.colorsDevices = []
       this.colorsRooms = []
-      this.colorsOld = []
       this.countDevices = {total: 0}
       this.countRooms = {total: 0}
-      this.countOld = {total: 0}
       this.queryTimeline()
     }
   },
