@@ -50,7 +50,7 @@ const store = new Vuex.Store({
     feedbacks: state => state.feedbacks,
     queryBooking: state => state.queryBooking,
     configs: state => state.configs,
-    historys: state => state.items
+    historys: state => state.historys
     // ส่งตัวแปรไปหน้า component
   },
   mutations: {

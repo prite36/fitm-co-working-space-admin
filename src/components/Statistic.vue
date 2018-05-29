@@ -49,6 +49,7 @@ import {mapGetters, mapActions} from 'vuex'
 import logoHeader from '../assets/FITM_LOGO.png'
 import pdfMake from 'pdfmake/build/pdfmake'
 import pdfFonts from 'pdfmake/build/vfs_fonts'
+import moment from 'moment'
 import momentTime from 'moment-timezone'
 pdfMake.vfs = pdfFonts.pdfMake.vfs
 pdfMake.fonts = {
@@ -67,7 +68,11 @@ export default {
   data () {
     return {
       scopefilter: momentTime().tz('Asia/Bangkok').format('YYYY-MM'),
-      types: 'month'
+      types: 'month',
+      barRooms: {labels: [], datasets: []},
+      barDevices: {labels: [], datasets: []},
+      barUsers: {labels: [], datasets: []},
+      all: null
     }
   },
   methods: {
@@ -203,6 +208,41 @@ export default {
       } else if (action === 'download') {
         pdfMake.createPdf(docDefinition).download(`Report Statistics [${momentTime().tz('Asia/Bangkok').format('DD-MM-YYYY HH.mm')}].pdf`)
       }
+    },
+    dataStructure () {
+      // สร้างโครงสร้างข้อมูลพื้นฐาน
+      [{varName: this.barRooms}, {varName: this.barDevices}, {varName: this.barUsers}].forEach(values1 => {
+        [{label: 'check-in', color: '#2196F3'},
+        {label: 'Not check-in', color: '#E91E63'},
+        {label: 'Cancle Booking', color: '#00BCD4'}].forEach(values2 => {
+          values1.varName.datasets.push({
+            label: values2.label,
+            backgroundColor: values2.color,
+            data: []
+          })
+        })
+      })
+    },
+    QueryStat () {
+      this.dataStructure()
+      let format = 'YYYY-MM'
+      let dataQuery = this.historys.filter(element => {
+        let checkdbStart = moment(element.dateStart, format)
+        let checkdbStop = moment(element.dateStop, format)
+        return moment(this.scopefilter, format).isBetween(checkdbStart, checkdbStop, 'month', '[]')
+      })
+
+      void [{item: this.items.meetingRoom}].forEach(data => {
+        Object.keys(data.item).forEach((typeItem, index) => {
+          this.barRooms.labels[index] = typeItem // เก็บชื่อ ลงใน label แต่ละประเภท
+          let allNameType = Object.keys(data.item[typeItem]) // nameTypeItem ทั้งหมดใน Item ประเภทืนั้น
+          dataQuery.forEach(value1 => {
+            if (allNameType.includes(value1.nameTypeItem)) {
+              console.log(value1.nameTypeItem)
+            }
+          })
+        })
+      })
     }
   },
   computed: {
@@ -214,7 +254,10 @@ export default {
   },
   watch: {
     scopefilter: function () {
-
+      this.QueryStat()
+    },
+    historys: function () {
+      this.QueryStat()
     }
   }
 }
