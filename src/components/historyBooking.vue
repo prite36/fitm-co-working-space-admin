@@ -51,7 +51,10 @@ export default {
       filteredOld: [],
       colorsDevices: [],
       colorsRooms: [],
-      colorsOld: []
+      colorsOld: [],
+      countDevices: {total: 0},
+      countRooms: {total: 0},
+      countOld: {total: 0}
     }
   },
   methods: {
@@ -61,28 +64,25 @@ export default {
       ]
       let tempHistories = Object.values(this.histories)
       let dataSet = [
-        {listItem: this.listItems.device, filtered: this.filteredDevices, colors: this.colorsDevices},
-        {listItem: this.listItems.meetingRoom, filtered: this.filteredRooms, colors: this.colorsRooms},
-        {listItem: 'oldItem', filtered: this.filteredOld, colors: this.colorsOld}
+        {listItem: this.listItems.device, filtered: this.filteredDevices, colors: this.colorsDevices, count: this.countDevices},
+        {listItem: this.listItems.meetingRoom, filtered: this.filteredRooms, colors: this.colorsRooms, count: this.countRooms},
+        {listItem: 'oldItem', filtered: this.filteredOld, colors: this.colorsOld, count: this.countOld}
       ]
       dataSet.forEach(values => {
         values.filtered.push(
           [
             'เวลาการจอง 24 ชม.',
             Moment(this.dateQuery).format('YYYY-MM-DD 00:00 Z'),
-            Moment(this.dateQuery).format('YYYY-MM-DD 00:01 Z')
-          ],
-          [
-            'เวลาการจอง 24 ชม.',
-            Moment(this.dateQuery).format('YYYY-MM-DD 23:59 Z'),
             Moment(this.dateQuery).format('YYYY-MM-DD 24:00 Z')
           ]
         )
         // ใส่สีขาว
         values.colors.push('#ffffff')
+        values.count.total++
         if (values.listItem !== 'oldItem') {
           for (var typeItem in values.listItem) {
             for (var nametypeItem in values.listItem[typeItem]) {
+              values.count.total++
               let countBeforeCheck = tempHistories.length
               tempHistories.forEach((element, index) => {
                 // console.log(element.nameTypeItem)
@@ -115,11 +115,6 @@ export default {
                   [
                     nametypeItem,
                     Moment(this.dateQuery).format('YYYY-MM-DD 00:00 Z'),
-                    Moment(this.dateQuery).format('YYYY-MM-DD 00:01 Z')
-                  ],
-                  [
-                    nametypeItem,
-                    Moment(this.dateQuery).format('YYYY-MM-DD 23:59 Z'),
                     Moment(this.dateQuery).format('YYYY-MM-DD 24:00 Z')
                   ]
                 )
@@ -129,7 +124,6 @@ export default {
             }
           }
         } else {
-          console.log(tempHistories)
           tempHistories.forEach((element, index) => {
             // console.log(element.nameTypeItem)
             if (element.nameTypeItem === nametypeItem) {
@@ -168,6 +162,9 @@ export default {
       this.colorsDevices = []
       this.colorsRooms = []
       this.colorsOld = []
+      this.countDevices = {total: 0}
+      this.countRooms = {total: 0}
+      this.countOld = {total: 0}
       this.queryTimeline()
     },
     dateQuery () {
@@ -178,6 +175,9 @@ export default {
       this.colorsDevices = []
       this.colorsRooms = []
       this.colorsOld = []
+      this.countDevices = {total: 0}
+      this.countRooms = {total: 0}
+      this.countOld = {total: 0}
       this.queryTimeline()
     }
   },
@@ -189,14 +189,13 @@ export default {
   },
   computed: {
     roomsTLHeight () {
-      // console.log(`${(this.colorsRooms.length * 50) + 41}px`)
-      return `${(this.colorsRooms.length * 50) + 41}px`
+      return `${(this.countRooms.total * 50) + 41}px`
     },
     devicesTLHeight () {
-      return `${(this.colorsDevices.length * 50) + 41}px`
+      return `${(this.countDevices.total * 50) + 41}px`
     },
     oldTLHeight () {
-      return `${(this.colorsOld.length * 50) + 41}px`
+      return `${(this.countOld.total * 50) + 41}px`
     }
   }
 }
