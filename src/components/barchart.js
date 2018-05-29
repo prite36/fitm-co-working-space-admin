@@ -1,8 +1,10 @@
 import {Bar} from 'vue-chartjs'
+// import {HorizontalBar} from 'vue-chartjs'
 import {mapGetters} from 'vuex'
 
 export default {
   extends: Bar,
+  // extends: HorizontalBar,
   computed: {
     ...mapGetters(['registerFilter'])
   },

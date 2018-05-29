@@ -1,42 +1,39 @@
 <template lang="html">
   <div class="statistic">
-    <v-container grid-list-md text-xs-center class="pickers">
-     <v-layout row wrap>
-       <v-flex xs4>
-         <v-radio-group v-model="types" column>
-           <v-radio
-              label="year"
-              color="primary"
-              value="year">
-           </v-radio>
-           <v-radio
-              label="month & year"
-              color="primary"
-              value="month">
-           </v-radio>
-         </v-radio-group>
-       </v-flex>
-       <v-flex xs8>
-         <v-dialog persistent lazy full-width width="290px">
-           <v-text-field slot="activator" :label="`Change type ${type}`" v-model="scopefilter" prepend-icon="event" readonly>
-           </v-text-field>
-           <v-date-picker
-           v-model="scopefilter"
-           :type="types"
-           scrollable
-           >
-             <template slot-scope="{ save, cancel }">
-                 <v-card-actions>
-                   <v-spacer></v-spacer>
-                   <v-btn flat color="primary" @click="cancel">Cancel</v-btn>
-                   <v-btn flat color="primary" @click="save">OK</v-btn>
-                 </v-card-actions>
-               </template>
-           </v-date-picker>
-         </v-dialog>
-       </v-flex>
-     </v-layout>
-    </v-container>
+    <v-dialog persistent lazy full-width width="290px">
+      <v-text-field slot="activator" label="Change month in dialog" v-model="scopefilter" prepend-icon="event" readonly>
+      </v-text-field>
+      <v-date-picker
+      v-model="scopefilter"
+      type="month"
+      scrollable
+      >
+        <template slot-scope="{ save, cancel }">
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn flat color="primary" @click="cancel">Cancel</v-btn>
+              <v-btn flat color="primary" @click="save">OK</v-btn>
+            </v-card-actions>
+          </template>
+      </v-date-picker>
+    </v-dialog>
+    <v-dialog persistent lazy full-width width="290px">
+      <v-text-field slot="activator" label="Change year in dialog" v-model="scopefilter" prepend-icon="event" readonly>
+      </v-text-field>
+      <v-date-picker
+      v-model="scopefilter"
+      type="year"
+      scrollable
+      >
+        <template slot-scope="{ save, cancel }">
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn flat color="primary" @click="cancel">Cancel</v-btn>
+              <v-btn flat color="primary" @click="save">OK</v-btn>
+            </v-card-actions>
+          </template>
+      </v-date-picker>
+    </v-dialog>
     <bar-chart ref="barChart"></bar-chart>
     <v-btn flat color="primary" @click="createPDF('download')">Download</v-btn>
     <v-btn flat color="primary" @click="createPDF('print')">Print</v-btn>
@@ -66,12 +63,11 @@ export default {
   name: 'statistic',
   data () {
     return {
-      scopefilter: momentTime().tz('Asia/Bangkok').format('YYYY-MM'),
-      types: 'month'
+      scopefilter: momentTime().tz('Asia/Bangkok').format('YYYY-MM')
     }
   },
   methods: {
-    ...mapActions(['setHistorysRef', 'setItemsRef']),
+    ...mapActions(['setProfileRef', 'regiterGraphQuery']),
     saveImg (ref) {
       let canvas = document.getElementById('bar-chart').toDataURL('image/png')
       return canvas
@@ -206,15 +202,14 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['historys', 'items'])
+    ...mapGetters(['registerFilter'])
   },
   created () {
-    this.setItemsRef()
-    this.setHistorysRef()
+    this.setProfileRef()
   },
   watch: {
     scopefilter: function () {
-
+      this.regiterGraphQuery(this.scopefilter)
     }
   }
 }
@@ -223,8 +218,5 @@ export default {
 <style>
 .sendinfo {
   align-items: center;
-}
-.pickers {
-  width: 50%;
 }
 </style>

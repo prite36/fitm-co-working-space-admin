@@ -48,9 +48,9 @@ const store = new Vuex.Store({
     booking: state => state.booking,
     profiles: state => state.profiles,
     feedbacks: state => state.feedbacks,
-    registerFilter: state => state.registerFilter,
     queryBooking: state => state.queryBooking,
-    configs: state => state.configs
+    configs: state => state.configs,
+    historys: state => state.items
     // ส่งตัวแปรไปหน้า component
   },
   mutations: {
@@ -149,30 +149,6 @@ const store = new Vuex.Store({
           }
         }
       }
-    },
-    queryForregisterGraph (state, duration) {
-      state.registerFilter = []
-      if (state.profiles.guest) {
-        let mapguest = Object.values(state.profiles.guest)
-        let guest = mapguest.filter(
-          guest => moment(guest.timestamp).isSame(duration, 'month')
-        )
-        state.registerFilter.push(guest)
-      }
-      if (state.profiles.student) {
-        let mapstudent = Object.values(state.profiles.student)
-        let student = mapstudent.filter(
-          student => moment(student.timestamp).isSame(duration, 'month')
-        )
-        state.registerFilter.push(student)
-      }
-      if (state.profiles.staff) {
-        let mapstaff = Object.values(state.profiles.staff)
-        let staff = mapstaff.filter(
-          staff => moment(staff.timestamp).isSame(duration, 'month')
-        )
-        state.registerFilter.push(staff)
-      }
     }
   },
   actions: {
@@ -260,9 +236,6 @@ const store = new Vuex.Store({
           countOfNotCheckIn: 0
         }
       )
-    },
-    regiterGraphQuery ({commit}, duration) {
-      commit('queryForregisterGraph', duration)
     },
     Bookingquery ({commit}, date) {
       commit('updateQueryBooking', date)
