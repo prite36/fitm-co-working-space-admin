@@ -37,7 +37,7 @@
        </v-flex>
      </v-layout>
     </v-container>
-    <bar-chart ref="barChart"></bar-chart>
+    <bar-chart :chart-data="testData" ref="barChart"></bar-chart>
     <v-btn flat color="primary" @click="createPDF('download')">Download</v-btn>
     <v-btn flat color="primary" @click="createPDF('print')">Print</v-btn>
   </div>
@@ -69,24 +69,37 @@ export default {
     return {
       scopefilter: momentTime().tz('Asia/Bangkok').format('YYYY-MM'),
       types: 'month',
-      barRooms: {labels: [], datasets: []},
+      barMeetRooms: {labels: [], datasets: []},
       barDevices: {labels: [], datasets: []},
       barUsers: {labels: [], datasets: []},
-      all: null
+      testData: {labels: [ 'classRoom', 'largeRoom', 'mediumRoom' ],
+        datasets: [
+          {
+            label: 'check-in',
+            backgroundColor: '#2196F3',
+            data: [ 0, 2, 0 ]
+          },
+          {
+            label: 'Not check-in',
+            backgroundColor: '#E91E63',
+            data: [ 0, 0, 0 ]
+          },
+          {
+            label: 'Cancle Booking',
+            backgroundColor: '#00BCD4',
+            data: [ 3, 3, 0 ] }
+        ]
+      }
     }
   },
   methods: {
     ...mapActions(['setHistorysRef', 'setItemsRef']),
     saveImg (ref) {
-      let canvas = document.getElementById('bar-chart').toDataURL('image/png')
+      let canvas = document.getElementById(ref).toDataURL('image/png')
       return canvas
-      // let link = document.createElement('a')
-      // link.download = 'image'
-      // link.href = canvas
-      // link.click()
     },
     createPDF (action) {
-      let barChart = this.saveImg('barChart')
+      let barChart = this.saveImg('bar-chart')
       var docDefinition = {
         pageMargins: [40, 120, 40, 40],
         header: () => {
@@ -211,15 +224,32 @@ export default {
     },
     dataStructure () {
       // สร้างโครงสร้างข้อมูลพื้นฐาน
-      [{varName: this.barRooms}, {varName: this.barDevices}, {varName: this.barUsers}].forEach(values1 => {
-        [{label: 'check-in', color: '#2196F3'},
-        {label: 'Not check-in', color: '#E91E63'},
-        {label: 'Cancle Booking', color: '#00BCD4'}].forEach(values2 => {
-          values1.varName.datasets.push({
-            label: values2.label,
-            backgroundColor: values2.color,
-            data: []
-          })
+      void [{label: 'check-in', color: '#2196F3'},
+      {label: 'Not check-in', color: '#E91E63'},
+      {label: 'Cancle Booking', color: '#00BCD4'}].forEach(values2 => {
+        this.barMeetRooms.datasets.push({
+          label: values2.label,
+          backgroundColor: values2.color,
+          data: [0, 0, 0]
+        })
+      })
+
+      void [{label: 'Booked', color: '#2196F3'},
+      {label: 'Cancle Booking', color: '#00BCD4'}].forEach(values2 => {
+        this.barDevices.datasets.push({
+          label: values2.label,
+          backgroundColor: values2.color,
+          data: [0, 0]
+        })
+      })
+
+      void [{label: 'Student', color: '#2196F3'},
+      {label: 'Staff', color: '#E91E63'},
+      {label: 'Guest', color: '#00BCD4'}].forEach(values2 => {
+        this.barUsers.datasets.push({
+          label: values2.label,
+          backgroundColor: values2.color,
+          data: [0, 0, 0]
         })
       })
     },
@@ -232,13 +262,28 @@ export default {
         return moment(this.scopefilter, format).isBetween(checkdbStart, checkdbStop, 'month', '[]')
       })
 
-      void [{item: this.items.meetingRoom}].forEach(data => {
-        Object.keys(data.item).forEach((typeItem, index) => {
-          this.barRooms.labels[index] = typeItem // เก็บชื่อ ลงใน label แต่ละประเภท
+      void [{item: this.items.meetingRoom, varName: this.barMeetRooms, type: 'MeetRooms'},
+      {item: this.items.device, varName: this.barDevices, type: 'Devices'}].forEach(data => {
+        Object.keys(data.item).forEach((typeItem, index) => { // index เอาไปใช้กับ labels และระบุตำแหน่งให้ datasets
+          data.varName.labels[index] = typeItem // เก็บชื่อ ลงใน label แต่ละประเภท
           let allNameType = Object.keys(data.item[typeItem]) // nameTypeItem ทั้งหมดใน Item ประเภทืนั้น
           dataQuery.forEach(value1 => {
-            if (allNameType.includes(value1.nameTypeItem)) {
-              console.log(value1.nameTypeItem)
+            if (allNameType.includes(value1.nameTypeItem)) {  // หาว่าการจองครั้งนี้ มี nameTypeItem อยู่ใน  allNameType ไหม
+              if (data.type === 'MeetRooms') {
+                if (value1.status === 'endBooking') { // สถานะ checkin-in
+                  data.varName.datasets[0].data[index] ++
+                } else if (value1.status === 'notCheckIn') {  // สถานะ Not ckeck-in
+                  data.varName.datasets[1].data[index] ++
+                } else if (value1.status === 'userCancleBooking') {
+                  data.varName.datasets[2].data[index] ++
+                }
+              } else if (data.type === 'Devices') {
+                if (value1.status === 'endBooking') { // สถานะ checkin-in
+                  data.varName.datasets[0].data[index] ++
+                } else if (value1.status === 'userCancleBooking') {
+                  data.varName.datasets[1].data[index] ++
+                }
+              }
             }
           })
         })
