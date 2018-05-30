@@ -93,7 +93,7 @@
         Push on cancle button for back to original page</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="red darken-1" flat="flat" @click.native="unblock(pathBlock), dialog = false">unblock</v-btn>
+          <v-btn color="red darken-1" flat="flat" @click.native="unblock({pathBlock: pathBlock, id: id}), dialog = false">unblock</v-btn>
           <v-btn color="green darken-1" flat="flat" @click.native="dialog = false">cancle</v-btn>
         </v-card-actions>
       </v-card>
@@ -109,7 +109,8 @@ export default {
   data: () => ({
     dialog: false,
     user: '',
-    pathBlock: ''
+    pathBlock: '',
+    id: ''
   }),
   computed: {
     ...mapGetters(['profiles'])
@@ -117,6 +118,7 @@ export default {
   methods: {
     ...mapActions(['setProfileRef', 'unblock']),
     async commitunblock (type, id) {
+      this.id = id
       this.pathBlock = await type + '/' + id
       this.dialog = true
       if (type === 'guest') {

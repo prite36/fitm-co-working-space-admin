@@ -5,6 +5,7 @@ import router from '../router'
 import Moment from 'moment'
 import { extendMoment } from 'moment-range'
 import {firebaseMutations, firebaseAction} from 'vuexfire'
+import axios from 'axios'
 
 Vue.use(Vuex)
 const moment = extendMoment(Moment)
@@ -27,10 +28,12 @@ let Profile = db.ref('profile')
 let Feedbacks = db.ref('feedbacks')
 let Historys = db.ref('history')
 let Configs = db.ref('configSystem')
+let userState = db.ref('state')
 // store
 const store = new Vuex.Store({
   strict: true,
   state: {
+    listMsg: [],
     statusLogin: true,
     items: '',
     booking: {},
@@ -65,11 +68,28 @@ const store = new Vuex.Store({
     historys: state => state.historys,
     barUsers: state => state.barUsers,
     barMeetRooms: state => state.barMeetRooms,
-    barDevices: state => state.barDevices
+    barDevices: state => state.barDevices,
+    listMsg: state => state.listMsg
     // ส่งตัวแปรไปหน้า component
   },
   mutations: {
     ...firebaseMutations,
+    langBlock (state, lang) {
+      console.log(lang)
+      if (lang === 'th') {
+        state.listMsg = [
+          'คุณถูกบล็อคเนื่องจากส่งเสียงรบกวนผู้อื่น หากต้องการใช้งาน กรุณาติดต่อเจ้าหน้าที่',
+          'คุณถูกบล็อคเนื่องจากใช้งานห้องเกินเวลาที่กำหนด หากต้องการใช้งาน กรุณาติดต่อเจ้าหน้าที่',
+          'คุณถูกบล็อคเนื่องจากใช้งานอุปกรณ์เกินเวลาที่กำหนด หากต้องการใช้งาน กรุณาติดต่อเจ้าหน้าที่'
+        ]
+      } else if (lang === 'eng') {
+        state.listMsg = [
+          'You are blocked because of noise. if you need to use please contact me.',
+          'You are blocked because of using the room over time. if you need to use please contact me.',
+          'You are blocked because of using the device over time. if you need to use please contact me.'
+        ]
+      }
+    },
     QUERYSTAT (state) {
       state.barUsers = {
         datasets: [],
@@ -308,22 +328,52 @@ const store = new Vuex.Store({
     removeItem (payload, child) {
       Items.child(child).remove()
     },
+    langBlockMessage ({commit}, id) {
+      console.log('langBlockMessage')
+      let lang = null
+      userState.child(id).once('value', snapshot => {
+        lang = snapshot.val().language
+        commit('langBlock', lang)
+      })
+    },
     block ({commit}, data) {
       console.log(data)
-      Profile.child(data.type).child(data.id).update(
-        {
-          statusBlock: true
-        }
-      )
+      let alertMassage = ''
+      if (data.message === '') {
+        alertMassage = 'ขณะนี้คุณถูกบล็อค หากต้องการใช้งาน กรุณาติดต่อเจ้าหน้าที่ผู้ดูแลห้อง'
+      } else {
+        alertMassage = data.message
+      }
+      let token = 'EAACa7MZCazhABAFiNd0UivgHJoAaWWy967Xg1xz1ZBxoxZBqia1zy29CZAlJUqMog6nFZCcYfY4TS1Iu5wFoObNVxpFhCgAnDM9CM0GmSppZCQyAPzLKLIAfGh5lQ9EFujpIovehxvn5RW7wU42BBEOONyAwnASTu1t4Nvj5vOWGltCPHtVYOL'
+      Profile.child(data.data.type).child(data.data.id).update({
+        statusBlock: true
+      }).then(value => {
+        axios.post('https://graph.facebook.com/v2.6/me/messages?access_token=' + token, {
+          'recipient': {
+            'id': data.data.id
+          },
+          'message': {
+            'text': alertMassage
+          }
+        })
+      })
       commit('moveBookingToHistory', data.id)
     },
-    unblock (payload, path) {
-      Profile.child(path).update(
-        {
-          statusBlock: false,
-          countOfNotCheckIn: 0
-        }
-      )
+    unblock (payload, data) {
+      let token = 'EAACa7MZCazhABAFiNd0UivgHJoAaWWy967Xg1xz1ZBxoxZBqia1zy29CZAlJUqMog6nFZCcYfY4TS1Iu5wFoObNVxpFhCgAnDM9CM0GmSppZCQyAPzLKLIAfGh5lQ9EFujpIovehxvn5RW7wU42BBEOONyAwnASTu1t4Nvj5vOWGltCPHtVYOL'
+      Profile.child(data.pathBlock).update({
+        statusBlock: false,
+        countOfNotCheckIn: 0
+      }).then(value => {
+        axios.post('https://graph.facebook.com/v2.6/me/messages?access_token=' + token, {
+          'recipient': {
+            'id': data.id
+          },
+          'message': {
+            'text': 'ขณะนี้คุณได้รับการปลดบล็อคแล้ว สามารถใช้งานระบบได้ตามปกติ'
+          }
+        })
+      })
     },
     Bookingquery ({commit}, date) {
       commit('updateQueryBooking', date)

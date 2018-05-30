@@ -91,9 +91,16 @@
         <v-card-title class="headline">You want to block  <b>" {{user}} "</b> ?</v-card-title>
         <v-card-text> Push on block button for block or<br>
         Push on cancle button for back to original page</v-card-text>
+        <v-select
+          autocomplete="true"
+          :items="listMsg"
+          class="padd"
+          label="name of room"
+          v-model="detailmessage">
+        </v-select>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="red darken-1" flat="flat" @click.native="block(data), dialog = false">block</v-btn>
+          <v-btn color="red darken-1" flat="flat" @click.native="block({data: data, message: detailmessage}), dialog = false">block</v-btn>
           <v-btn color="green darken-1" flat="flat" @click.native="dialog = false">cancle</v-btn>
         </v-card-actions>
       </v-card>
@@ -109,14 +116,16 @@ export default {
   data: () => ({
     dialog: false,
     data: {},
-    user: ''
+    user: '',
+    detailmessage: ''
   }),
   computed: {
-    ...mapGetters(['profiles'])
+    ...mapGetters(['profiles', 'listMsg'])
   },
   methods: {
-    ...mapActions(['setProfileRef', 'setBookingRef', 'setHistorysRef', 'block']),
+    ...mapActions(['setProfileRef', 'setBookingRef', 'setHistorysRef', 'block', 'langBlockMessage']),
     commitblock (data) {
+      this.langBlockMessage(data.id)
       this.dialog = true
       if (data.type === 'guest') {
         this.user = this.profiles[data.type][data.id].firstName
@@ -141,4 +150,8 @@ export default {
 @import '../styles/font.scss';
 </style>
 <style scoped>
+.padd {
+  margin-left: 10%;
+  padding-right: 20%;
+}
 </style>
