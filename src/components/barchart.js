@@ -3,17 +3,12 @@ import {Bar, mixins} from 'vue-chartjs'
 let options = {
   scales: {
     xAxes: [{
-      stack: false,
-      barPercentage: 0.4
-    }],
-    yAxes: [{
-      stack: false,
       barPercentage: 0.4
     }]
   },
   responsive: true,
   maintainAspectRatio: true,
-  displayColors: true
+  displayColors: false
 }
 export default {
   extends: Bar,

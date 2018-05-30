@@ -1,10 +1,8 @@
 <template lang="html">
   <div class="statistic">
-    <v-container grid-list-xs text-xs-center class="pickers">
+    <v-container grid-list-xs text-xs-center>
      <v-layout row wrap>
        <v-flex xs12>
-       </v-flex>
-       <v-flex xs4>
          <v-radio-group v-model="types" column>
            <v-radio
               label="year"
@@ -18,7 +16,7 @@
            </v-radio>
          </v-radio-group>
        </v-flex>
-       <v-flex xs8>
+       <v-flex xs12>
          <v-dialog persistent lazy full-width width="290px">
            <v-text-field slot="activator" :label="`Change type ${type}`" v-model="scopefilter" prepend-icon="event" readonly>
            </v-text-field>
@@ -27,35 +25,40 @@
            :type="types"
            scrollable
            >
-             <template slot-scope="{ save, cancel }">
-                 <v-card-actions>
-                   <v-spacer></v-spacer>
-                   <v-btn flat color="primary" @click="cancel">Cancel</v-btn>
-                   <v-btn flat color="primary" @click="save">OK</v-btn>
-                 </v-card-actions>
-               </template>
+           <template slot-scope="{ save, cancel }">
+               <v-card-actions>
+                 <v-spacer></v-spacer>
+                 <v-btn flat color="primary" @click="cancel">Cancel</v-btn>
+                 <v-btn flat color="primary" @click="save">OK</v-btn>
+               </v-card-actions>
+             </template>
            </v-date-picker>
          </v-dialog>
        </v-flex>
-  </v-layout>
- </v-container>
- <v-container grid-list-xs text-xs-center>
-  <v-layout row wrap>
-    <v-flex xs12 >
-      <bar-chart :height="150" :chart-data="barMeetRooms" ref="barChart"></bar-chart>
-    </v-flex>
-     <v-flex xs12 >
-       <bar-chart :height="150" :chart-data="barDevices" ref="barChart"></bar-chart>
-     </v-flex>
-     <v-flex xs12>
-       <bar-chart :height="150" :chart-data="barUsers" ref="barChart"></bar-chart>
-     </v-flex>
-     <v-flex xs12>
-       <v-btn flat color="primary" @click="createPDF('download')">Download</v-btn>
-       <v-btn flat color="primary" @click="createPDF('print')">Print</v-btn>
-     </v-flex>
-   </v-layout>
- </v-container>
+      <v-flex xs12 >
+        <br>
+        <h2>สถิติการจองห้องแต่ละประเภท {{scopefilter}}</h2>
+        <br>
+        <bar-chart :height="150" :chart-data="barMeetRooms" ref="barChart"></bar-chart>
+      </v-flex>
+       <v-flex xs12 >
+         <br>
+         <h2>สถิติการจองอุปกรณ์แต่ละประเภท {{scopefilter}}</h2>
+         <br>
+         <bar-chart :height="150" :chart-data="barDevices" ref="barChart"></bar-chart>
+       </v-flex>
+       <v-flex xs12>
+         <br>
+         <h2>สถิติการจองสมาชิกแต่ละประเภท {{scopefilter}}</h2>
+         <br>
+         <bar-chart :height="150" :chart-data="barUsers" ref="barChart"></bar-chart>
+       </v-flex>
+       <v-flex xs12>
+         <v-btn flat color="primary" @click="createPDF('download')">Download</v-btn>
+         <v-btn flat color="primary" @click="createPDF('print')">Print</v-btn>
+       </v-flex>
+     </v-layout>
+    </v-container>
   </div>
 </template>
 
