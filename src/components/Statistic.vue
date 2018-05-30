@@ -45,10 +45,10 @@
         <bar-chart :chart-data="barMeetRooms" ref="barChart"></bar-chart>
       </v-flex>
    <v-flex xs6 >
-     <bar-chart :chart-data="barDevices" ref="barChart"></bar-chart>
+     <bar-chart :chart-data="barDevices" ref="barChart2"></bar-chart>
    </v-flex>
    <v-flex xs6>
-     <bar-chart :chart-data="barUsers" ref="barChart"></bar-chart>
+     <bar-chart :chart-data="barUsers" ref="barChart3"></bar-chart>
    </v-flex>
    <v-flex xs12>
      <v-btn flat color="primary" @click="createPDF('download')">Download</v-btn>
@@ -90,13 +90,25 @@ export default {
       barMeetRooms: null,
       barUsers: null,
       scopefilter: momentTime().tz('Asia/Bangkok').format('YYYY-MM'),
-      types: 'month'
+      types: 'month',
+      pdfData: [[]]
     }
   },
   methods: {
     saveImg (ref) {
       let canvas = document.getElementById(ref).toDataURL('image/png')
       return canvas
+    },
+    makePDFData () {
+      this.pdfData[0].push({text: 'ประเภทห้อง\nTypeRoom', style: 'tableHeader'}, {text: 'เข้าใช้งาน\ncheck-in', style: 'tableHeader'}, {text: 'ไม่เข้าใช้งาน\nNot check-in', style: 'tableHeader'}, {text: 'ยกเลิกการจอง\nCancle Booking', style: 'tableHeader'})
+      this.barMeetRooms.labels.forEach((value1, index1) => {
+        let pointer1 = index1 + 1
+        this.pdfData[pointer1] = [value1]
+        this.barMeetRooms.datasets[index1].data.forEach((value2, index2) => {
+          let pointer2 = index2 + 1
+          this.pdfData[pointer1][pointer2] = value2
+        })
+      })
     },
     createPDF (action) {
       let barChart = this.saveImg('bar-chart')
@@ -158,29 +170,7 @@ export default {
               heights: 30,
               widths: [100, '*', '*', '*'],
               headerRows: 1,
-              body: [
-                [{text: 'ประเภทห้อง\nTypeRoom', style: 'tableHeader'}, {text: 'เข้าใช้งาน\ncheck-in', style: 'tableHeader'}, {text: 'ไม่เข้าใช้งาน\nNot check-in', style: 'tableHeader'}, {text: 'ยกเลิกการจอง\nCancle Booking', style: 'tableHeader'}],
-                [ 'สวัสดดี', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ],
-                [ 'Value 1', 'Value 2', 'Value 3', 'Value 4' ]
-              ]
+              body: this.pdfData
             }
           }
         ],
@@ -322,6 +312,7 @@ export default {
           if (indexArray !== -1) this.barUsers.datasets[0].data[indexArray]++
         }
       })
+      this.makePDFData()
     }
   },
   computed: {
