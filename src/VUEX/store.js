@@ -39,7 +39,19 @@ const store = new Vuex.Store({
     historys: [],
     registerFilter: [],
     queryBooking: [],
-    configs: {}
+    configs: {},
+    barUsers: {
+      datasets: [],
+      labels: []
+    },
+    barDevices: {
+      datasets: [],
+      labels: []
+    },
+    barMeetRooms: {
+      datasets: [],
+      labels: []
+    }
     // สร้างตัวแปร
   },
   getters: {
@@ -50,11 +62,87 @@ const store = new Vuex.Store({
     feedbacks: state => state.feedbacks,
     queryBooking: state => state.queryBooking,
     configs: state => state.configs,
-    historys: state => state.historys
+    historys: state => state.historys,
+    barUsers: state => state.barUsers,
+    barMeetRooms: state => state.barMeetRooms,
+    barDevices: state => state.barDevices
     // ส่งตัวแปรไปหน้า component
   },
   mutations: {
     ...firebaseMutations,
+    QUERYSTAT (state) {
+      state.barUsers = {
+        datasets: [],
+        labels: []
+      }
+      state.barDevices = {
+        datasets: [],
+        labels: []
+      }
+      state.barMeetRooms = {
+        datasets: [],
+        labels: []
+      }
+      void [{label: 'check-in', color: '#2196F3'},
+      {label: 'Not check-in', color: '#E91E63'},
+      {label: 'Cancle Booking', color: '#00BCD4'}].forEach(values2 => {
+        state.barMeetRooms.datasets.push({
+          label: values2.label,
+          backgroundColor: values2.color,
+          data: [0, 0, 0]
+        })
+      })
+      void [{label: 'Booked', color: '#2196F3'},
+      {label: 'Cancle Booking', color: '#00BCD4'}].forEach(values2 => {
+        state.barDevices.datasets.push({
+          label: values2.label,
+          backgroundColor: values2.color,
+          data: [0, 0]
+        })
+      })
+      void [{label: 'Student', color: '#2196F3'},
+      {label: 'Staff', color: '#E91E63'},
+      {label: 'Guest', color: '#00BCD4'}].forEach(values2 => {
+        state.barUsers.datasets.push({
+          label: values2.label,
+          backgroundColor: values2.color,
+          data: [0, 0, 0]
+        })
+      })
+      let format = 'YYYY-MM'
+      let dataQuery = state.historys.filter(element => {
+        let checkdbStart = moment(element.dateStart, format)
+        let checkdbStop = moment(element.dateStop, format)
+        return moment(state.scopefilter, format).isBetween(checkdbStart, checkdbStop, 'month', '[]')
+      })
+
+      void [{item: state.items.meetingRoom, varName: state.barMeetRooms, type: 'MeetRooms'},
+      {item: state.items.device, varName: state.barDevices, type: 'Devices'}].forEach(data => {
+        Object.keys(data.item).forEach((typeItem, index) => { // index เอาไปใช้กับ labels และระบุตำแหน่งให้ datasets
+          data.varName.labels[index] = typeItem // เก็บชื่อ ลงใน label แต่ละประเภท
+          let allNameType = Object.keys(data.item[typeItem]) // nameTypeItem ทั้งหมดใน Item ประเภทืนั้น
+          dataQuery.forEach(value1 => {
+            if (allNameType.includes(value1.nameTypeItem)) {  // หาว่าการจองครั้งนี้ มี nameTypeItem อยู่ใน  allNameType ไหม
+              if (data.type === 'MeetRooms') {
+                if (value1.status === 'endBooking') { // สถานะ checkin-in
+                  data.varName.datasets[0].data[index] ++
+                } else if (value1.status === 'notCheckIn') {  // สถานะ Not ckeck-in
+                  data.varName.datasets[1].data[index] ++
+                } else if (value1.status === 'userCancleBooking') {
+                  data.varName.datasets[2].data[index] ++
+                }
+              } else if (data.type === 'Devices') {
+                if (value1.status === 'endBooking') { // สถานะ checkin-in
+                  data.varName.datasets[0].data[index] ++
+                } else if (value1.status === 'userCancleBooking') {
+                  data.varName.datasets[1].data[index] ++
+                }
+              }
+            }
+          })
+        })
+      })
+    },
     updateStatus (state, status) {
       state.statusLogin = status
     },
@@ -274,6 +362,9 @@ const store = new Vuex.Store({
       } else {
         alert('please check again')
       }
+    },
+    queryStat ({commit}) {
+      commit('QUERYSTAT')
     }
   }
 })

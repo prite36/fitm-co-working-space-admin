@@ -6,18 +6,25 @@ export default {
   extends: Bar,
   // extends: HorizontalBar,
   computed: {
-    ...mapGetters(['registerFilter'])
+    ...mapGetters(['registerFilter', 'barUsers', 'historys', 'barMeetRooms', 'barDevices'])
   },
   watch: {
-    historyFilter: function () {
+    barMeetRooms: function () {
+      console.log('bar in js')
+      let options = {
+        scales: {
+          xAxes: [{
+            barPercentage: 0.4
+          }]
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+        displayColors: false
+      }
+      this.renderChart(this.chartData, options)
     }
   },
-  props: ['chartData'],
-  mounted () {
-    console.log(JSON.stringify(this.chartData))
-    console.log(this.chartData)
-    this.renderChart(this.chartData, {responsive: true, maintainAspectRatio: false, displayColors: false})
-  }
+  props: ['chartData']
 }
 // {
 //   labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],

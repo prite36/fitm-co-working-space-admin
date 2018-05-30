@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="statistic">
-    <v-container grid-list-md text-xs-center class="pickers">
+    <v-container grid-list-xs text-xs-center class="pickers">
      <v-layout row wrap>
        <v-flex xs4>
          <v-radio-group v-model="types" column>
@@ -35,11 +35,25 @@
            </v-date-picker>
          </v-dialog>
        </v-flex>
-     </v-layout>
-    </v-container>
-    <bar-chart :chart-data="testData" ref="barChart"></bar-chart>
-    <v-btn flat color="primary" @click="createPDF('download')">Download</v-btn>
-    <v-btn flat color="primary" @click="createPDF('print')">Print</v-btn>
+  </v-layout>
+ </v-container>
+ <v-container grid-list-xs text-xs-center>
+  <v-layout row wrap>
+   <v-flex xs12>
+     <bar-chart :chart-data="barMeetRooms" ref="barChart"></bar-chart>
+   </v-flex>
+   <v-flex xs6>
+     <bar-chart :chart-data="barDevices" ref="barChart"></bar-chart>
+   </v-flex>
+   <v-flex xs6>
+     <bar-chart :chart-data="barDevices" ref="barChart"></bar-chart>
+   </v-flex>
+   <v-flex xs12>
+     <v-btn flat color="primary" @click="createPDF('download')">Download</v-btn>
+     <v-btn flat color="primary" @click="createPDF('print')">Print</v-btn>
+   </v-flex>
+ </v-layout>
+</v-container>
   </div>
 </template>
 
@@ -49,7 +63,7 @@ import {mapGetters, mapActions} from 'vuex'
 import logoHeader from '../assets/FITM_LOGO.png'
 import pdfMake from 'pdfmake/build/pdfmake'
 import pdfFonts from 'pdfmake/build/vfs_fonts'
-import moment from 'moment'
+// import moment from 'moment'
 import momentTime from 'moment-timezone'
 pdfMake.vfs = pdfFonts.pdfMake.vfs
 pdfMake.fonts = {
@@ -68,32 +82,11 @@ export default {
   data () {
     return {
       scopefilter: momentTime().tz('Asia/Bangkok').format('YYYY-MM'),
-      types: 'month',
-      barMeetRooms: {labels: [], datasets: []},
-      barDevices: {labels: [], datasets: []},
-      barUsers: {labels: [], datasets: []},
-      testData: {labels: [ 'classRoom', 'largeRoom', 'mediumRoom' ],
-        datasets: [
-          {
-            label: 'check-in',
-            backgroundColor: '#2196F3',
-            data: [ 0, 2, 0 ]
-          },
-          {
-            label: 'Not check-in',
-            backgroundColor: '#E91E63',
-            data: [ 0, 0, 0 ]
-          },
-          {
-            label: 'Cancle Booking',
-            backgroundColor: '#00BCD4',
-            data: [ 3, 3, 0 ] }
-        ]
-      }
+      types: 'month'
     }
   },
   methods: {
-    ...mapActions(['setHistorysRef', 'setItemsRef']),
+    ...mapActions(['setHistorysRef', 'setItemsRef', 'queryStat']),
     saveImg (ref) {
       let canvas = document.getElementById(ref).toDataURL('image/png')
       return canvas
@@ -221,88 +214,24 @@ export default {
       } else if (action === 'download') {
         pdfMake.createPdf(docDefinition).download(`Report Statistics [${momentTime().tz('Asia/Bangkok').format('DD-MM-YYYY HH.mm')}].pdf`)
       }
-    },
-    dataStructure () {
-      // สร้างโครงสร้างข้อมูลพื้นฐาน
-      void [{label: 'check-in', color: '#2196F3'},
-      {label: 'Not check-in', color: '#E91E63'},
-      {label: 'Cancle Booking', color: '#00BCD4'}].forEach(values2 => {
-        this.barMeetRooms.datasets.push({
-          label: values2.label,
-          backgroundColor: values2.color,
-          data: [0, 0, 0]
-        })
-      })
-
-      void [{label: 'Booked', color: '#2196F3'},
-      {label: 'Cancle Booking', color: '#00BCD4'}].forEach(values2 => {
-        this.barDevices.datasets.push({
-          label: values2.label,
-          backgroundColor: values2.color,
-          data: [0, 0]
-        })
-      })
-
-      void [{label: 'Student', color: '#2196F3'},
-      {label: 'Staff', color: '#E91E63'},
-      {label: 'Guest', color: '#00BCD4'}].forEach(values2 => {
-        this.barUsers.datasets.push({
-          label: values2.label,
-          backgroundColor: values2.color,
-          data: [0, 0, 0]
-        })
-      })
-    },
-    QueryStat () {
-      this.dataStructure()
-      let format = 'YYYY-MM'
-      let dataQuery = this.historys.filter(element => {
-        let checkdbStart = moment(element.dateStart, format)
-        let checkdbStop = moment(element.dateStop, format)
-        return moment(this.scopefilter, format).isBetween(checkdbStart, checkdbStop, 'month', '[]')
-      })
-
-      void [{item: this.items.meetingRoom, varName: this.barMeetRooms, type: 'MeetRooms'},
-      {item: this.items.device, varName: this.barDevices, type: 'Devices'}].forEach(data => {
-        Object.keys(data.item).forEach((typeItem, index) => { // index เอาไปใช้กับ labels และระบุตำแหน่งให้ datasets
-          data.varName.labels[index] = typeItem // เก็บชื่อ ลงใน label แต่ละประเภท
-          let allNameType = Object.keys(data.item[typeItem]) // nameTypeItem ทั้งหมดใน Item ประเภทืนั้น
-          dataQuery.forEach(value1 => {
-            if (allNameType.includes(value1.nameTypeItem)) {  // หาว่าการจองครั้งนี้ มี nameTypeItem อยู่ใน  allNameType ไหม
-              if (data.type === 'MeetRooms') {
-                if (value1.status === 'endBooking') { // สถานะ checkin-in
-                  data.varName.datasets[0].data[index] ++
-                } else if (value1.status === 'notCheckIn') {  // สถานะ Not ckeck-in
-                  data.varName.datasets[1].data[index] ++
-                } else if (value1.status === 'userCancleBooking') {
-                  data.varName.datasets[2].data[index] ++
-                }
-              } else if (data.type === 'Devices') {
-                if (value1.status === 'endBooking') { // สถานะ checkin-in
-                  data.varName.datasets[0].data[index] ++
-                } else if (value1.status === 'userCancleBooking') {
-                  data.varName.datasets[1].data[index] ++
-                }
-              }
-            }
-          })
-        })
-      })
     }
   },
   computed: {
-    ...mapGetters(['historys', 'items'])
+    ...mapGetters(['historys', 'items', 'barUsers', 'barMeetRooms', 'barDevices'])
   },
   created () {
     this.setItemsRef()
     this.setHistorysRef()
   },
   watch: {
+    types: function () {
+      this.scopefilter = null
+    },
     scopefilter: function () {
-      this.QueryStat()
+      this.queryStat()
     },
     historys: function () {
-      this.QueryStat()
+      this.queryStat()
     }
   }
 }
