@@ -1,69 +1,29 @@
-import {Bar} from 'vue-chartjs'
+import {Bar, mixins} from 'vue-chartjs'
 // import {HorizontalBar} from 'vue-chartjs'
-import {mapGetters} from 'vuex'
+let options = {
+  scales: {
+    xAxes: [{
+      barPercentage: 0.4,
+      stacked: false
+    }],
+    yAxes: [{
+      stacked: false
+    }]
+  },
+  responsive: true,
+  maintainAspectRatio: false,
+  displayColors: false
+}
 
 export default {
   extends: Bar,
-  // extends: HorizontalBar,
-  computed: {
-    ...mapGetters(['registerFilter', 'barUsers', 'historys', 'barMeetRooms', 'barDevices'])
-  },
-  watch: {
-    barMeetRooms: function () {
-      console.log('bar in js')
-      let options = {
-        scales: {
-          xAxes: [{
-            barPercentage: 0.4
-          }]
-        },
-        responsive: true,
-        maintainAspectRatio: false,
-        displayColors: false
-      }
+  mixins: [mixins.reactiveProp],
+  methods: {
+    chartRender () {
       this.renderChart(this.chartData, options)
     }
   },
-  props: ['chartData']
+  mounted () {
+    this.renderChart(this.chartData, this.options)
+  }
 }
-// {
-//   labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-//   datasets: [
-//     {
-//       label: 'Data One',
-//       backgroundColor: '#2196F3',
-//       // data: [10, 39, 1, 3, 50, 40, 22, 0, 0]
-//       data: [0, 0, 1, 0, 0, 0, 0, 0, 0]
-//     },
-//     {
-//       label: 'Data two',
-//       backgroundColor: '#E91E63',
-//       data: [20, 49, 5, 4, 60, 45, 20]
-//     },
-//     {
-//       label: 'Data two',
-//       backgroundColor: '#00BCD4',
-//       data: [30, 29, 8, 6, 80, 58, 15]
-//     }
-//   ]
-// }
-
-// {
-//   labels: [ 'classRoom', 'largeRoom', 'mediumRoom' ],
-//   datasets: [
-//     {
-//       label: 'check-in',
-//       backgroundColor: '#2196F3',
-//       data: [ 0, 2, 0 ]
-//     },
-//     {
-//       label: 'Not check-in',
-//       backgroundColor: '#E91E63',
-//       data: [ 0, 0, 0 ]
-//     },
-//     {
-//       label: 'Cancle Booking',
-//       backgroundColor: '#00BCD4',
-//       data: [ 3, 3, 0 ] }
-//   ]
-// }
