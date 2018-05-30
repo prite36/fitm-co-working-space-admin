@@ -40,10 +40,7 @@ const store = new Vuex.Store({
     registerFilter: [],
     queryBooking: [],
     configs: {},
-    barUsers: {
-      datasets: [],
-      labels: []
-    },
+    barUsers: { labels: ['Student', 'Staff', 'Guest'], datasets: [] },
     barDevices: {
       datasets: [],
       labels: []
@@ -70,11 +67,7 @@ const store = new Vuex.Store({
   },
   mutations: {
     ...firebaseMutations,
-    QUERYSTAT (state) {
-      state.barUsers = {
-        datasets: [],
-        labels: []
-      }
+    QUERYSTAT (state, data) {
       state.barDevices = {
         datasets: [],
         labels: []
@@ -100,20 +93,27 @@ const store = new Vuex.Store({
           data: [0, 0]
         })
       })
-      void [{label: 'Student', color: '#2196F3'},
-      {label: 'Staff', color: '#E91E63'},
-      {label: 'Guest', color: '#00BCD4'}].forEach(values2 => {
-        state.barUsers.datasets.push({
-          label: values2.label,
-          backgroundColor: values2.color,
-          data: [0, 0, 0]
-        })
-      })
+      state.barUsers = { labels: ['Student', 'Staff', 'Guest'],
+        datasets: [
+          {
+            label: 'total',
+            backgroundColor: '#2196F3',
+            data: [0, 0, 0]}
+        ] }
+      // void [{label: 'Student', color: '#2196F3'},
+      // {label: 'Staff', color: '#E91E63'},
+      // {label: 'Guest', color: '#00BCD4'}].forEach(values2 => {
+      //   state.barUsers.datasets.push({
+      //     label: values2.label,
+      //     backgroundColor: values2.color,
+      //     data: [0]
+      //   })
+      // })
       let format = 'YYYY-MM'
       let dataQuery = state.historys.filter(element => {
-        let checkdbStart = moment(element.dateStart, format)
-        let checkdbStop = moment(element.dateStop, format)
-        return moment(state.scopefilter, format).isBetween(checkdbStart, checkdbStop, 'month', '[]')
+        let checkdbStart = Moment(element.dateStart, format)
+        let checkdbStop = Moment(element.dateStop, format)
+        return Moment(data.scopefilter, format).isBetween(checkdbStart, checkdbStop, data.types, '[]')
       })
 
       void [{item: state.items.meetingRoom, varName: state.barMeetRooms, type: 'MeetRooms'},
@@ -140,6 +140,19 @@ const store = new Vuex.Store({
               }
             }
           })
+        })
+      })
+      Profile.once('value').then(function (snapshot) {
+        dataQuery.forEach(value1 => {
+          let type = null   // เก็บประเภทของ userคนนั้น
+          for (let key in snapshot.val()) {
+            if (snapshot.val()[key][value1.senderID]) {
+              type = key
+              break
+            }
+          }
+          let indexArray = state.barUsers.labels.findIndex(x => x.toLowerCase() === type)
+          if (!indexArray) state.barUsers.datasets[0].data[indexArray]++
         })
       })
     },
@@ -363,8 +376,8 @@ const store = new Vuex.Store({
         alert('please check again')
       }
     },
-    queryStat ({commit}) {
-      commit('QUERYSTAT')
+    queryStat ({commit}, data) {
+      commit('QUERYSTAT', data)
     }
   }
 })

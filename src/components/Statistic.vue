@@ -2,6 +2,8 @@
   <div class="statistic">
     <v-container grid-list-xs text-xs-center class="pickers">
      <v-layout row wrap>
+       <v-flex xs12>
+       </v-flex>
        <v-flex xs4>
          <v-radio-group v-model="types" column>
            <v-radio
@@ -39,14 +41,14 @@
  </v-container>
  <v-container grid-list-xs text-xs-center>
   <v-layout row wrap>
-   <v-flex xs12>
-     <bar-chart :chart-data="barMeetRooms" ref="barChart"></bar-chart>
-   </v-flex>
-   <v-flex xs6>
+      <v-flex xs12 >
+        <bar-chart :chart-data="barMeetRooms" ref="barChart"></bar-chart>
+      </v-flex>
+   <v-flex xs6 >
      <bar-chart :chart-data="barDevices" ref="barChart"></bar-chart>
    </v-flex>
    <v-flex xs6>
-     <bar-chart :chart-data="barDevices" ref="barChart"></bar-chart>
+     <bar-chart :chart-data="barUsers" ref="barChart"></bar-chart>
    </v-flex>
    <v-flex xs12>
      <v-btn flat color="primary" @click="createPDF('download')">Download</v-btn>
@@ -58,12 +60,12 @@
 </template>
 
 <script>
+import firebase from 'firebase'
 import BarChart from './barchart.js'
-import {mapGetters, mapActions} from 'vuex'
 import logoHeader from '../assets/FITM_LOGO.png'
 import pdfMake from 'pdfmake/build/pdfmake'
 import pdfFonts from 'pdfmake/build/vfs_fonts'
-// import moment from 'moment'
+import moment from 'moment'
 import momentTime from 'moment-timezone'
 pdfMake.vfs = pdfFonts.pdfMake.vfs
 pdfMake.fonts = {
@@ -81,12 +83,17 @@ export default {
   name: 'statistic',
   data () {
     return {
+      allProfile: null,
+      allHistory: null,
+      allItem: null,
+      barDevices: null,
+      barMeetRooms: null,
+      barUsers: null,
       scopefilter: momentTime().tz('Asia/Bangkok').format('YYYY-MM'),
       types: 'month'
     }
   },
   methods: {
-    ...mapActions(['setHistorysRef', 'setItemsRef', 'queryStat']),
     saveImg (ref) {
       let canvas = document.getElementById(ref).toDataURL('image/png')
       return canvas
@@ -214,25 +221,134 @@ export default {
       } else if (action === 'download') {
         pdfMake.createPdf(docDefinition).download(`Report Statistics [${momentTime().tz('Asia/Bangkok').format('DD-MM-YYYY HH.mm')}].pdf`)
       }
+    },
+    getDB () {
+      let getAllProfile = new Promise(resolve => {
+        this.$bindAsObject('allProfile', firebase.database().ref('profile'), null, () => {
+          delete this.allProfile['.key']
+          resolve()
+        })
+      })
+      let getAllHistory = new Promise(resolve => {
+        this.$bindAsObject('allHistory', firebase.database().ref('history'), null, () => {
+          delete this.allHistory['.key']
+          resolve()
+        })
+      })
+      let getAllItem = new Promise(resolve => {
+        this.$bindAsObject('allItem', firebase.database().ref('items'), null, () => {
+          delete this.allItem['.key']
+          resolve()
+        })
+      })
+      Promise.all([getAllProfile, getAllHistory, getAllItem]).then(values => {
+        this.queryBarChart()
+      })
+    },
+    dataStructure () {
+      this.barDevices = {datasets: [], labels: []}
+      this.barMeetRooms = {datasets: [], labels: []}
+
+      void [{label: 'check-in', color: '#2196F3'},
+      {label: 'Not check-in', color: '#E91E63'},
+      {label: 'Cancle Booking', color: '#00BCD4'}].forEach(values2 => {
+        this.barMeetRooms.datasets.push({
+          label: values2.label,
+          backgroundColor: values2.color,
+          data: [0, 0, 0]
+        })
+      })
+
+      void [{label: 'Booked', color: '#2196F3'},
+      {label: 'Cancle Booking', color: '#00BCD4'}].forEach(values2 => {
+        this.barDevices.datasets.push({
+          label: values2.label,
+          backgroundColor: values2.color,
+          data: [0, 0]
+        })
+      })
+
+      this.barUsers = { labels: ['Student', 'Staff', 'Guest'],
+        datasets: [
+          {
+            label: 'total',
+            backgroundColor: '#2196F3',
+            data: [0, 0, 0]}
+        ]
+      }
+    },
+    queryBarChart () {
+      this.dataStructure()
+      let format = 'YYYY-MM'
+      let dataQuery = Object.values(this.allHistory).filter(element => {
+        let checkdbStart = moment(element.dateStart, format)
+        let checkdbStop = moment(element.dateStop, format)
+        return moment(this.scopefilter, format).isBetween(checkdbStart, checkdbStop, this.types, '[]')
+      })
+
+      void [{item: this.allItem.meetingRoom, varName: this.barMeetRooms, type: 'MeetRooms'},
+      {item: this.allItem.device, varName: this.barDevices, type: 'Devices'}].forEach(data => {
+        Object.keys(data.item).forEach((typeItem, index) => { // index เอาไปใช้กับ labels และระบุตำแหน่งให้ datasets
+          data.varName.labels[index] = typeItem // เก็บชื่อ ลงใน label แต่ละประเภท
+          let allNameType = Object.keys(data.item[typeItem]) // nameTypeItem ทั้งหมดใน Item ประเภทืนั้น
+          dataQuery.forEach(value1 => {
+            if (allNameType.includes(value1.nameTypeItem)) {  // หาว่าการจองครั้งนี้ มี nameTypeItem อยู่ใน  allNameType ไหม
+              if (data.type === 'MeetRooms') {
+                if (value1.status === 'endBooking') { // สถานะ checkin-in
+                  data.varName.datasets[0].data[index] ++
+                } else if (value1.status === 'notCheckIn') {  // สถานะ Not ckeck-in
+                  data.varName.datasets[1].data[index] ++
+                } else if (value1.status === 'userCancleBooking') {
+                  data.varName.datasets[2].data[index] ++
+                }
+              } else if (data.type === 'Devices') {
+                if (value1.status === 'endBooking') { // สถานะ checkin-in
+                  data.varName.datasets[0].data[index] ++
+                } else if (value1.status === 'userCancleBooking') {
+                  data.varName.datasets[1].data[index] ++
+                }
+              }
+            }
+          })
+        })
+      })
+      dataQuery.forEach(value1 => { //  Query เฉพาะ barUsers
+        if (value1.status === 'endBooking') { // สถานะ checkin-in
+          var type = null   // เก็บประเภทของ userคนนั้น
+          for (type in this.allProfile) { // หา ประเภทของ Userคนนี้
+            if (this.allProfile[type][value1.senderID]) break  // ถ้าเจอที่ ประเภทไหน ก็หยุด ไม่วนต่อ
+          }
+          let indexArray = this.barUsers.labels.findIndex(x => x.toLowerCase() === type)
+          if (indexArray !== -1) this.barUsers.datasets[0].data[indexArray]++
+        }
+      })
     }
   },
   computed: {
-    ...mapGetters(['historys', 'items', 'barUsers', 'barMeetRooms', 'barDevices'])
-  },
-  created () {
-    this.setItemsRef()
-    this.setHistorysRef()
   },
   watch: {
-    types: function () {
+    allProfile () {
+      delete this.allProfile['.key']
+    },
+    allHistory () {
+      delete this.allHistory['.key']
+    },
+    allItem () {
+      delete this.allItem['.key']
+    },
+    types () {
       this.scopefilter = null
     },
-    scopefilter: function () {
-      this.queryStat()
-    },
-    historys: function () {
-      this.queryStat()
+    scopefilter () {
+      if (this.scopefilter) {
+        this.queryBarChart()
+      }
     }
+  },
+  created () {
+  },
+  mounted () {
+    this.getDB()
   }
 }
 </script>
