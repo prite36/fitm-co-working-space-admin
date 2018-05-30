@@ -3,27 +3,22 @@ import {Bar, mixins} from 'vue-chartjs'
 let options = {
   scales: {
     xAxes: [{
-      barPercentage: 0.4,
-      stacked: false
+      stack: false,
+      barPercentage: 0.4
     }],
     yAxes: [{
-      stacked: false
+      stack: false,
+      barPercentage: 0.4
     }]
   },
   responsive: true,
-  maintainAspectRatio: false,
-  displayColors: false
+  maintainAspectRatio: true,
+  displayColors: true
 }
-
 export default {
   extends: Bar,
   mixins: [mixins.reactiveProp],
-  methods: {
-    chartRender () {
-      this.renderChart(this.chartData, options)
-    }
-  },
   mounted () {
-    this.renderChart(this.chartData, this.options)
+    this.renderChart(this.chartData, options)
   }
 }

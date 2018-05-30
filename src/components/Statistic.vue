@@ -41,21 +41,21 @@
  </v-container>
  <v-container grid-list-xs text-xs-center>
   <v-layout row wrap>
-      <v-flex xs12 >
-        <bar-chart :chart-data="barMeetRooms" ref="barChart"></bar-chart>
-      </v-flex>
-   <v-flex xs6 >
-     <bar-chart :chart-data="barDevices" ref="barChart"></bar-chart>
-   </v-flex>
-   <v-flex xs6>
-     <bar-chart :chart-data="barUsers" ref="barChart"></bar-chart>
-   </v-flex>
-   <v-flex xs12>
-     <v-btn flat color="primary" @click="createPDF('download')">Download</v-btn>
-     <v-btn flat color="primary" @click="createPDF('print')">Print</v-btn>
-   </v-flex>
- </v-layout>
-</v-container>
+    <v-flex xs12 >
+      <bar-chart :height="150" :chart-data="barMeetRooms" ref="barChart"></bar-chart>
+    </v-flex>
+     <v-flex xs12 >
+       <bar-chart :height="150" :chart-data="barDevices" ref="barChart"></bar-chart>
+     </v-flex>
+     <v-flex xs12>
+       <bar-chart :height="150" :chart-data="barUsers" ref="barChart"></bar-chart>
+     </v-flex>
+     <v-flex xs12>
+       <v-btn flat color="primary" @click="createPDF('download')">Download</v-btn>
+       <v-btn flat color="primary" @click="createPDF('print')">Print</v-btn>
+     </v-flex>
+   </v-layout>
+ </v-container>
   </div>
 </template>
 
