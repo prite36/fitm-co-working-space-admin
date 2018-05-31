@@ -26,7 +26,7 @@
                 Booking time {{detail.bookingTime.timestart}}-{{detail.bookingTime.timestop}}
               </v-list-tile-content>
 
-                <v-btn icon ripple  @click="removeBooking(detail.data.childPart)">
+                <v-btn icon ripple  @click="setRemoveBooking(detail.data)">
                   <v-icon medium color="red">delete_forever</v-icon>
                 </v-btn>
                 <v-btn icon ripple  @click="setUpdateBooking(detail.data)">
@@ -40,24 +40,43 @@
         </v-card>
       </v-flex>
     </v-layout>
-
-    <v-dialog v-if="details !== null" v-model="dialog" max-width="290">
-      <v-card>
-        <v-card-title class="headline">Details Booking of {{details.bookingTime.nameitem}}</v-card-title>
-        <v-card-text>
-          <li>Date of booking {{dateQuery}}</li>
-          <li>Sum time booking {{details.bookingTime.timestart}}-{{details.bookingTime.timestop}}</li>
-          <li>Date time start  {{details.data.dateStart}} {{details.data.timeStart}}</li>
-          <li>Date time stop  {{details.data.dateStop}} {{details.data.timeStop}}</li>
-          <li>Time stamp  {{details.data.timeStamp}}</li>
-          <li v-if="details.data.countPeople">people of use {{details.data.countPeople}}</li>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="green darken-1" flat="flat" @click.native="dialog = false">กลับหน้าเดิม</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <div class="">
+      <v-dialog v-if="commitDelelte" v-model="commitDelelte" max-width="290">
+        <v-card>
+          <v-card-title class="headline">You want to delete <b></b> ?</v-card-title>
+          <v-card-text> Push on delete button for delete or<br>
+          Push on cancle button for back to original page</v-card-text>
+          <v-select
+            :items="listMsg"
+            class="padd"
+            label="alert to user"
+            v-model="detailmessage">
+          </v-select>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="red darken-1" flat="flat" @click.native="removeBooking({pathDelete: pathDelete, senderID: removesenderID, alertMassage: detailmessage}), dialog5 = false">delete</v-btn>
+            <v-btn color="green darken-1" flat="flat" @click.native="commitDelelte = false">cancle</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-dialog v-if="dialog" v-model="dialog" max-width="290">
+        <v-card>
+          <v-card-title class="headline">Details Booking of {{details.bookingTime.nameitem}}</v-card-title>
+          <v-card-text>
+            <li>Date of booking {{dateQuery}}</li>
+            <li>Sum time booking {{details.bookingTime.timestart}}-{{details.bookingTime.timestop}}</li>
+            <li>Date time start  {{details.data.dateStart}} {{details.data.timeStart}}</li>
+            <li>Date time stop  {{details.data.dateStop}} {{details.data.timeStop}}</li>
+            <li>Time stamp  {{details.data.timeStamp}}</li>
+            <li v-if="details.data.countPeople">people of use {{details.data.countPeople}}</li>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="green darken-1" flat="flat" @click.native="dialog = false">กลับหน้าเดิม</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </div>
   </div>
   <div v-else>
     <v-dialog persistent v-model="dialog1" lazy full-width width="290px">
@@ -73,7 +92,7 @@
       </v-date-picker>
     </v-dialog>
     <v-dialog persistent v-model="dialog2" lazy full-width width="290px">
-      <v-text-field slot="activator"  v-model="data.timeStart" label="Time Stop" prepend-icon="event" color="success" readonly></v-text-field>
+      <v-text-field slot="activator"  v-model="data.timeStart" label="Time Start" prepend-icon="event" color="success" readonly></v-text-field>
         <v-time-picker format="24hr" v-model="data.timeStart" >
           <template slot-scope="{ save, cancel }">
             <v-card-actions>
@@ -108,8 +127,8 @@
         </v-dialog>
         <v-btn @click="updateBook()">update</v-btn>
         <v-btn @click="newBooking = !newBooking">cancle</v-btn>
+    </div>
   </div>
-</div>
 </template>
 
 <script>
@@ -125,7 +144,9 @@ export default {
       dialog2: false,
       dialog3: false,
       dialog4: false,
+      commitDelelte: false,
       details: null,
+      pathDelete: null,
       modaldate: false,
       newBooking: false,
       dateQuery: momenTime().tz('Asia/Bangkok').format('YYYY-MM-DD'),
@@ -134,17 +155,27 @@ export default {
         dateStop: null,
         timeStart: null,
         timeStop: null,
-        child: null
-      }
+        child: null,
+        senderID: null,
+        item: null
+      },
+      detailmessage: null,
+      removesenderID: null
     }
   },
   computed: {
-    ...mapGetters(['queryBooking', 'booking'])
+    ...mapGetters(['queryBooking', 'booking', 'listMsg'])
   },
   methods: {
-    ...mapActions(['setBookingRef', 'Bookingquery', 'removeBooking', 'updateBooking']),
-    async showDetail (detail) {
-      this.details = await detail
+    ...mapActions(['setBookingRef', 'Bookingquery', 'removeBooking', 'updateBooking', 'langAlertMessage']),
+    setRemoveBooking (details) {
+      this.commitDelelte = true
+      this.langAlertMessage({id: details.senderID, typeAlert: 'removebooking', item: details.nameTypeItem})
+      this.pathDelete = details.childPart
+      this.removesenderID = details.senderID
+    },
+    showDetail (detail) {
+      this.details = detail
       this.dialog = true
     },
     setUpdateBooking (details) {
@@ -154,9 +185,12 @@ export default {
       this.data.dateStop = details.dateStop
       this.data.timeStart = details.timeStart
       this.data.timeStop = details.timeStop
+      this.data.senderID = details.senderID
+      this.data.item = details.nameTypeItem
+      this.langAlertMessage({id: details.senderID, typeAlert: 'updatebooking', item: details.nameTypeItem})
     },
     updateBook () {
-      this.updateBooking(this.data)
+      this.updateBooking({data: this.data, alertMassage: this.listMsg})
       this.newBooking = !this.newBooking
     }
   },

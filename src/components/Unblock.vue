@@ -93,7 +93,7 @@
         Push on cancle button for back to original page</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="red darken-1" flat="flat" @click.native="unblock({pathBlock: pathBlock, id: id}), dialog = false">unblock</v-btn>
+          <v-btn color="red darken-1" flat="flat" @click.native="unblock({pathBlock: pathBlock, id: id, messageAlert: listMsg}), dialog = false">unblock</v-btn>
           <v-btn color="green darken-1" flat="flat" @click.native="dialog = false">cancle</v-btn>
         </v-card-actions>
       </v-card>
@@ -113,10 +113,10 @@ export default {
     id: ''
   }),
   computed: {
-    ...mapGetters(['profiles'])
+    ...mapGetters(['profiles', 'listMsg'])
   },
   methods: {
-    ...mapActions(['setProfileRef', 'unblock']),
+    ...mapActions(['setProfileRef', 'unblock', 'langAlertMessage']),
     async commitunblock (type, id) {
       this.id = id
       this.pathBlock = await type + '/' + id
@@ -128,6 +128,7 @@ export default {
       } else if (type === 'staff') {
         this.user = this.profiles[type][id].thname
       }
+      this.langAlertMessage({id: id, typeAlert: 'unblock'})
     }
   },
   watch: {

@@ -11,6 +11,12 @@
                   <v-spacer></v-spacer>
                 </v-toolbar>
                 <v-card-text>
+                  Format password <br>
+                  8 characters length  |
+                  2 letters in Upper Case  |
+                  1 Special Character (!@#$&*)  |
+                  2 numerals (0-9)  |
+                  3 letters in Lower Case
                   <v-form>
                     <v-text-field prepend-icon="person" name="login" label="Enter your email" v-model="user.email" type="text"></v-text-field>
                     <v-text-field prepend-icon="lock" name="password" label="Enter your password" v-model="user.password" id="password" type="password"></v-text-field>

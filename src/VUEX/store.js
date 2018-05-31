@@ -71,20 +71,45 @@ const store = new Vuex.Store({
   },
   mutations: {
     ...firebaseMutations,
-    langBlock (state, lang) {
-      console.log(lang)
-      if (lang === 'th') {
-        state.listMsg = [
-          'คุณถูกบล็อคเนื่องจากส่งเสียงรบกวนผู้อื่น หากต้องการใช้งาน กรุณาติดต่อเจ้าหน้าที่',
-          'คุณถูกบล็อคเนื่องจากใช้งานห้องเกินเวลาที่กำหนด หากต้องการใช้งาน กรุณาติดต่อเจ้าหน้าที่',
-          'คุณถูกบล็อคเนื่องจากใช้งานอุปกรณ์เกินเวลาที่กำหนด หากต้องการใช้งาน กรุณาติดต่อเจ้าหน้าที่'
-        ]
-      } else if (lang === 'eng') {
-        state.listMsg = [
-          'You are blocked because of noise. if you need to use please contact me.',
-          'You are blocked because of using the room over time. if you need to use please contact me.',
-          'You are blocked because of using the device over time. if you need to use please contact me.'
-        ]
+    setLangAlert (state, typeAndLang) {
+      if (typeAndLang.typeAlert === 'block') {
+        if (typeAndLang.lang === 'th') {
+          state.listMsg = [
+            'คุณถูกบล็อคเนื่องจากส่งเสียงรบกวนผู้อื่น หากต้องการใช้งาน กรุณาติดต่อเจ้าหน้าที่',
+            'คุณถูกบล็อคเนื่องจากใช้งานห้องเกินเวลาที่กำหนด หากต้องการใช้งาน กรุณาติดต่อเจ้าหน้าที่',
+            'คุณถูกบล็อคเนื่องจากใช้งานอุปกรณ์เกินเวลาที่กำหนด หากต้องการใช้งาน กรุณาติดต่อเจ้าหน้าที่'
+          ]
+        } else if (typeAndLang.lang === 'eng') {
+          state.listMsg = [
+            'You are blocked because of noise. if you need to use please contact me.',
+            'You are blocked because of using the room over time. if you need to use please contact me.',
+            'You are blocked because of using the device over time. if you need to use please contact me.'
+          ]
+        }
+      } else if (typeAndLang.typeAlert === 'unblock') {
+        if (typeAndLang.lang === 'th') {
+          state.listMsg = 'ขณะนี้คุณได้รับการปลดบล็อคแล้ว สามารถใช้งานระบบได้ตามปกติ'
+        } else if (typeAndLang.lang === 'eng') {
+          state.listMsg = 'Now unbloked. You can use the system.'
+        }
+      } else if (typeAndLang.typeAlert === 'updatebooking') {
+        if (typeAndLang.lang === 'th') {
+          state.listMsg = 'ผู้ดูแลได้ทำการอัพเดตข้อมูลการจอง ' + typeAndLang.item + ' ของคุณเรียบร้อยแล้ว'
+        } else if (typeAndLang.lang === 'eng') {
+          state.listMsg = 'Update ' + typeAndLang.item + ' booking completed.'
+        }
+      } else if (typeAndLang.typeAlert === 'removebooking') {
+        if (typeAndLang.lang === 'th') {
+          state.listMsg = [
+            'ผู้ดูแลได้ยกเลิกการจอง ' + typeAndLang.item + ' ของคุณเรียบร้อยแล้ว',
+            'ผู้ดูแลได้ยกเลิกการจอง ' + typeAndLang.item + ' ของคุณเรียบร้อยแล้วเนื่องจากเกิดการชำรุด'
+          ]
+        } else if (typeAndLang.lang === 'eng') {
+          state.listMsg = [
+            'Cancle ' + typeAndLang.item + ' booking by admin completed. Because of Defective',
+            'Cancle ' + typeAndLang.item + ' booking by admin completed. Because of Defective'
+          ]
+        }
       }
     },
     updateStatus (state, status) {
@@ -252,16 +277,18 @@ const store = new Vuex.Store({
     removeItem (payload, child) {
       Items.child(child).remove()
     },
-    langBlockMessage ({commit}, id) {
-      console.log('langBlockMessage')
+    langAlertMessage ({commit}, typeAndID) {
       let lang = null
-      userState.child(id).once('value', snapshot => {
+      userState.child(typeAndID.id).once('value', snapshot => {
         lang = snapshot.val().language
-        commit('langBlock', lang)
+        if (typeAndID.item) {
+          commit('setLangAlert', {lang: lang, typeAlert: typeAndID.typeAlert, item: typeAndID.item})
+        } else {
+          commit('setLangAlert', {lang: lang, typeAlert: typeAndID.typeAlert})
+        }
       })
     },
     block ({commit}, data) {
-      console.log(data)
       let alertMassage = ''
       if (data.message === '') {
         alertMassage = 'ขณะนี้คุณถูกบล็อค หากต้องการใช้งาน กรุณาติดต่อเจ้าหน้าที่ผู้ดูแลห้อง'
@@ -294,7 +321,7 @@ const store = new Vuex.Store({
             'id': data.id
           },
           'message': {
-            'text': 'ขณะนี้คุณได้รับการปลดบล็อคแล้ว สามารถใช้งานระบบได้ตามปกติ'
+            'text': data.messageAlert
           }
         })
       })
@@ -302,27 +329,60 @@ const store = new Vuex.Store({
     Bookingquery ({commit}, date) {
       commit('updateQueryBooking', date)
     },
-    removeBooking (payload, child) {
-      Booking.child(child).remove()
+    removeBooking (payload, data) {
+      let alertMassage = ''
+      if (data.alertMassage === '') {
+        alertMassage = 'ผู้ดูแลได้ยกเลิกการจองของคุณเรียบร้อยแล้ว'
+      } else {
+        alertMassage = data.message
+      }
+      let token = 'EAACa7MZCazhABAFiNd0UivgHJoAaWWy967Xg1xz1ZBxoxZBqia1zy29CZAlJUqMog6nFZCcYfY4TS1Iu5wFoObNVxpFhCgAnDM9CM0GmSppZCQyAPzLKLIAfGh5lQ9EFujpIovehxvn5RW7wU42BBEOONyAwnASTu1t4Nvj5vOWGltCPHtVYOL'
+      Booking.child(data.pathDelete).remove().then(value => {
+        axios.post('https://graph.facebook.com/v2.6/me/messages?access_token=' + token, {
+          'recipient': {
+            'id': data.senderID
+          },
+          'message': {
+            'text': alertMassage
+          }
+        })
+      })
     },
     updateBooking (payload, data) {
-      if (moment(data.dateStart, data.timeStart).isSameOrBefore(data.dateStop, data.timeStop)) {
-        Booking.child(data.child).update({
-          'timeStart': data.timeStart,
-          'timeStop': data.timeStop,
-          'dateStart': data.dateStart,
-          'dateStop': data.dateStop
+      let token = 'EAACa7MZCazhABAFiNd0UivgHJoAaWWy967Xg1xz1ZBxoxZBqia1zy29CZAlJUqMog6nFZCcYfY4TS1Iu5wFoObNVxpFhCgAnDM9CM0GmSppZCQyAPzLKLIAfGh5lQ9EFujpIovehxvn5RW7wU42BBEOONyAwnASTu1t4Nvj5vOWGltCPHtVYOL'
+      // if (Moment(data.data.dateStart, data.data.timeStart).isSameOrBefore(data.data.dateStop, data.data.timeStop)) {
+      Booking.child(data.data.child).update({
+        'timeStart': data.data.timeStart,
+        'timeStop': data.data.timeStop,
+        'dateStart': data.data.dateStart,
+        'dateStop': data.data.dateStop
+      }).then(value => {
+        axios.post('https://graph.facebook.com/v2.6/me/messages?access_token=' + token, {
+          'recipient': {
+            'id': data.data.senderID
+          },
+          'message': {
+            'text': data.alertMassage
+          }
         })
-      } else {
-        alert('plese recheck and try again')
-      }
+      })
+      // } else {
+      //   alert('plese recheck and try again')
+      // }
     },
     addAdmin (payload, user) {
-      if (user.repassword === user.password) {
-        console.log('pass')
-        firebase.auth().createUserWithEmailAndPassword(user.email, user.password).catch()
+      let pattmail = /\S+@\S+\.\S+/
+      let pattpass = /^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8}$/
+      if (pattmail.test(user.email)) {
+        if (pattpass.test(user.password) && pattpass.test(user.password) && user.password === user.repassword) {
+          firebase.auth().createUserWithEmailAndPassword(user.email, user.password).then(value => {
+            alert('add success')
+          }).catch()
+        } else {
+          alert('please check your password and try again')
+        }
       } else {
-        alert('please try again')
+        alert('please check your data and try again')
       }
     },
     saveConfig (payload, config) {

@@ -35,28 +35,26 @@
            </v-date-picker>
          </v-dialog>
        </v-flex>
-      <v-flex xs12 >
-        <br>
-        <h2>สถิติการจองห้องแต่ละประเภท {{scopefilter}}</h2>
-        <br>
-        <bar-chart :height="150" :chart-data="barMeetRooms" ref="barChart"></bar-chart>
-      </v-flex>
-       <v-flex xs12 >
+      <!-- <v-flex xs12> -->
+        <v-flex xs12>
+          <h2>สถิติการจองห้อง {{scopefilter}}</h2>
+          <br>
+          <bar-chart :chart-data="barMeetRooms" ref="barChart"></bar-chart>
+        </v-flex>
+        <v-flex xs6 >
+         <h2>สถิติการจองอุปกรณ์ {{scopefilter}}</h2>
          <br>
-         <h2>สถิติการจองอุปกรณ์แต่ละประเภท {{scopefilter}}</h2>
+         <bar-chart :chart-data="barDevices" ref="barChart"></bar-chart>
+        </v-flex>
+        <v-flex xs6>
+         <h2>สถิติการจองสมาชิก {{scopefilter}}</h2>
          <br>
-         <bar-chart :height="150" :chart-data="barDevices" ref="barChart"></bar-chart>
-       </v-flex>
-       <v-flex xs12>
-         <br>
-         <h2>สถิติการจองสมาชิกแต่ละประเภท {{scopefilter}}</h2>
-         <br>
-         <bar-chart :height="150" :chart-data="barUsers" ref="barChart"></bar-chart>
-       </v-flex>
-       <v-flex xs12>
+         <bar-chart :chart-data="barUsers" ref="barChart"></bar-chart>
+        </v-flex>
+        <v-flex xs12>
          <v-btn flat color="primary" @click="createPDF('download')">Download</v-btn>
          <v-btn flat color="primary" @click="createPDF('print')">Print</v-btn>
-       </v-flex>
+        </v-flex>
      </v-layout>
     </v-container>
   </div>

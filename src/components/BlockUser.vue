@@ -123,9 +123,9 @@ export default {
     ...mapGetters(['profiles', 'listMsg'])
   },
   methods: {
-    ...mapActions(['setProfileRef', 'setBookingRef', 'setHistorysRef', 'block', 'langBlockMessage']),
+    ...mapActions(['setProfileRef', 'setBookingRef', 'setHistorysRef', 'block', 'langAlertMessage']),
     commitblock (data) {
-      this.langBlockMessage(data.id)
+      this.langAlertMessage({id: data.id, typeAlert: 'block'})
       this.dialog = true
       if (data.type === 'guest') {
         this.user = this.profiles[data.type][data.id].firstName
