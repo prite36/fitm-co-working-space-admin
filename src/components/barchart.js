@@ -1,16 +1,9 @@
 import {Bar, mixins} from 'vue-chartjs'
 // import {HorizontalBar} from 'vue-chartjs'
 let options = {
-  legend: {
-    display: true,
-    labels: {
-      boxWidth: 20,
-      fontSize: 16
-    }
-  },
   scales: {
     xAxes: [{
-      barPercentage: 0.4
+      barPercentage: 0.1
     }]
   },
   responsive: true,
