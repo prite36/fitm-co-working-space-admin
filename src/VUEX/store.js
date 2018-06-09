@@ -391,7 +391,12 @@ const store = new Vuex.Store({
           'countOfBlock': {'value': config.countOfBlock},
           'countOfMaxBooking': config.maxBooking,
           'device': {'max': config.deviceMax, 'min': config.deviceMin},
-          'meetingRoom': {'max': config.roomMax, 'min': config.roomMin}
+          'meetingRoom': {'max': config.roomMax, 'min': config.roomMin},
+          'meetingRoomDescription': {
+            'classRoom': config.classRoom,
+            'largeRoom': config.largeRoom,
+            'mediumRoom': config.mediumRoom
+          }
         })
       } else {
         alert('please check again')

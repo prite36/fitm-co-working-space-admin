@@ -104,6 +104,58 @@
           </v-select>
         </v-flex>
       </v-layout>
+    </v-container>
+    <hr color="blue"> <br>
+    <h3 align="center">Items in rooms and capacity persons</h3><br>
+    <v-container grid-list-md text-xs-center>
+      <h3 align="left">Items in classroom and capacity persons</h3><br>
+      <v-layout row wrap>
+        <v-flex xs6>
+          <v-text-field
+            v-model="configs.meetingRoomDescription.classRoom.items"
+            label="items"
+          ></v-text-field>
+        </v-flex>
+        <v-flex xs6>
+          <v-text-field
+            label="person"
+            v-model="configs.meetingRoomDescription.classRoom.person"
+            type="number"
+          ></v-text-field>
+        </v-flex>
+      </v-layout>
+      <h3 align="left">Items in mediumroom and capacity persons</h3><br>
+      <v-layout row wrap>
+        <v-flex xs6>
+          <v-text-field
+            v-model="configs.meetingRoomDescription.mediumRoom.items"
+            label="items"
+          ></v-text-field>
+        </v-flex>
+        <v-flex xs6>
+          <v-text-field
+            label="person"
+            v-model="configs.meetingRoomDescription.mediumRoom.person"
+            type="number"
+          ></v-text-field>
+        </v-flex>
+      </v-layout>
+      <h3 align="left">Items in largeroom and capacity persons</h3><br>
+      <v-layout row wrap>
+        <v-flex xs6>
+          <v-text-field
+            v-model="configs.meetingRoomDescription.largeRoom.items"
+            label="items"
+          ></v-text-field>
+        </v-flex>
+        <v-flex xs6>
+          <v-text-field
+            label="person"
+            v-model="configs.meetingRoomDescription.largeRoom.person"
+            type="number"
+          ></v-text-field>
+        </v-flex>
+      </v-layout>
       <v-flex xs12>
         <v-btn class="primary" @click="packData()">save config</v-btn>
       </v-flex>
@@ -145,7 +197,19 @@ export default {
         'deviceMin': deviceMin,
         'deviceMax': deviceMax,
         'roomMin': roomMin,
-        'roomMax': roomMax
+        'roomMax': roomMax,
+        'classRoom': {
+          'items': this.configs.meetingRoomDescription.classRoom.items,
+          'person': this.configs.meetingRoomDescription.classRoom.person
+        },
+        'mediumRoom': {
+          'items': this.configs.meetingRoomDescription.mediumRoom.items,
+          'person': this.configs.meetingRoomDescription.mediumRoom.person
+        },
+        'largeRoom': {
+          'items': this.configs.meetingRoomDescription.largeRoom.items,
+          'person': this.configs.meetingRoomDescription.largeRoom.person
+        }
       }
       this.saveConfig(config)
     },
